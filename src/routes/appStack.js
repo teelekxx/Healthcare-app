@@ -3,6 +3,7 @@ import { createAppContainer } from "react-navigation";
 import LandingPage from "../views/LandingPage/index";
 import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
+import HomePage from "../views/HomePage/index";
 const screens = {
     Landing: {
       screen: LandingPage,
@@ -10,12 +11,12 @@ const screens = {
         headerShown: false,
       },
     },
-    // Home: {
-    //   screen: HomePage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
+    Home: {
+      screen: HomePage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
     SignUp: {
       screen: SignUpPage,
       navigationOptions: {
