@@ -36,7 +36,7 @@ export const InputGroup = styled.View`
   flex-direction:row;
   justify-content: space-between;
   align-items:center;
-  padding-top:30px;
+  padding-top:25px;
 `;
 export const Input = styled.TextInput`
   font-size: 15px;
@@ -53,6 +53,7 @@ export const BlueContainer = styled.View`
   background-color: ${Colors.blue};
   width: 100%;
 `;
+
 export const Form = styled.View`
   margin-top: auto;
   display: flex;
@@ -61,7 +62,7 @@ export const Form = styled.View`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
-  padding: 70px 25px 0px 25px;
+  padding: 50px 25px 0px 25px;
 `;
 export const BlueButton = styled.Pressable`
   margin-top: 50px;
