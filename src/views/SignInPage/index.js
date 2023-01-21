@@ -1,12 +1,21 @@
 import React from "react";
 import { SafeAreaView, Text } from "react-native";
-import { ThemeButton, ThemeButtonText, Or, ForgotPassword } from "./index.style";
+import { ThemeButton, ThemeButtonText, Or, ForgotPassword, CircleButton } from "./index.style";
 import { Input, InputGroup, SubTitle, ItalicText2, BlueContainer, Form, BlueButton, BlueButtonText} from "../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
+import BackButton from "../../components/BackButton";
 function SignInPage({ navigation }) {
   return (
     <BlueContainer>
+      <CircleButton onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={20}
+            />
+        </CircleButton>
       <Form>
       <SubTitle>Welcome back!</SubTitle>
       <ItalicText2>Hello there, sign in to continue</ItalicText2>
