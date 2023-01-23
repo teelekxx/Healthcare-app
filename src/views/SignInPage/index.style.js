@@ -9,7 +9,7 @@ export const ThemeButton = styled.Pressable`
   width: 100%;
   height: 40px;
   border: 1px solid ${Colors.grey}
-  box-shadow: 0px 4px 7px grey;
+  box-shadow: 0px 2px 2px grey;
   background-color: ${Colors.white};
   border-radius: 10px;
   align-items: center;
@@ -34,6 +34,7 @@ export const Or = styled.Text`
 export const ForgotPassword = styled.Text`
   font-size: 15px;
   text-decoration: underline;
+  text-decoration-color: ${Colors.grey}
   font-style:italic;
   align-self: flex-end;
   font-family: Monaco;

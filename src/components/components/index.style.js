@@ -1,6 +1,15 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 
+export const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${Colors.white};
+  padding: 25px 25px 0px 25px;
+  width: 100%;
+  justify-content: center;
+  align-self: center;
+`;
 export const Title = styled.Text`
     color: ${Colors.blue}
     font-family: Monaco;
@@ -33,17 +42,17 @@ export const ItalicText2 = styled.Text`
 `;
 
 export const InputGroup = styled.View`
-  flex-direction:row;
+  flex-direction: row;
   justify-content: space-between;
-  align-items:center;
-  padding-top:25px;
+  align-items: center;
+  padding-top: 25px;
 `;
 export const Input = styled.TextInput`
   font-size: 15px;
   padding: 10px;
   border: 1px solid ${Colors.grey};
   border-radius: 10px;
-  width:300px;
+  width: 300px;
   height: 40px;
 `;
 
@@ -64,7 +73,7 @@ export const Form = styled.View`
   background-color: ${Colors.white};
   padding: 50px 25px 0px 25px;
 `;
-export const BlueButton = styled.Pressable`
+export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;
   padding: 15px;
   width: 340px;
@@ -82,3 +91,10 @@ export const BlueButtonText = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
 `;
+
+export const Text = styled.Text`
+  font-size:20px;
+  font-family: Monaco;
+  font-weight: regular;
+  color: ${Colors.blue};
+`
