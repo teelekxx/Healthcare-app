@@ -31,18 +31,18 @@ function RolePage({ navigation }) {
         />
       </BoxWrapper>
       <BoxWrapper>
-        <RoleImage source={require("../../../assets/regularUser.png")} />
-        <Text>Paramedics</Text>
+        <RoleImage source={require("../../../assets/paramedicUser.png")} />
+        <Text>Paramedic</Text>
         <RadioButton
           color={Colors.blue}
           uncheckedColor={Colors.grey}
-          value="Paramedics"
-          status={checked === "Paramedics" ? "checked" : "unchecked"}
-          onPress={() => setChecked("Paramedics")}
+          value="Paramedic"
+          status={checked === "Paramedic" ? "checked" : "unchecked"}
+          onPress={() => setChecked("Paramedic")}
         />
       </BoxWrapper>
       <BoxWrapper>
-        <RoleImage source={require("../../../assets/regularUser.png")} />
+        <RoleImage source={require("../../../assets/pharmacistUser.png")} />
         <Text>Pharmacist</Text>
         <RadioButton
           color={Colors.blue}
