@@ -4,6 +4,8 @@ import LandingPage from "../views/LandingPage/index";
 import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
 import HomePage from "../views/HomePage/index";
+import RolePage from "../views/RolePage/index";
+
 const screens = {
     Landing: {
       screen: LandingPage,
@@ -23,48 +25,18 @@ const screens = {
         headerShown: false,
       },
     },
-    // MedInfo:{
-    //   screen: MedInfoPage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
     SignIn: {
       screen: SignInPage,
       navigationOptions: {
         headerShown: false,
       },
     },
-    // FirstAid: {
-    //   screen: FirstAidPage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
-    // History: {
-    //   screen: HistoryPage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
-    // Chat: {
-    //   screen: ChatPage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
-    // GotAmbulance: {
-    //   screen: GotAmbulancePage,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
-    // Arrival: {
-    //   screen: AmbulanceArrival,
-    //   navigationOptions: {
-    //     headerShown: false,
-    //   },
-    // },
+    Role: {
+      screen: RolePage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
   };
   const Stack = createStackNavigator(screens);
   

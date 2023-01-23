@@ -31,14 +31,13 @@ export const Image = styled.Image`
   align-self: center;
 `;
 
-export const ThemeButton = styled.Pressable`
-  margin-top:50px;
+export const ThemeButton = styled.TouchableOpacity`
+  margin-top:200px;
   padding: 15px;
   width: 300px;
   height: 60px;
   border: 1px solid ${Colors.blue}
   align-self: center;
-  box-shadow: 0px 4px 7px grey;
   background-color: white;
   border-radius: 10px;
 `;
@@ -49,13 +48,12 @@ export const ThemeButtonText = styled.Text`
   font-weight: bold;
   color: ${Colors.blue};
 `;
-export const ThemeButton2 = styled.Pressable`
-  margin-top: 50px;
+export const ThemeButton2 = styled.TouchableOpacity`
+  margin-top: 30px;
   padding: 15px;
   width: 300px;
   height: 60px;
   align-self: center;
-  box-shadow: 0px 4px 7px grey;
   background-color: ${Colors.blue};
   border-radius: 10px;
 `;
@@ -67,3 +65,5 @@ export const ThemeButtonText2 = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
 `;
+
+

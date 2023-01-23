@@ -1,7 +1,7 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
-import { Title, ItalicText} from "../../components/components/index.style";
-import { Container, Image, Text, ThemeButton, ThemeButtonText, ThemeButton2, ThemeButtonText2} from "./index.style";
+import { SafeAreaView, Button,  } from "react-native";
+import { Title, ItalicText, Container} from "../../components/components/index.style";
+import { Image, Text, ThemeButton, ThemeButtonText, ThemeButton2, ThemeButtonText2, Bt} from "./index.style";
 function LandingPage({ navigation }) {
   return (
     <Container>
@@ -9,13 +9,13 @@ function LandingPage({ navigation }) {
       {/* <Title text = {"SAGE"}/> */}
       <Title>SAGE</Title>
       <ItalicText>Your health, our care</ItalicText>
-      <ThemeButton>
-          <ThemeButtonText onPress={() => navigation.navigate("SignIn")}>
+      <ThemeButton onPress={() => navigation.navigate("SignIn")}>
+          <ThemeButtonText>
             Sign in
           </ThemeButtonText>
         </ThemeButton>
-        <ThemeButton2>
-          <ThemeButtonText2 onPress={() => navigation.navigate("SignUp")}>
+        <ThemeButton2 onPress={() => navigation.navigate("SignUp")}>
+          <ThemeButtonText2>
             Sign up
           </ThemeButtonText2>
         </ThemeButton2>

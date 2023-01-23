@@ -3,7 +3,7 @@ import { Colors } from "../../constants";
 
 
 
-export const ThemeButton = styled.Pressable`
+export const ThemeButton = styled.TouchableOpacity`
   flex-direction:row;
   margin-top:50px;
   width: 100%;
@@ -30,7 +30,7 @@ export const Or = styled.Text`
   padding-top: 20px;
   
 `;
-export const CircleButton = styled.Pressable`
+export const CircleButton = styled.TouchableOpacity`
   margin-top:60px;
   margin-left:25px;
   padding: 10px;
