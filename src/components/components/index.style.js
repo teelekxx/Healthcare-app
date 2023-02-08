@@ -98,3 +98,28 @@ export const Text = styled.Text`
   font-weight: regular;
   color: ${Colors.blue};
 `
+
+export const PageTitle = styled.Text`
+ font-size:24px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.white};
+  margin-top:70px;
+  margin-left: 75px;
+`
+
+export const PageTitleContainer = styled.View`
+flex:1
+flex-direction: row;
+width: 100%;
+`
+export const SignUpForm = styled.View`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: ${Colors.white};
+  padding: 50px 25px 0px 25px;
+`;

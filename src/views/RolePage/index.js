@@ -7,6 +7,19 @@ import { SubTitle, Text, BlueButton, BlueButtonText } from "../../components/com
 import { RadioButton } from "react-native-paper";
 function RolePage({ navigation }) {
   const [checked, setChecked] = React.useState("Regular user");
+  function next(){
+    console.log(checked)
+    if(checked === "Regular user"){
+      navigation.navigate("SignUpRegular")
+    }
+    else if(checked === "Paramedic"){
+      navigation.navigate("SignUpParamedic")
+    }
+    else{
+      navigation.navigate("SignUpPharmacist")
+    }
+      
+  }
   return (
     <Container>
       <CircleButton onPress={() => navigation.goBack()}>
@@ -52,7 +65,7 @@ function RolePage({ navigation }) {
           onPress={() => setChecked("Pharmacist")}
         />
       </BoxWrapper>
-      <BlueButton  onPress={() => navigation.navigate("Home")}>
+      <BlueButton  onPress={next}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>
     </Container>
