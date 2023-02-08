@@ -36,6 +36,6 @@ export const BoxWrapper = styled.View`
 `;
 
 export const RoleImage = styled.Image`
-  width:80;
-  height:80;
+  width:80px;
+  height:80px;
 `

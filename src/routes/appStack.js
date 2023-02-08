@@ -5,7 +5,9 @@ import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
 import HomePage from "../views/HomePage/index";
 import RolePage from "../views/RolePage/index";
-
+import SignUpParamedicPage from "../views/SignUpParamedicPage";
+import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
+import SignUpRegularPage from "../views/SignUpRegularPage";
 const screens = {
     Landing: {
       screen: LandingPage,
@@ -37,6 +39,24 @@ const screens = {
         headerShown: false,
       },
     },
+    SignUpRegular:{
+      screen: SignUpRegularPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SignUpPharmacist:{
+      screen: SignUpPharmacistPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SignUpParamedic:{
+      screen: SignUpParamedicPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    }
   };
   const Stack = createStackNavigator(screens);
   
