@@ -50,7 +50,7 @@ export const InputGroup = styled.View`
 export const Input = styled.TextInput`
   font-size: 15px;
   padding: 10px;
-  border: 1px solid ${Colors.grey};
+  border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
   width: 300px;
   height: 40px;
@@ -75,6 +75,7 @@ export const Form = styled.View`
 `;
 export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;
+  margin-bottom: 50px
   padding: 15px;
   width: 340px;
   height: 60px;
@@ -113,7 +114,7 @@ flex:1
 flex-direction: row;
 width: 100%;
 `
-export const SignUpForm = styled.View`
+export const SignUpForm = styled.ScrollView`
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -121,5 +122,34 @@ export const SignUpForm = styled.View`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
-  padding: 50px 25px 0px 25px;
+  padding: 25px 25px 0px 25px;
+  flexGrow:0px;
 `;
+
+export const AvatarContainer = styled.View`
+  align-self:center;
+`
+
+export const FormText = styled.Text`
+  font-size:15px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.blue};
+  padding-top:10px
+  padding-bottom:10px;
+`
+
+export const FormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 340px;
+  height: 40px;
+`
+export const BigFormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 340px;
+  height: 80px;
+`
