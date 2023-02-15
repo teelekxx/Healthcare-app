@@ -8,6 +8,7 @@ import RolePage from "../views/RolePage/index";
 import SignUpParamedicPage from "../views/SignUpParamedicPage";
 import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
 import SignUpRegularPage from "../views/SignUpRegularPage";
+import MedInfoPage from "../views/MedInfoPage";
 const screens = {
     Landing: {
       screen: LandingPage,
@@ -53,6 +54,12 @@ const screens = {
     },
     SignUpParamedic:{
       screen: SignUpParamedicPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    MedInfo:{
+      screen: MedInfoPage,
       navigationOptions: {
         headerShown: false,
       },

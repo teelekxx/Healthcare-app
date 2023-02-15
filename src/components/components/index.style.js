@@ -123,7 +123,7 @@ export const SignUpForm = styled.ScrollView`
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 25px 25px 0px 25px;
-  flexGrow:0px;
+  flexGrow:0;
 `;
 
 export const AvatarContainer = styled.View`
@@ -145,6 +145,8 @@ export const FormInput = styled.TextInput`
   border-radius: 10px;
   width: 340px;
   height: 40px;
+  padding-left:10px;
+  padding-right:10px;
 `
 export const BigFormInput = styled.TextInput`
   font-size: 15px;
@@ -152,4 +154,20 @@ export const BigFormInput = styled.TextInput`
   border-radius: 10px;
   width: 340px;
   height: 80px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const SmallFormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 300px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const DateCalendar = styled.View`
+flex:1;
+flex-direction:row;
+justify-content:space-between;
 `
