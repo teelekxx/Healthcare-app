@@ -4,30 +4,39 @@ import LandingPage from "../views/LandingPage/index";
 import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
 import HomePage from "../views/HomePage/index";
+import MapPage from "../views/Map/index";
 import RolePage from "../views/RolePage/index";
 import SignUpParamedicPage from "../views/SignUpParamedicPage";
 import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
 import SignUpRegularPage from "../views/SignUpRegularPage";
 import MedInfoPage from "../views/MedInfoPage";
+
 const screens = {
-    Landing: {
-      screen: LandingPage,
-      navigationOptions: {
-        headerShown: false,
-      },
+  Landing: {
+    screen: LandingPage,
+    navigationOptions: {
+      headerShown: false,
     },
-    Home: {
-      screen: HomePage,
-      navigationOptions: {
-        headerShown: false,
-      },
+  },
+  Home: {
+    screen: HomePage,
+    navigationOptions: {
+      headerShown: false,
     },
-    SignUp: {
-      screen: SignUpPage,
-      navigationOptions: {
-        headerShown: false,
-      },
+  },
+  SignUp: {
+    screen: SignUpPage,
+    navigationOptions: {
+      headerShown: false,
     },
+  },
+  Map: {
+    screen: MapPage,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+
     SignIn: {
       screen: SignInPage,
       navigationOptions: {
