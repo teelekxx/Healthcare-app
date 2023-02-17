@@ -5,6 +5,12 @@ import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
 import HomePage from "../views/HomePage/index";
 import MapPage from "../views/Map/index";
+import RolePage from "../views/RolePage/index";
+import SignUpParamedicPage from "../views/SignUpParamedicPage";
+import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
+import SignUpRegularPage from "../views/SignUpRegularPage";
+import MedInfoPage from "../views/MedInfoPage";
+
 const screens = {
   Landing: {
     screen: LandingPage,
@@ -30,49 +36,44 @@ const screens = {
       headerShown: false,
     },
   },
-  // MedInfo:{
-  //   screen: MedInfoPage,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  SignIn: {
-    screen: SignInPage,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
-  // FirstAid: {
-  //   screen: FirstAidPage,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  // History: {
-  //   screen: HistoryPage,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  // Chat: {
-  //   screen: ChatPage,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  // GotAmbulance: {
-  //   screen: GotAmbulancePage,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  // Arrival: {
-  //   screen: AmbulanceArrival,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-};
-const Stack = createStackNavigator(screens);
 
-export default createAppContainer(Stack);
+    SignIn: {
+      screen: SignInPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    Role: {
+      screen: RolePage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SignUpRegular:{
+      screen: SignUpRegularPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SignUpPharmacist:{
+      screen: SignUpPharmacistPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    SignUpParamedic:{
+      screen: SignUpParamedicPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    MedInfo:{
+      screen: MedInfoPage,
+      navigationOptions: {
+        headerShown: false,
+      },
+    }
+  };
+  const Stack = createStackNavigator(screens);
+  
+  export default createAppContainer(Stack);

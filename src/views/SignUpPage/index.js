@@ -56,7 +56,7 @@ function SignUpPage({ navigation }) {
         />
           <Input type="text" placeholder="Confirm password" placeholderTextColor={Colors.grey}/>
         </InputGroup>
-        <BlueButton  onPress={() => navigation.navigate("Home")}>
+        <BlueButton  onPress={() => navigation.navigate("Role")}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>
       </Form>

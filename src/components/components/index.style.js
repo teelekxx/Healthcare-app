@@ -1,6 +1,15 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 
+export const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${Colors.white};
+  padding: 25px 25px 0px 25px;
+  width: 100%;
+  justify-content: center;
+  align-self: center;
+`;
 export const Title = styled.Text`
     color: ${Colors.blue}
     font-family: Monaco;
@@ -33,17 +42,17 @@ export const ItalicText2 = styled.Text`
 `;
 
 export const InputGroup = styled.View`
-  flex-direction:row;
+  flex-direction: row;
   justify-content: space-between;
-  align-items:center;
-  padding-top:25px;
+  align-items: center;
+  padding-top: 25px;
 `;
 export const Input = styled.TextInput`
   font-size: 15px;
   padding: 10px;
-  border: 1px solid ${Colors.grey};
+  border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width:300px;
+  width: 300px;
   height: 40px;
 `;
 
@@ -64,8 +73,9 @@ export const Form = styled.View`
   background-color: ${Colors.white};
   padding: 50px 25px 0px 25px;
 `;
-export const BlueButton = styled.Pressable`
+export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;
+  margin-bottom: 50px
   padding: 15px;
   width: 340px;
   height: 60px;
@@ -82,3 +92,82 @@ export const BlueButtonText = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
 `;
+
+export const Text = styled.Text`
+  font-size:20px;
+  font-family: Monaco;
+  font-weight: regular;
+  color: ${Colors.blue};
+`
+
+export const PageTitle = styled.Text`
+ font-size:24px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.white};
+  margin-top:70px;
+  margin-left: 75px;
+`
+
+export const PageTitleContainer = styled.View`
+flex:1
+flex-direction: row;
+width: 100%;
+`
+export const SignUpForm = styled.ScrollView`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: ${Colors.white};
+  padding: 25px 25px 0px 25px;
+  flexGrow:0;
+`;
+
+export const AvatarContainer = styled.View`
+  align-self:center;
+`
+
+export const FormText = styled.Text`
+  font-size:15px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.blue};
+  padding-top:10px
+  padding-bottom:10px;
+`
+
+export const FormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 340px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const BigFormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 340px;
+  height: 80px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const SmallFormInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  border-radius: 10px;
+  width: 300px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const DateCalendar = styled.View`
+flex:1;
+flex-direction:row;
+justify-content:space-between;
+`
