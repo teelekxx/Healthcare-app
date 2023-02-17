@@ -18,7 +18,7 @@ import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Platform } from "react-native";
+
 
 function SignUpRegularPage({ navigation }) {
   const [name, onChangeName] = useState("");
@@ -46,10 +46,6 @@ function SignUpRegularPage({ navigation }) {
     let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1)+'/'+tempDate.getFullYear()
     setText(fDate)
   }
-  // const showMode = (currentMode) => {
-  //   setShow(true)
-  //   setMode(currentMode)
-  // }
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -106,7 +102,7 @@ function SignUpRegularPage({ navigation }) {
         <FormText>Tel.</FormText>
         <FormInput onChangeText={onChangePhone} value={phone} />
         <FormText>Address</FormText>
-        <BigFormInput multiline numberOfLines={3} />
+        <BigFormInput multiline numberOfLines={3} onChangeText={onChangeAddress} value={address}/>
         <FormText>City</FormText>
         <FormInput onChangeText={onChangeCity} value={city} />
         <FormText>Zip Code</FormText>
