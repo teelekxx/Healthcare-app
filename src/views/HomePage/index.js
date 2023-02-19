@@ -3,7 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+
 import MapPage from "../Map/index";
+import EmergencyScreen from "../EmergencyScreen/index";
+import RequestScreen from "../RequestScreen/index";
+
 import { Colors } from "../../constants";
 
 function ProfileScreen({ navigation }) {
@@ -39,6 +43,21 @@ function HistoryScreen({ navigation }) {
 }
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function AmbulanceStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+      <Stack.Screen name="Emergency" component={EmergencyScreen} />
+      <Stack.Screen name="Request" component={RequestScreen} />
+      <Stack.Screen name="Map" component={MapPage} />
+    </Stack.Navigator>
+  );
+}
 
 function HomePage({ navigation }) {
   return (
@@ -72,7 +91,7 @@ function HomePage({ navigation }) {
       >
         <Tab.Screen name="Pharmacy" component={PharmaScreen} />
         <Tab.Screen name="Chat" component={ChatScreen} />
-        <Tab.Screen name="Home" component={MapPage} />
+        <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
