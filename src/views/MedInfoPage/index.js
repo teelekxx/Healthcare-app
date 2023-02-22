@@ -1,9 +1,206 @@
-import { Input, InputGroup, SubTitle, ItalicText2, BlueContainer, Form, BlueButton, BlueButtonText} from "../../components/components/index.style";
-function MedInfoPage({navigation}){
-    return(
+import { useState } from "react";
+import {
+  FormInput,
+  SmallFormInput,
+  BigFormInput,
+  BlueContainer,
+  SignUpForm,
+  FormText,
+  PageTitleContainer,
+  PageTitle,
+BlueButtonText,
+  DateCalendar,
+  CenterFormText,
+} from "../../components/components/index.style";
+import { CircleButton, CheckBoxContainer, Space, SaveButton, SkipButton, ButtonContainer} from "./index.style";
+import { Button, Icon } from "react-native-elements";
+import { Colors } from "../../constants";
+import AvatarContainer from "../../components/Avatar/index";
+import DropDownPicker from "react-native-dropdown-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import RadioButtonRN from "radio-buttons-react-native";
+import { CheckBox } from "@rneui/themed";
 
-            <SubTitle>med info</SubTitle>
+function MedInfoPage({ navigation }) {
+  const [allergy, onChangeAllergy] = useState("");
+  const [medication, onChangeMedication] = useState("");
+  const [disease, onChangeDisease] = useState("");
+  const [open, setOpen] = useState(false);
+  const [bloodType, setBloodType] = useState(null);
+  const [items, setItems] = useState([
+    { label: "A", value: "A" },
+    { label: "B", value: "B" },
+    { label: "O", value: "O" },
+    { label: "AB", value: "AB" },
+  ]);
+  const [checkedDNR, setCheckedDNR] = useState(false);
+  const toggleDNR = () => setCheckedDNR(!checkedDNR);
+  const [checkedDonor, setCheckedDonor] = useState(false);
+  const toggleDonor = () => setCheckedDonor(!checkedDonor);
+  const [name, setName] = useState("");
+  const [relationships, setRelationships] = useState([
+    { label: "Father", value: "father" },
+    { label: "Mother", value: "mother" },
+    { label: "Spouse", value: "spouse" },
+    { label: "Partner", value: "partner" },
+    { label: "Friends", value: "friends" },
+  ]);
+  const [openRelationships, setOpenRelationships] = useState(false);
+  const [relationship, setRelationship] = useState(null);
+  const [tel, setTel] = useState("");
+  const [insuranceProvider, setInsuranceProvider] = useState("")
+  const [insurancePlan, setInsurancePlan] = useState("")
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState("select expiration date");
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShow(false);
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      "/" +
+      (tempDate.getMonth() + 1) +
+      "/" +
+      tempDate.getFullYear();
+    setText(fDate);
+  };
 
-    );
+  return (
+    <BlueContainer>
+      <PageTitleContainer>
+        <CircleButton onPress={() => navigation.goBack()}>
+          <Icon
+            name="arrow-back-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={20}
+          />
+        </CircleButton>
+        <PageTitle>Medical Information</PageTitle>
+      </PageTitleContainer>
+      <SignUpForm vertical={true} keyboardDismissMode="on-drag">
+        <FormText>Blood type</FormText>
+        <DropDownPicker
+          open={open}
+          value={bloodType}
+          items={items}
+          setOpen={setOpen}
+          setValue={setBloodType}
+          setItems={setItems}
+          placeholder="select your blood type"
+          placeholderStyle={{
+            fontSize: 15,
+          }}
+          style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+        />
+        <FormText>Congenital disease</FormText>
+        <BigFormInput
+          multiline
+          numberOfLines={3}
+          onChangeText={onChangeDisease}
+          value={disease}
+        />
+        <FormText>Regular Medication</FormText>
+        <BigFormInput
+          multiline
+          numberOfLines={3}
+          onChangeText={onChangeMedication}
+          value={medication}
+        />
+        <FormText>Allergies</FormText>
+        <BigFormInput
+          multiline
+          numberOfLines={3}
+          onChangeText={onChangeAllergy}
+          value={allergy}
+        />
+        <Space></Space>
+        <CheckBoxContainer>
+          <FormText>Do-not-resuscitate</FormText>
+          <CheckBox
+            checked={checkedDNR}
+            onPress={toggleDNR}
+            iconType="material-community"
+            checkedIcon="checkbox-outline"
+            uncheckedIcon={"checkbox-blank-outline"}
+          />
+        </CheckBoxContainer>
+
+        <CheckBoxContainer>
+          <FormText>Organ Donor</FormText>
+          <CheckBox
+            checked={checkedDonor}
+            onPress={toggleDonor}
+            iconType="material-community"
+            checkedIcon="checkbox-outline"
+            uncheckedIcon={"checkbox-blank-outline"}
+          />
+        </CheckBoxContainer>
+        <CenterFormText>Medical Power of Attorney</CenterFormText>
+        <FormText>Name</FormText>
+        <FormInput onChangeText={setName} value={name} />
+        <FormText>Relationship</FormText>
+        <DropDownPicker
+          open={openRelationships}
+          value={relationship}
+          items={relationships}
+          setOpen={setOpenRelationships}
+          setValue={setRelationship}
+          setItems={setRelationships}
+          placeholder="select relationship"
+          placeholderStyle={{
+            fontSize: 15,
+          }}
+          style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+        />
+        <FormText>Tel.</FormText>
+        <FormInput onChangeText={setTel} value={tel} />
+        <Space></Space>
+        <CenterFormText>Insurance information</CenterFormText>
+        <FormText>Insurance Provider</FormText>
+        <FormInput onChangeText={setInsuranceProvider} value={insuranceProvider} />
+        <FormText>Insurance Plan</FormText>
+        <FormInput onChangeText={setInsurancePlan} value={insurancePlan} />
+        <FormText>Expiration Date</FormText>
+        <DateCalendar>
+        <SmallFormInput value={text}/>
+        {show &&(<DateTimePicker
+        testID="dateTimePicker"
+          value={date}
+          mode='date'
+          display='default'
+          onChange={onChange}
+        />)}
+        <Icon
+              name="calendar-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={30}
+              onPress={()=> setShow(true)}
+            />
+        </DateCalendar>
+
+        <ButtonContainer>
+        <SkipButton
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <BlueButtonText>Skip</BlueButtonText>
+        </SkipButton>
+        <SaveButton
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <BlueButtonText>Save</BlueButtonText>
+        </SaveButton>
+        </ButtonContainer>
+        
+      </SignUpForm>
+    </BlueContainer>
+  );
 }
 export default MedInfoPage;
