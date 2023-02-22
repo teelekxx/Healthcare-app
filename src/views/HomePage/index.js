@@ -62,7 +62,7 @@ function AmbulanceStack() {
 function HomePage({ navigation }) {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      <Tab.Navigator initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
