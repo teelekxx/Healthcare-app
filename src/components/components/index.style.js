@@ -180,3 +180,50 @@ flex:1;
 flex-direction:row;
 justify-content:space-between;
 `
+
+
+export const GreyText= styled.Text`
+ font-size:15px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.grey};
+  padding-bottom:5px;
+  padding-top: 5px; 
+
+`
+export const InfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  color: ${Colors.blue}
+  border-radius: 10px;
+  font-family: Monaco;
+  font-weight: bold;
+  width: 340px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const SmallInfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  color: ${Colors.blue}
+  border-radius: 10px;
+  font-family: Monaco;
+  font-weight: bold;
+  width: 300px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`
+export const BigInfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.blue}
+  border-radius: 10px;
+  width: 340px;
+  height: 80px;
+  padding-left:10px;
+  padding-right:10px;
+`
