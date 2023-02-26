@@ -1,14 +1,14 @@
 import { Button, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ProfileScreen from "../ProfileScreen";
-
 import MapPage from "../Map/index";
 import EmergencyScreen from "../EmergencyScreen/index";
 import RequestScreen from "../RequestScreen/index";
-
+import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import { Colors } from "../../constants";
 
 // function ProfileScreen({ navigation }) {
@@ -59,6 +59,18 @@ function AmbulanceStack() {
     </Stack.Navigator>
   );
 }
+function ProfileStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+    <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+      <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} />
+    </Stack.Navigator>
+  );
+}
 
 function HomePage({ navigation }) {
   return (
@@ -94,7 +106,16 @@ function HomePage({ navigation }) {
         <Tab.Screen name="Chat" component={ChatScreen} />
         <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Profile" component={ProfileStack} options={({ route }) => ({
+            tabBarStyle: ((route) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+              console.log(routeName)
+              if (routeName === 'MedInfoSummary') {
+                return { display: "none" }
+              }
+              return
+            })(route),
+          })}/>
       </Tab.Navigator>
     </NavigationContainer>
   );

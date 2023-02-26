@@ -6,6 +6,8 @@ import {
   SmallInfoInput,
   DateCalendar,
   BigInfoInput,
+  BlueButton,
+  BlueButtonText
 } from "../../components/components/index.style";
 import {
   Background,
@@ -18,6 +20,7 @@ import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
+
 function ProfileScreen({ navigation }) {
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("John Doe");
@@ -117,6 +120,9 @@ function ProfileScreen({ navigation }) {
       <BigInfoInput multiline numberOfLines={3}  onChangeText={setAddress} value={address} editable ={edit}/>
       <GreyText>Role</GreyText>
       <InfoInput value={role} editable={false} />
+      <BlueButton onPress={() => navigation.navigate("MedInfoSummary")}>
+        <BlueButtonText>View Medical Information</BlueButtonText>
+      </BlueButton>
     </Background>
   );
 }
