@@ -125,7 +125,7 @@ function RequestScreen({ navigation }) {
         </HorizonInput2>
       </SymptomList>
       <InputContainer>
-        <BlueText>Contact number*</BlueText>
+        <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput></GreyInput>
       </InputContainer>
       <HorizonInput3>

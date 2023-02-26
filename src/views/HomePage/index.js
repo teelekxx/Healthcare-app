@@ -3,12 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Colors } from "../../constants";
 
 import MapPage from "../Map/index";
 import EmergencyScreen from "../EmergencyScreen/index";
 import RequestScreen from "../RequestScreen/index";
-
-import { Colors } from "../../constants";
+import ChatsListScreen from "../ChatsListScreen/index";
+import ChatScreen from "../ChatScreen/index";
+import NotificationsScreen from "../NotificationsScreen/index";
 
 function ProfileScreen({ navigation }) {
   return (
@@ -22,14 +24,6 @@ function PharmaScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Pharma screen</Text>
-    </View>
-  );
-}
-
-function ChatScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Chat screen</Text>
     </View>
   );
 }
@@ -55,6 +49,27 @@ function AmbulanceStack() {
       <Stack.Screen name="Emergency" component={EmergencyScreen} />
       <Stack.Screen name="Request" component={RequestScreen} />
       <Stack.Screen name="Map" component={MapPage} />
+      <Stack.Screen name="Notification" component={NotificationsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function ChatStack({ navigation, route }) {
+  // navigation.setOptions({
+  //   tabBarStyle: { display: "none" },
+  // });
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+      <Stack.Screen name="ChatList" component={ChatsListScreen} />
+      <Stack.Screen
+        name="Chatting"
+        component={ChatScreen}
+        options={({ route }) => ({ tabBarHide: true })}
+      />
     </Stack.Navigator>
   );
 }
@@ -90,7 +105,7 @@ function HomePage({ navigation }) {
         })}
       >
         <Tab.Screen name="Pharmacy" component={PharmaScreen} />
-        <Tab.Screen name="Chat" component={ChatScreen} />
+        <Tab.Screen name="Chat" component={ChatStack} />
         <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
