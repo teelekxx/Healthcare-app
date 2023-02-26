@@ -15,7 +15,6 @@ import ChatsListScreen from "../ChatsListScreen/index";
 import ChatScreen from "../ChatScreen/index";
 import NotificationsScreen from "../NotificationsScreen/index";
 import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
-import { Colors } from "../../constants";
 import HistoryScreen from "../HistoryScreen";
 // function ProfileScreen({ navigation }) {
 //   return (
@@ -29,21 +28,6 @@ function PharmaScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Pharma screen</Text>
-    </View>
-  );
-}
-
-function HistoryScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>History screen</Text>
-    </View>
-  );
-}
-function ChatScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Chat screen</Text>
     </View>
   );
 }
