@@ -10,7 +10,7 @@ import EmergencyScreen from "../EmergencyScreen/index";
 import RequestScreen from "../RequestScreen/index";
 import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import { Colors } from "../../constants";
-
+import HistoryScreen from "../HistoryScreen";
 // function ProfileScreen({ navigation }) {
 //   return (
 //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -35,13 +35,13 @@ function ChatScreen({ navigation }) {
   );
 }
 
-function HistoryScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>History screen</Text>
-    </View>
-  );
-}
+// function HistoryScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>History screen</Text>
+//     </View>
+//   );
+// }
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -109,7 +109,6 @@ function HomePage({ navigation }) {
         <Tab.Screen name="Profile" component={ProfileStack} options={({ route }) => ({
             tabBarStyle: ((route) => {
               const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-              console.log(routeName)
               if (routeName === 'MedInfoSummary') {
                 return { display: "none" }
               }
