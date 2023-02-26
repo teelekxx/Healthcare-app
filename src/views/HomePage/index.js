@@ -1,14 +1,12 @@
 import { Button, Text, View } from "react-native";
-import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-<<<<<<< HEAD
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../constants";
-=======
->>>>>>> e0a56da34a6d8bb9d9c371fc570b1f6ba9023810
-
-import Ionicons from "react-native-vector-icons/Ionicons";
 import ProfileScreen from "../ProfileScreen";
 import MapPage from "../Map/index";
 import EmergencyScreen from "../EmergencyScreen/index";
@@ -102,7 +100,7 @@ function ProfileStack() {
         headerShown: false,
       })}
     >
-    <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+      <Stack.Screen name="ProfileMain" component={ProfileScreen} />
       <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} />
     </Stack.Navigator>
   );
@@ -111,7 +109,8 @@ function ProfileStack() {
 function HomePage({ navigation }) {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="Home"
+      <Tab.Navigator
+        initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
@@ -142,15 +141,19 @@ function HomePage({ navigation }) {
         <Tab.Screen name="Chat" component={ChatStack} />
         <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
-        <Tab.Screen name="Profile" component={ProfileStack} options={({ route }) => ({
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStack}
+          options={({ route }) => ({
             tabBarStyle: ((route) => {
-              const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-              if (routeName === 'MedInfoSummary') {
-                return { display: "none" }
+              const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+              if (routeName === "MedInfoSummary") {
+                return { display: "none" };
               }
-              return
+              return;
             })(route),
-          })}/>
+          })}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
