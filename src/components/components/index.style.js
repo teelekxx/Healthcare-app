@@ -106,7 +106,7 @@ export const PageTitle = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
   margin-top: 70px;
-  margin-left: 75px;
+  margin-left: 20px;
 `;
 
 export const PageTitleContainer = styled.View`
@@ -137,6 +137,15 @@ export const FormText = styled.Text`
   color: ${Colors.blue};
   padding-top:10px
   padding-bottom:10px;
+`;
+export const CenterFormText = styled.Text`
+  font-size:15px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.blue};
+  padding-top:10px
+  padding-bottom:10px;
+  align-self:center;
 `;
 
 export const FormInput = styled.TextInput`
@@ -189,4 +198,49 @@ export const NotificationTouchable = styled.TouchableOpacity`
   margin-top: 25px;
   margin-left: auto;
   margin-right: 25px;
+`;
+
+export const GreyText = styled.Text`
+  font-size: 15px;
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.grey};
+  padding-bottom: 5px;
+  padding-top: 5px;
+`;
+export const InfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  color: ${Colors.blue}
+  border-radius: 10px;
+  font-family: Monaco;
+  font-weight: bold;
+  width: 340px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`;
+export const SmallInfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  color: ${Colors.blue}
+  border-radius: 10px;
+  font-family: Monaco;
+  font-weight: bold;
+  width: 300px;
+  height: 40px;
+  padding-left:10px;
+  padding-right:10px;
+`;
+export const BigInfoInput = styled.TextInput`
+  font-size: 15px;
+  border: 1px solid ${Colors.lightGrey};
+  font-family: Monaco;
+  font-weight: bold;
+  color: ${Colors.blue}
+  border-radius: 10px;
+  width: 340px;
+  height: 80px;
+  padding-left:10px;
+  padding-right:10px;
 `;

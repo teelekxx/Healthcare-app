@@ -1,24 +1,31 @@
 import { Button, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+<<<<<<< HEAD
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../constants";
+=======
+>>>>>>> e0a56da34a6d8bb9d9c371fc570b1f6ba9023810
 
+import Ionicons from "react-native-vector-icons/Ionicons";
+import ProfileScreen from "../ProfileScreen";
 import MapPage from "../Map/index";
 import EmergencyScreen from "../EmergencyScreen/index";
 import RequestScreen from "../RequestScreen/index";
 import ChatsListScreen from "../ChatsListScreen/index";
 import ChatScreen from "../ChatScreen/index";
 import NotificationsScreen from "../NotificationsScreen/index";
-
-function ProfileScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Profile screen</Text>
-    </View>
-  );
-}
+import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
+import { Colors } from "../../constants";
+import HistoryScreen from "../HistoryScreen";
+// function ProfileScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>Profile screen</Text>
+//     </View>
+//   );
+// }
 
 function PharmaScreen({ navigation }) {
   return (
@@ -35,6 +42,21 @@ function HistoryScreen({ navigation }) {
     </View>
   );
 }
+function ChatScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Chat screen</Text>
+    </View>
+  );
+}
+
+// function HistoryScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>History screen</Text>
+//     </View>
+//   );
+// }
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -73,11 +95,23 @@ function ChatStack({ navigation, route }) {
     </Stack.Navigator>
   );
 }
+function ProfileStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+    <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+      <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} />
+    </Stack.Navigator>
+  );
+}
 
 function HomePage({ navigation }) {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      <Tab.Navigator initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
@@ -108,7 +142,15 @@ function HomePage({ navigation }) {
         <Tab.Screen name="Chat" component={ChatStack} />
         <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Profile" component={ProfileStack} options={({ route }) => ({
+            tabBarStyle: ((route) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+              if (routeName === 'MedInfoSummary') {
+                return { display: "none" }
+              }
+              return
+            })(route),
+          })}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
