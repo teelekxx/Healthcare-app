@@ -123,7 +123,7 @@ export const SignUpForm = styled.ScrollView`
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 25px 25px 0px 25px;
-  flexgrow: 0;
+  flexGrow: 0;
 `;
 
 export const AvatarContainer = styled.View`
