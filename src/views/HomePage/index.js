@@ -53,7 +53,20 @@ function AmbulanceStack() {
       <Stack.Screen name="Emergency" component={EmergencyScreen} />
       <Stack.Screen name="Request" component={RequestScreen} />
       <Stack.Screen name="Map" component={MapPage} />
-      <Stack.Screen name="Notification" component={NotificationsScreen} />
+      <Stack.Screen name="Notification" component={NotificationStack} />
+    </Stack.Navigator>
+  );
+}
+
+function NotificationStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+      <Stack.Screen name="NotificationList" component={NotificationsScreen} />
+      <Stack.Screen name="Chatting" component={ChatScreen} />
     </Stack.Navigator>
   );
 }
@@ -70,7 +83,7 @@ function ChatStack({ navigation, route }) {
     >
       <Stack.Screen name="ChatList" component={ChatsListScreen} />
       <Stack.Screen name="Chatting" component={ChatScreen} />
-      <Stack.Screen name="Notification" component={NotificationsScreen} />
+      <Stack.Screen name="Notification" component={NotificationStack} />
     </Stack.Navigator>
   );
 }
@@ -125,14 +138,26 @@ function HomePage({ navigation }) {
           options={({ route }) => ({
             tabBarStyle: ((route) => {
               const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-              if (routeName === "Chatting") {
+              if (routeName === "Chatting" || routeName === "Notification") {
                 return { display: "none" };
               }
               return;
             })(route),
           })}
         />
-        <Tab.Screen name="Home" component={AmbulanceStack} />
+        <Tab.Screen
+          name="Home"
+          component={AmbulanceStack}
+          options={({ route }) => ({
+            tabBarStyle: ((route) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+              if (routeName === "Notification") {
+                return { display: "none" };
+              }
+              return;
+            })(route),
+          })}
+        />
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen
           name="Profile"
