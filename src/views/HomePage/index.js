@@ -69,11 +69,8 @@ function ChatStack({ navigation, route }) {
       })}
     >
       <Stack.Screen name="ChatList" component={ChatsListScreen} />
-      <Stack.Screen
-        name="Chatting"
-        component={ChatScreen}
-        options={({ route }) => ({ tabBarHide: true })}
-      />
+      <Stack.Screen name="Chatting" component={ChatScreen} />
+      <Stack.Screen name="Notification" component={NotificationsScreen} />
     </Stack.Navigator>
   );
 }
@@ -122,7 +119,19 @@ function HomePage({ navigation }) {
         })}
       >
         <Tab.Screen name="Pharmacy" component={PharmaScreen} />
-        <Tab.Screen name="Chat" component={ChatStack} />
+        <Tab.Screen
+          name="Chat"
+          component={ChatStack}
+          options={({ route }) => ({
+            tabBarStyle: ((route) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+              if (routeName === "Chatting") {
+                return { display: "none" };
+              }
+              return;
+            })(route),
+          })}
+        />
         <Tab.Screen name="Home" component={AmbulanceStack} />
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen

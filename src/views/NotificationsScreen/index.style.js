@@ -9,7 +9,7 @@ export const NotificationsTitle = styled.Text`
   font-family: Monaco;
   font-weight: bold;
   font-size: 25px;
-  margin-top: ${height * 0.023696}px;
+  margin-top: ${height * 0.08886}px;
   margin-left: ${width * 0.0641}px;
 `;
 

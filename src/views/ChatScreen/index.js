@@ -34,6 +34,10 @@ import {
   CallButton,
   PageTitle,
   PhoneNumber,
+  GreyInput,
+  WhiteContainer,
+  PictureButton,
+  SendButton,
 } from "./index.style";
 
 function ChatScreen({ navigation, route }) {
@@ -69,11 +73,28 @@ function ChatScreen({ navigation, route }) {
           <PhoneNumber>0814637245</PhoneNumber>
         </CallButton>
       </PageTitleContainer>
-      <ChatField>
+      <ChatField></ChatField>
+      <WhiteContainer>
         <ChatInputContainer>
-          <PageTitle>Tee</PageTitle>
+          <PictureButton>
+            <Icon
+              name="images-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={21}
+            />
+          </PictureButton>
+          <GreyInput></GreyInput>
+          <SendButton>
+            <Icon
+              name="send-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={21}
+            />
+          </SendButton>
         </ChatInputContainer>
-      </ChatField>
+      </WhiteContainer>
     </BlueContainer>
   );
 }

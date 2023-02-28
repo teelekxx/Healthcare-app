@@ -26,6 +26,10 @@ export const HorizonTitle = styled.View`
   flex-direction: row;
 `;
 
+export const WhiteContainer = styled.View`
+  background-color: ${Colors.white};
+`;
+
 export const CallButton = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
@@ -49,7 +53,30 @@ export const PhoneNumber = styled.Text`
 export const ChatInputContainer = styled.View`
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-color: ${Colors.blue};
-  margin-top: ${height * 0.65521}px;
-  z-index: 99;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  height: ${height * 0.094786}px;
+  padding: 20px;
+`;
+
+export const GreyInput = styled.TextInput`
+  font-size: 15px;
+  background-color: ${Colors.white};
+  border-radius: 10px;
+  width: ${width * 0.7}px;
+  height: ${height * 0.047393}px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: ${width * 0.046153}px;
+`;
+
+export const PictureButton = styled.TouchableOpacity`
+  margin-right: ${width * 0.046153}px;
+`;
+
+export const SendButton = styled.TouchableOpacity`
+  /* margin-right: ${width * 0.046153}px; */
 `;

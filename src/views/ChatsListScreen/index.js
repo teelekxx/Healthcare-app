@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Button,
@@ -15,15 +15,18 @@ import {
 } from "../../components/components/index.style";
 import ChatModule from "../../components/ChatModule/index";
 import { Icon } from "react-native-elements";
+import SwitchSelector from "react-native-switch-selector";
 import { Colors } from "../../constants";
 import {
   ChatListContainer,
   ChatListTitle,
   ChatScrollable,
+  RoleSwitch,
 } from "./index.style";
 
 function ChatsListScreen({ navigation }) {
-  const chatsList = [
+  const [isPatient, setPatient] = useState(false);
+  const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
     { Name: "Bill Doe", LastMassage: "" },
     { Name: "Collin Doe", LastMassage: "Hello" },
@@ -33,9 +36,19 @@ function ChatsListScreen({ navigation }) {
     { Name: "Gill Doe", LastMassage: "" },
     { Name: "Harry Doe", LastMassage: "" },
   ];
+  const chatsListPharma = [
+    { Name: "Mine Pattarin", LastMassage: "" },
+    { Name: "Hel Ping", LastMassage: "Hello!" },
+  ];
+  const options = [
+    { label: "As a patient", value: true },
+    { label: "As a Paramedic", value: false },
+  ];
   return (
     <ChatListContainer>
-      <NotificationTouchable>
+      <NotificationTouchable
+        onPress={() => navigation.navigate("Notification")}
+      >
         <Icon
           name="notifications-outline"
           type="ionicon"
@@ -44,25 +57,58 @@ function ChatsListScreen({ navigation }) {
         />
       </NotificationTouchable>
       <ChatListTitle>Chats</ChatListTitle>
-      <SafeAreaView>
-        <ChatScrollable>
-          {chatsList.map((val, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Chatting", { paramKey: val.Name })
-                }
-                key={index}
-              >
-                <ChatModule
-                  name={val.Name}
-                  lastMassage={val.LastMassage}
-                ></ChatModule>
-              </TouchableOpacity>
-            );
-          })}
-        </ChatScrollable>
-      </SafeAreaView>
+      <RoleSwitch>
+        <SwitchSelector
+          options={options}
+          initial={0}
+          textColor={Colors.blue}
+          selectedColor={Colors.white}
+          buttonColor={Colors.blue}
+          borderColor={Colors.blue}
+          onPress={(value) => setPatient(value)}
+        />
+      </RoleSwitch>
+      {isPatient ? (
+        <SafeAreaView>
+          <ChatScrollable>
+            {chatsListPatient.map((val, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Chatting", { paramKey: val.Name })
+                  }
+                  key={index}
+                >
+                  <ChatModule
+                    name={val.Name}
+                    lastMassage={val.LastMassage}
+                  ></ChatModule>
+                </TouchableOpacity>
+              );
+            })}
+          </ChatScrollable>
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView>
+          <ChatScrollable>
+            {chatsListPharma.map((val, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Chatting", { paramKey: val.Name })
+                  }
+                  key={index}
+                >
+                  <ChatModule
+                    name={val.Name}
+                    lastMassage={val.LastMassage}
+                  ></ChatModule>
+                </TouchableOpacity>
+              );
+            })}
+          </ChatScrollable>
+        </SafeAreaView>
+      )}
     </ChatListContainer>
   );
 }

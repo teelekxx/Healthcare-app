@@ -18,5 +18,10 @@ export const ChatListContainer = styled.View`
 `;
 
 export const ChatScrollable = styled.ScrollView`
-  height: ${height * 0.770142}px;
+  height: ${height * 0.699142}px;
+`;
+
+export const RoleSwitch = styled.View`
+  margin-right: ${width * 0.064102}px;
+  margin-bottom: ${height * 0.036729}px;
 `;
