@@ -94,26 +94,26 @@ export const BlueButtonText = styled.Text`
 `;
 
 export const Text = styled.Text`
-  font-size:20px;
+  font-size: 20px;
   font-family: Monaco;
   font-weight: regular;
   color: ${Colors.blue};
-`
+`;
 
 export const PageTitle = styled.Text`
- font-size:24px;
+  font-size: 24px;
   font-family: Monaco;
   font-weight: bold;
   color: ${Colors.white};
-  margin-top:70px;
+  margin-top: 70px;
   margin-left: 20px;
-`
+`;
 
 export const PageTitleContainer = styled.View`
-flex:1
-flex-direction: row;
-width: 100%;
-`
+  flex: 1;
+  flex-direction: row;
+  width: 100%;
+`;
 export const SignUpForm = styled.ScrollView`
   margin-top: auto;
   display: flex;
@@ -123,12 +123,12 @@ export const SignUpForm = styled.ScrollView`
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 25px 25px 0px 25px;
-  flexGrow:0;
+  flexgrow: 0;
 `;
 
 export const AvatarContainer = styled.View`
-  align-self:center;
-`
+  align-self: center;
+`;
 
 export const FormText = styled.Text`
   font-size:15px;
@@ -137,7 +137,7 @@ export const FormText = styled.Text`
   color: ${Colors.blue};
   padding-top:10px
   padding-bottom:10px;
-`
+`;
 export const CenterFormText = styled.Text`
   font-size:15px;
   font-family: Monaco;
@@ -146,7 +146,7 @@ export const CenterFormText = styled.Text`
   padding-top:10px
   padding-bottom:10px;
   align-self:center;
-`
+`;
 
 export const FormInput = styled.TextInput`
   font-size: 15px;
@@ -154,43 +154,60 @@ export const FormInput = styled.TextInput`
   border-radius: 10px;
   width: 340px;
   height: 40px;
-  padding-left:10px;
-  padding-right:10px;
-`
+  padding-left: 10px;
+  padding-right: 10px;
+`;
 export const BigFormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
   width: 340px;
   height: 80px;
-  padding-left:10px;
-  padding-right:10px;
-`
+  padding-left: 10px;
+  padding-right: 10px;
+`;
 export const SmallFormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
   width: 300px;
   height: 40px;
-  padding-left:10px;
-  padding-right:10px;
-`
+  padding-left: 10px;
+  padding-right: 10px;
+`;
 export const DateCalendar = styled.View`
-flex:1;
-flex-direction:row;
-justify-content:space-between;
-`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
+export const CircleButton = styled.TouchableOpacity`
+  margin-top: 60px;
+  margin-left: 25px;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  elevation: 10;
+  background-color: ${Colors.white};
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+`;
 
-export const GreyText= styled.Text`
- font-size:15px;
+export const NotificationTouchable = styled.TouchableOpacity`
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: 25px;
+`;
+
+export const GreyText = styled.Text`
+  font-size: 15px;
   font-family: Monaco;
   font-weight: bold;
   color: ${Colors.grey};
-  padding-bottom:5px;
-  padding-top: 5px; 
-
-`
+  padding-bottom: 5px;
+  padding-top: 5px;
+`;
 export const InfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
@@ -202,7 +219,7 @@ export const InfoInput = styled.TextInput`
   height: 40px;
   padding-left:10px;
   padding-right:10px;
-`
+`;
 export const SmallInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
@@ -214,7 +231,7 @@ export const SmallInfoInput = styled.TextInput`
   height: 40px;
   padding-left:10px;
   padding-right:10px;
-`
+`;
 export const BigInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
@@ -226,4 +243,4 @@ export const BigInfoInput = styled.TextInput`
   height: 80px;
   padding-left:10px;
   padding-right:10px;
-`
+`;

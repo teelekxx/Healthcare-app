@@ -1,9 +1,12 @@
 import React from "react";
 import { SafeAreaView, Button } from "react-native";
+import { Icon } from "react-native-elements";
+import { Colors } from "../../constants";
 import {
   Title,
   ItalicText,
   Container,
+  NotificationTouchable,
 } from "../../components/components/index.style";
 import {
   SosButton,
@@ -16,6 +19,16 @@ import {
 function EmergencyScreen({ navigation }) {
   return (
     <SosContainer>
+      <NotificationTouchable
+        onPress={() => navigation.navigate("Notification")}
+      >
+        <Icon
+          name="notifications-outline"
+          type="ionicon"
+          color={Colors.blue}
+          size={30}
+        />
+      </NotificationTouchable>
       <SosTitle>Ambulance request</SosTitle>
       <PromptText1>Click the button below to request an ambulance</PromptText1>
       <SosButton onPress={() => navigation.navigate("Request")}>

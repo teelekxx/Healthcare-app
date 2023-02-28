@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Button, Dimensions } from "react-native";
+import {
+  SafeAreaView,
+  Button,
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Colors } from "../../constants";
 import {
@@ -124,8 +130,8 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
       </SymptomList>
-      <InputContainer>
-        <BlueText>Contact number*</BlueText>
+      <InputContainer behavior="padding">
+        <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput></GreyInput>
       </InputContainer>
       <HorizonInput3>

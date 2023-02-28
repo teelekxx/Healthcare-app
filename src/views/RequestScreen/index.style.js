@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
-import { Dimensions } from "react-native";
+import { Dimensions, KeyboardAvoidingView } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const { width, height } = Dimensions.get("window");
@@ -69,7 +69,7 @@ export const RequestTitle = styled.Text`
   margin-top: ${height * 0.08886}px;
 `;
 
-export const InputContainer = styled.View``;
+export const InputContainer = styled.KeyboardAvoidingView``;
 
 export const HorizonInput = styled.View`
   display: flex;
@@ -88,7 +88,7 @@ export const HorizonInput3 = styled.View`
   margin-top: ${height * 0.03672}px;
 `;
 
-export const RequestContainer = styled.View`
+export const RequestContainer = styled.ScrollView`
   margin-left: ${width * 0.0641}px;
 `;
 
