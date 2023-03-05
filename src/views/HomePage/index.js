@@ -16,6 +16,7 @@ import ChatScreen from "../ChatScreen/index";
 import NotificationsScreen from "../NotificationsScreen/index";
 import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import HistoryScreen from "../HistoryScreen";
+import PatientPharmacyScreen from "../PatientPharmacyScreen/index";
 // function ProfileScreen({ navigation }) {
 //   return (
 //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -24,13 +25,13 @@ import HistoryScreen from "../HistoryScreen";
 //   );
 // }
 
-function PharmaScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Pharma screen</Text>
-    </View>
-  );
-}
+// function PharmaScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>Pharma screen</Text>
+//     </View>
+//   );
+// }
 
 // function HistoryScreen({ navigation }) {
 //   return (
@@ -42,6 +43,20 @@ function PharmaScreen({ navigation }) {
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function PharmacyStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+      <Stack.Screen name="PatientPharmacy" component={PatientPharmacyScreen} />
+      <Stack.Screen name="Chatting" component={ChatScreen} />
+      <Stack.Screen name="Notification" component={NotificationStack} />
+    </Stack.Navigator>
+  );
+}
 
 function AmbulanceStack() {
   return (
@@ -131,7 +146,19 @@ function HomePage({ navigation }) {
           tabBarInactiveTintColor: Colors.grey,
         })}
       >
-        <Tab.Screen name="Pharmacy" component={PharmaScreen} />
+        <Tab.Screen
+          name="Pharmacy"
+          component={PharmacyStack}
+          options={({ route }) => ({
+            tabBarStyle: ((route) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+              if (routeName === "Chatting") {
+                return { display: "none" };
+              }
+              return;
+            })(route),
+          })}
+        />
         <Tab.Screen
           name="Chat"
           component={ChatStack}
