@@ -49,9 +49,7 @@ function SignUpPage({ navigation }) {
       createAlert("Password does not match")
       return
     }
-    navigation.navigate("Role",  {
-      email:"hi",
-    })
+    navigation.navigate('Role', {email: email})
   }
   
 
