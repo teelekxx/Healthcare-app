@@ -29,7 +29,14 @@ class Auth {
     // createv user in firebase
    const user = await createUserWithEmailAndPassword(auth, email, password);
     // create user in mongo
-    // () => {}
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/`,
+      body: options.body,
+      token: options.token,
+    };
+
+    return request(config).catch((err) => ({ ...err, ok: false }));
 
   }
 }
