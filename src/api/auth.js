@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "lib/firebase";
+import { request } from "./index";
 
 
 
