@@ -58,10 +58,20 @@ function SignUpPharmacistPage({ navigation, route }) {
     let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1)+'/'+tempDate.getFullYear()
     setLicenseText(fDate)
   }
-  const handleSubmit = () =>{
-    navigation.navigate('MedInfo', {email:email, role:role, name: name})
-  }
-
+  const handleSubmit = () => {
+    navigation.navigate("MedInfo", {
+      email: email,
+      role: role,
+      name: name,
+      dateOfBirth: text,
+      gender: gender,
+      citizenId: id,
+      phoneNumber: phone,
+      address: address,
+      city:city,
+      zipCode:zipCode,
+    });
+  };
   return (
     <BlueContainer>
       <PageTitleContainer>

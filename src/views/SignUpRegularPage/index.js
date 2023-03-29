@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import {
   FormInput,
   SmallFormInput,
@@ -19,10 +19,9 @@ import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-
 function SignUpRegularPage({ navigation, route }) {
-  const {email} = route.params;
-  const {role} = route.params;
+  const { email } = route.params;
+  const { role } = route.params;
   const [name, onChangeName] = useState("");
   const [id, onChangeID] = useState("");
   const [phone, onChangePhone] = useState("");
@@ -35,22 +34,38 @@ function SignUpRegularPage({ navigation, route }) {
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ]);
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
   // const [mode, setMode] = useState('date')
-  const [show, setShow] = useState(false)
-  const [text, setText] = useState('select date')
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState("select date");
 
-  const onChange = (event, selectedDate) => {  
-    const currentDate = selectedDate || date
-    setDate(currentDate)
-    setShow(false)
-    let tempDate = new Date(currentDate)
-    let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1)+'/'+tempDate.getFullYear()
-    setText(fDate)
-  }
-  const handleSubmit = () =>{
-    navigation.navigate('MedInfo', {email:email, role:role, name: name})
-  }
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShow(false);
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      "/" +
+      (tempDate.getMonth() + 1) +
+      "/" +
+      tempDate.getFullYear();
+    setText(fDate);
+  };
+  const handleSubmit = () => {
+    navigation.navigate("MedInfo", {
+      email: email,
+      role: role,
+      name: name,
+      dateOfBirth: text,
+      gender: gender,
+      citizenId: id,
+      phoneNumber: phone,
+      address: address,
+      city:city,
+      zipCode:zipCode,
+    });
+  };
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -70,23 +85,25 @@ function SignUpRegularPage({ navigation, route }) {
         <FormInput onChangeText={onChangeName} value={name} />
         <FormText>Date of Birth</FormText>
         <DateCalendar>
-        <SmallFormInput value={text}/>
-        {show &&(<DateTimePicker
-        testID="dateTimePicker"
-          value={date}
-          mode='date'
-          display='default'
-          onChange={onChange}
-        />)}
-        <Icon
-              name="calendar-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={30}
-              onPress={()=> setShow(true)}
+          <SmallFormInput value={text} />
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
             />
+          )}
+          <Icon
+            name="calendar-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+            onPress={() => setShow(true)}
+          />
         </DateCalendar>
-       
+
         <FormText>Gender</FormText>
         <DropDownPicker
           open={open}
@@ -97,7 +114,6 @@ function SignUpRegularPage({ navigation, route }) {
           setItems={setItems}
           placeholder="select your gender"
           placeholderStyle={{
-         
             fontSize: 15,
           }}
           style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
@@ -107,7 +123,12 @@ function SignUpRegularPage({ navigation, route }) {
         <FormText>Tel.</FormText>
         <FormInput onChangeText={onChangePhone} value={phone} />
         <FormText>Address</FormText>
-        <BigFormInput multiline numberOfLines={3} onChangeText={onChangeAddress} value={address}/>
+        <BigFormInput
+          multiline
+          numberOfLines={3}
+          onChangeText={onChangeAddress}
+          value={address}
+        />
         <FormText>City</FormText>
         <FormInput onChangeText={onChangeCity} value={city} />
         <FormText>Zip Code</FormText>
