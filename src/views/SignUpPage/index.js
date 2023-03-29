@@ -1,11 +1,60 @@
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
+import { useState } from "react";
+import { SafeAreaView, Text, Alert } from "react-native";
 import { ThemeButton, ThemeButtonText, Or, CircleButton} from "./index.style";
 import { Input, InputGroup, SubTitle, ItalicText2, BlueContainer, Form, BlueButton, BlueButtonText} from "../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
 function SignUpPage({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  function isValidEmail(inputEmail) {
+    console.log(inputEmail)
+    // Regular expression for validating email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Return true if email matches the regular expression
+    return emailRegex.test(inputEmail);
+  }
+  function createAlert(message){ 
+    Alert.alert(
+    "Try Again",
+    message,
+    [
+      {
+        text: "Ok",
+        style: "cancel"
+      },
+    ]
+  );}
+ 
+  function checkPassword(pass, confirmPass){
+    if(pass === confirmPass){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+  const handleData = () =>{
+    const result = isValidEmail(email)
+    const matchPass = checkPassword(password, confirmPassword)
+
+    if(!result){
+      createAlert("Invalid email format")
+      return
+    }
+    else if(!matchPass){
+      createAlert("Password does not match")
+      return
+    }
+    navigation.navigate("Role",  {
+      email:"hi",
+    })
+  }
+  
+
   return (
     <BlueContainer>
     <CircleButton onPress={() => navigation.goBack()}>
@@ -36,7 +85,7 @@ function SignUpPage({ navigation }) {
               color={Colors.grey}
               size={30}
             />
-          <Input type="text" placeholder="Email address" placeholderTextColor={Colors.grey}/>
+          <Input type="text" placeholder="Email address" placeholderTextColor={Colors.grey}  onChangeText={setEmail} value={email}/>
         </InputGroup>
         <InputGroup>
         <Icon
@@ -45,7 +94,7 @@ function SignUpPage({ navigation }) {
           color={Colors.grey}
           size={30}
         />
-          <Input type="text" placeholder="Password" placeholderTextColor={Colors.grey}/>
+          <Input type="text" secureTextEntry={true} placeholder="Password" placeholderTextColor={Colors.grey} onChangeText={setPassword} value={password}/>
         </InputGroup>
         <InputGroup>
         <Icon
@@ -54,9 +103,9 @@ function SignUpPage({ navigation }) {
           color={Colors.grey}
           size={30}
         />
-          <Input type="text" placeholder="Confirm password" placeholderTextColor={Colors.grey}/>
+          <Input type="text" secureTextEntry={true} placeholder="Confirm password" placeholderTextColor={Colors.grey} onChangeText={setConfirmPassword} value={confirmPassword}/>
         </InputGroup>
-        <BlueButton  onPress={() => navigation.navigate("Role")}>
+        <BlueButton  onPress={handleData}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>
       </Form>

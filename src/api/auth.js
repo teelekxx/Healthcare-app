@@ -32,9 +32,8 @@ class Auth {
     // create user in mongo
     const config = {
       method: HTTP_METHODS.post,
-      url: `/`,
+      url: `/user`,
       body: options.body,
-      token: options.token,
     };
 
     return request(config).catch((err) => ({ ...err, ok: false }));
