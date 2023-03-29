@@ -8,11 +8,19 @@ import {
   FormText,
   PageTitleContainer,
   PageTitle,
-BlueButtonText,
+  BlueButtonText,
   DateCalendar,
   CenterFormText,
+  BlueButton,
 } from "../../components/components/index.style";
-import { CircleButton, CheckBoxContainer, Space, SaveButton, SkipButton, ButtonContainer} from "./index.style";
+import {
+  CircleButton,
+  CheckBoxContainer,
+  Space,
+  SaveButton,
+  SkipButton,
+  ButtonContainer,
+} from "./index.style";
 import { Button, Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
@@ -21,7 +29,19 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { CheckBox } from "@rneui/themed";
 
-function MedInfoPage({ navigation }) {
+function MedInfoPage({ navigation, route }) {
+  const {
+    email,
+    role,
+    name,
+    dateOfBirth,
+    gender,
+    citizenId,
+    phoneNumber,
+    address,
+    city,
+    zipCode,
+  } = route.params;
   const [allergy, onChangeAllergy] = useState("");
   const [medication, onChangeMedication] = useState("");
   const [disease, onChangeDisease] = useState("");
@@ -37,7 +57,7 @@ function MedInfoPage({ navigation }) {
   const toggleDNR = () => setCheckedDNR(!checkedDNR);
   const [checkedDonor, setCheckedDonor] = useState(false);
   const toggleDonor = () => setCheckedDonor(!checkedDonor);
-  const [name, setName] = useState("");
+  const [emergencyName, setEmergencyName] = useState("");
   const [relationships, setRelationships] = useState([
     { label: "Father", value: "father" },
     { label: "Mother", value: "mother" },
@@ -48,8 +68,8 @@ function MedInfoPage({ navigation }) {
   const [openRelationships, setOpenRelationships] = useState(false);
   const [relationship, setRelationship] = useState(null);
   const [tel, setTel] = useState("");
-  const [insuranceProvider, setInsuranceProvider] = useState("")
-  const [insurancePlan, setInsurancePlan] = useState("")
+  const [insuranceProvider, setInsuranceProvider] = useState("");
+  const [insurancePlan, setInsurancePlan] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [text, setText] = useState("select expiration date");
@@ -66,7 +86,36 @@ function MedInfoPage({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-
+  const handleSubmit = () => {
+    navigation.navigate("HomePage", {
+      //user
+      email: email,
+      role: role,
+      name: name,
+      //med info
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+      citizenId: citizenId,
+      phoneNumber: phoneNumber,
+      bloodType: bloodType,
+      congenitalDisease: disease,
+      regularMed: medication,
+      allergies: allergy,
+      DNRStatus: checkedDNR,
+      organDonor: checkedDonor,
+      powerOfAttorneyName: emergencyName,
+      powerOfAttorneyRelationship: relationship,
+      powerOfAttorneyPhoneNumber: tel,
+      //address
+      address: address,
+      city: city,
+      zipCode: zipCode,
+      //insurance
+      provider: insuranceProvider,
+      plan: insurancePlan,
+      expirationDate: text,
+    });
+  };
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -140,7 +189,7 @@ function MedInfoPage({ navigation }) {
         </CheckBoxContainer>
         <CenterFormText>Medical Power of Attorney</CenterFormText>
         <FormText>Name</FormText>
-        <FormInput onChangeText={setName} value={name} />
+        <FormInput onChangeText={setEmergencyName} value={emergencyName} />
         <FormText>Relationship</FormText>
         <DropDownPicker
           open={openRelationships}
@@ -160,29 +209,34 @@ function MedInfoPage({ navigation }) {
         <Space></Space>
         <CenterFormText>Insurance information</CenterFormText>
         <FormText>Insurance Provider</FormText>
-        <FormInput onChangeText={setInsuranceProvider} value={insuranceProvider} />
+        <FormInput
+          onChangeText={setInsuranceProvider}
+          value={insuranceProvider}
+        />
         <FormText>Insurance Plan</FormText>
         <FormInput onChangeText={setInsurancePlan} value={insurancePlan} />
         <FormText>Expiration Date</FormText>
         <DateCalendar>
-        <SmallFormInput value={text}/>
-        {show &&(<DateTimePicker
-        testID="dateTimePicker"
-          value={date}
-          mode='date'
-          display='default'
-          onChange={onChange}
-        />)}
-        <Icon
-              name="calendar-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={30}
-              onPress={()=> setShow(true)}
+          <SmallFormInput value={text} />
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
             />
+          )}
+          <Icon
+            name="calendar-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+            onPress={() => setShow(true)}
+          />
         </DateCalendar>
 
-        <ButtonContainer>
+        {/* <ButtonContainer>
         <SkipButton
           onPress={() => {
             navigation.navigate("Home");
@@ -197,8 +251,10 @@ function MedInfoPage({ navigation }) {
         >
           <BlueButtonText>Save</BlueButtonText>
         </SaveButton>
-        </ButtonContainer>
-        
+        </ButtonContainer> */}
+        <BlueButton onPress={handleSubmit}>
+          <BlueButtonText>Create account</BlueButtonText>
+        </BlueButton>
       </SignUpForm>
     </BlueContainer>
   );
