@@ -117,7 +117,7 @@ function ProfileStack() {
 
 function HomePage({ navigation }) {
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
@@ -200,7 +200,7 @@ function HomePage({ navigation }) {
           })}
         />
       </Tab.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }
 export default HomePage;

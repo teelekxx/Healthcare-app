@@ -5,18 +5,19 @@ import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import { SubTitle, Text, BlueButton, BlueButtonText } from "../../components/components/index.style";
 import { RadioButton } from "react-native-paper";
-function RolePage({ navigation }) {
+function RolePage({ route, navigation }) {
   const [checked, setChecked] = React.useState("Regular user");
+  const {email} = route.params;
   function next(){
     console.log(checked)
     if(checked === "Regular user"){
-      navigation.navigate("SignUpRegular")
+      navigation.navigate("SignUpRegular", {role: checked, email: email})
     }
     else if(checked === "Paramedic"){
-      navigation.navigate("SignUpParamedic")
+      navigation.navigate("SignUpParamedic",  {role: checked, email: email})
     }
     else{
-      navigation.navigate("SignUpPharmacist")
+      navigation.navigate("SignUpPharmacist",  {role: checked, email: email})
     }
       
   }

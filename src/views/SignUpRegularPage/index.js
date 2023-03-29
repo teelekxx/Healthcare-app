@@ -20,7 +20,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 
-function SignUpRegularPage({ navigation }) {
+function SignUpRegularPage({ navigation, route }) {
+  const {email} = route.params;
+  const {role} = route.params;
   const [name, onChangeName] = useState("");
   const [id, onChangeID] = useState("");
   const [phone, onChangePhone] = useState("");
@@ -45,6 +47,9 @@ function SignUpRegularPage({ navigation }) {
     let tempDate = new Date(currentDate)
     let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1)+'/'+tempDate.getFullYear()
     setText(fDate)
+  }
+  const handleSubmit = () =>{
+    navigation.navigate('MedInfo', {email:email, role:role, name: name})
   }
   return (
     <BlueContainer>
@@ -107,7 +112,7 @@ function SignUpRegularPage({ navigation }) {
         <FormInput onChangeText={onChangeCity} value={city} />
         <FormText>Zip Code</FormText>
         <FormInput onChangeText={onChangeZipCode} value={zipCode} />
-        <BlueButton onPress={() => {navigation.navigate('MedInfo')}}>
+        <BlueButton onPress={handleSubmit}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>
       </SignUpForm>
