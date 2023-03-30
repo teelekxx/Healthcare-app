@@ -20,8 +20,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 function SignUpRegularPage({ navigation, route }) {
-  const { email } = route.params;
-  const { role } = route.params;
+  const { email, password, role } = route.params;
   const [name, onChangeName] = useState("");
   const [id, onChangeID] = useState("");
   const [phone, onChangePhone] = useState("");
@@ -55,6 +54,7 @@ function SignUpRegularPage({ navigation, route }) {
   const handleSubmit = () => {
     navigation.navigate("MedInfo", {
       email: email,
+      password:password,
       role: role,
       name: name,
       dateOfBirth: text,

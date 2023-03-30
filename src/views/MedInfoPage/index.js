@@ -28,10 +28,15 @@ import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { CheckBox } from "@rneui/themed";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import Auth from "../../api/auth";
+import { async } from "@firebase/util";
+import {auth} from "../../lib/firebase";
 
 function MedInfoPage({ navigation, route }) {
   const {
     email,
+    password,
     role,
     name,
     dateOfBirth,
@@ -86,35 +91,54 @@ function MedInfoPage({ navigation, route }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-  const handleSubmit = () => {
-    navigation.navigate("HomePage", {
-      //user
-      email: email,
-      role: role,
-      name: name,
-      //med info
-      dateOfBirth: dateOfBirth,
-      gender: gender,
-      citizenId: citizenId,
-      phoneNumber: phoneNumber,
-      bloodType: bloodType,
-      congenitalDisease: disease,
-      regularMed: medication,
-      allergies: allergy,
-      DNRStatus: checkedDNR,
-      organDonor: checkedDonor,
-      powerOfAttorneyName: emergencyName,
-      powerOfAttorneyRelationship: relationship,
-      powerOfAttorneyPhoneNumber: tel,
-      //address
-      address: address,
-      city: city,
-      zipCode: zipCode,
-      //insurance
-      provider: insuranceProvider,
-      plan: insurancePlan,
-      expirationDate: text,
-    });
+  const handleSubmit = async (event) => {
+    try{
+      
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+
+      const res = await Auth.register({
+        body: {
+          email: email,
+          password: password,
+          role: role,
+        },
+        // token,
+      });
+      console.log(res)
+      // navigation.navigate("HomePage", {
+      //   //user
+      //   email: email,
+      //   role: role,
+      //   password:password,
+      //   //med info
+      //   name: name,
+      //   dateOfBirth: dateOfBirth,
+      //   gender: gender,
+      //   citizenId: citizenId,
+      //   phoneNumber: phoneNumber,
+      //   bloodType: bloodType,
+      //   congenitalDisease: disease,
+      //   regularMed: medication,
+      //   allergies: allergy,
+      //   DNRStatus: checkedDNR,
+      //   organDonor: checkedDonor,
+      //   powerOfAttorneyName: emergencyName,
+      //   powerOfAttorneyRelationship: relationship,
+      //   powerOfAttorneyPhoneNumber: tel,
+      //   //address
+      //   address: address,
+      //   city: city,
+      //   zipCode: zipCode,
+      //   //insurance
+      //   provider: insuranceProvider,
+      //   plan: insurancePlan,
+      //   expirationDate: text,
+      // });
+    }catch(err){
+      console.log(err)
+    }
+    
+ 
   };
   return (
     <BlueContainer>

@@ -48,8 +48,10 @@ function SignUpPage({ navigation }) {
     else if(!matchPass){
       createAlert("Password does not match")
       return
+    }else if(email===""||password===""||confirmPassword===""){
+      createAlert("All fields are required")
     }
-    navigation.navigate('Role', {email: email})
+    navigation.navigate('Role', {email: email, password:password})
   }
   
 
