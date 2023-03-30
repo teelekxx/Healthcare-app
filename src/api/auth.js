@@ -30,9 +30,7 @@ class Auth {
 
   static register(option) {
 
-    // create user in firebase
-  //  const user = await createUserWithEmailAndPassword(auth, email, password);
-    // create user in mongo
+
     const config = {
       method: HTTP_METHODS.post,
       url: `/user`,

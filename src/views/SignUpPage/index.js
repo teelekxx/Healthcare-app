@@ -6,6 +6,9 @@ import { Input, InputGroup, SubTitle, ItalicText2, BlueContainer, Form, BlueButt
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
+import Auth from "../../api/auth";
+import { compose } from "@reduxjs/toolkit";
+
 function SignUpPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,21 +40,34 @@ function SignUpPage({ navigation }) {
       return false
     }
   }
-  const handleData = () =>{
-    const result = isValidEmail(email)
-    const matchPass = checkPassword(password, confirmPassword)
+  const handleData = async () =>{
 
-    if(!result){
-      createAlert("Invalid email format")
-      return
-    }
-    else if(!matchPass){
-      createAlert("Password does not match")
-      return
-    }else if(email===""||password===""||confirmPassword===""){
-      createAlert("All fields are required")
-    }
-    navigation.navigate('Role', {email: email, password:password})
+    const res = await Auth.register({
+      body: {
+        email: "chanok213@mail.com",
+        password: "password",
+        role: "user",
+      },
+    });
+    console.log({res})
+
+
+    
+
+    // const result = isValidEmail(email)
+    // const matchPass = checkPassword(password, confirmPassword)
+
+    // if(!result){
+    //   createAlert("Invalid email format")
+    //   return
+    // }
+    // else if(!matchPass){
+    //   createAlert("Password does not match")
+    //   return
+    // }else if(email===""||password===""||confirmPassword===""){
+    //   createAlert("All fields are required")
+    // }
+    // navigation.navigate('Role', {email: email, password:password})
   }
   
 

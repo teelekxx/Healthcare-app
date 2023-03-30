@@ -102,9 +102,7 @@ function MedInfoPage({ navigation, route }) {
           password: password,
           role: role,
         },
-        // token,
       });
-      console.log(res)
       // navigation.navigate("HomePage", {
       //   //user
       //   email: email,
