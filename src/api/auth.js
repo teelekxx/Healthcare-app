@@ -39,7 +39,7 @@ class Auth {
       body: option.body,
     };
     
-    return request(config).catch((err) => ({ ...err, ok: false }));
+    return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
 }
