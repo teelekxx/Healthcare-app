@@ -63,7 +63,7 @@ export const BlueContainer = styled.View`
   width: 100%;
 `;
 
-export const Form = styled.View`
+export const Form = styled.ScrollView`
   margin-top: auto;
   display: flex;
   flex-direction: column;
