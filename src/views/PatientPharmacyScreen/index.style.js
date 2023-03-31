@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Icon } from "react-native-elements";
+import { Icon, Avatar } from "react-native-elements";
 import { Colors } from "../../constants";
 import { Dimensions } from "react-native";
 
@@ -64,6 +64,13 @@ export const PharmacyIcon = styled.Image`
   margin-top: ${height * 0.04739}px;
 `;
 
+export const ProfileIcon = styled.Image`
+  width: ${width * 0.35897}px;
+  height: ${width * 0.35897}px;
+  margin-left: ${width * 0.30769}px;
+  margin-top: ${height * 0.1587}px;
+`;
+
 export const FindingPrompt = styled.Text`
   color: ${Colors.blue};
   font-family: Monaco;
@@ -96,8 +103,29 @@ export const WhiteButtonText = styled.Text`
   color: ${Colors.white};
 `;
 
+export const DetailText = styled.Text`
+  color: ${Colors.blue};
+  font-family: Monaco;
+  font-weight: bold;
+  font-size: 25px;
+  text-align: center;
+`;
+
+export const TimeText = styled.Text`
+  color: ${Colors.blue};
+  font-family: Monaco;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+`;
+
 export const InlineIcon = styled(Icon)`
   padding-top: 5px;
+`;
+
+export const DetailContainer = styled.View`
+  margin-top: ${height * 0.04739}px;
+  margin-bottom: ${height * 0.0592}px;
 `;
 
 export const ButtonContainer = styled.View``;
