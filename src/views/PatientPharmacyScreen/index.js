@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, Button, ActivityIndicator } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Avatar } from "react-native-elements";
 import { Colors } from "../../constants";
 import {
   Title,
@@ -20,6 +20,10 @@ import {
   ChattingButton,
   InlineIcon,
   WhiteButtonText,
+  ProfileIcon,
+  DetailContainer,
+  DetailText,
+  TimeText,
 } from "./index.style";
 
 function PatientPharmacyScreen({ navigation }) {
@@ -40,9 +44,11 @@ function PatientPharmacyScreen({ navigation }) {
         />
       </NotificationTouchable>
       <FindTitle>Pharmacy</FindTitle>
-      <PharmacyIcon source={require("../../../assets/prescription-1.png")} />
       {!isWaiting && !isFound ? (
         <ButtonContainer>
+          <PharmacyIcon
+            source={require("../../../assets/prescription-1.png")}
+          />
           <FindButton
             onPress={() => {
               setWaiting(true);
@@ -53,6 +59,9 @@ function PatientPharmacyScreen({ navigation }) {
         </ButtonContainer>
       ) : isWaiting && !isFound ? (
         <ButtonContainer>
+          <PharmacyIcon
+            source={require("../../../assets/prescription-1.png")}
+          />
           {/* <WaitingButton disabled ={true} */}
           <WaitingButton
             onPress={() => {
@@ -65,14 +74,14 @@ function PatientPharmacyScreen({ navigation }) {
         </ButtonContainer>
       ) : (
         <ButtonContainer>
-          <WaitingButton disabled={true}>
-            <Icon
-              name="checkmark-outline"
-              type="ionicon"
-              color={Colors.white}
-              size={70}
-            />
-          </WaitingButton>
+          <ProfileIcon
+            source={require("../../../assets/profile-picture-empty.png")}
+          />
+          <DetailContainer>
+            <DetailText>Tee Doc</DetailText>
+            <DetailText>ABC Health Pharmacy</DetailText>
+            <TimeText>{new Date().toLocaleString()}</TimeText>
+          </DetailContainer>
           <FindingPrompt>
             Pharmacist found. Click the button below to start chatting{" "}
             <InlineIcon
