@@ -185,7 +185,7 @@ function MapPage({ navigation }) {
           </MapView>
         </MapContainer>
       )}
-      <ThemeButton2 onPress={() => navigation.navigate("Landing")}>
+      <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
         <ThemeButtonText2>Firstaid Knowledge</ThemeButtonText2>
       </ThemeButton2>
     </Container>
