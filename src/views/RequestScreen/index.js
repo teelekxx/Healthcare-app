@@ -138,7 +138,8 @@ function RequestScreen({ navigation }) {
         <BlueBorderButton onPress={() => navigation.goBack()}>
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
-        <BlueButton onPress={() => navigation.navigate("Map")}>
+        {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
+        <BlueButton onPress={() => navigation.navigate("Firstaid")}>
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>
