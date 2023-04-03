@@ -7,17 +7,17 @@ import { SubTitle, Text, BlueButton, BlueButtonText } from "../../components/com
 import { RadioButton } from "react-native-paper";
 function RolePage({ route, navigation }) {
   const [checked, setChecked] = React.useState("Regular user");
-  const {email} = route.params;
+  const {email, password} = route.params;
   function next(){
     console.log(checked)
     if(checked === "Regular user"){
-      navigation.navigate("SignUpRegular", {role: checked, email: email})
+      navigation.navigate("SignUpRegular", {role: checked, email: email, password:password})
     }
     else if(checked === "Paramedic"){
-      navigation.navigate("SignUpParamedic",  {role: checked, email: email})
+      navigation.navigate("SignUpParamedic",  {role: checked, email: email, password:password})
     }
     else{
-      navigation.navigate("SignUpPharmacist",  {role: checked, email: email})
+      navigation.navigate("SignUpPharmacist",  {role: checked, email: email, password:password})
     }
       
   }

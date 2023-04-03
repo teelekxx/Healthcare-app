@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const uri = `http://localhost:3000`;
+const uri = `http://192.168.1.179:3000`;
 
 export async function request({
   baseURL = uri,

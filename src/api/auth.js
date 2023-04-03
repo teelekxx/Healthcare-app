@@ -3,8 +3,9 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "lib/firebase";
 
+import { auth } from "../lib/firebase";
+import { HTTP_METHODS } from "./constant";
 import { request } from "./index";
 
 
@@ -26,19 +27,20 @@ class Auth {
     await signOut(auth);
   }
 
-  static async register(email, password, mongoData) {
-    // createv user in firebase
-   const user = await createUserWithEmailAndPassword(auth, email, password);
-    // create user in mongo
+
+  static registerUser(option) {
+
+
     const config = {
       method: HTTP_METHODS.post,
       url: `/user`,
-      body: options.body,
+      body: option.body,
     };
-
-    return request(config).catch((err) => ({ ...err, ok: false }));
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
+
 }
 
 export default Auth;

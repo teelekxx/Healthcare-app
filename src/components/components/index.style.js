@@ -63,7 +63,7 @@ export const BlueContainer = styled.View`
   width: 100%;
 `;
 
-export const Form = styled.View`
+export const Form = styled.ScrollView`
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -72,6 +72,7 @@ export const Form = styled.View`
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 50px 25px 0px 25px;
+  flexGrow: 0;
 `;
 export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;

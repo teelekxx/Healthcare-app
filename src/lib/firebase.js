@@ -24,5 +24,3 @@ export { auth, app, firebaseConfig, db };
 
 
 
-
-export {}
