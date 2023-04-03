@@ -28,7 +28,7 @@ class Auth {
   }
 
 
-  static register(option) {
+  static registerUser(option) {
 
 
     const config = {
@@ -40,6 +40,7 @@ class Auth {
     return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
+
 }
 
 export default Auth;

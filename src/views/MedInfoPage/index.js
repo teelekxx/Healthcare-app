@@ -93,16 +93,15 @@ function MedInfoPage({ navigation, route }) {
   };
   const handleSubmit = async (event) => {
     try{
-      
-      const user = await createUserWithEmailAndPassword(auth, email, password);
 
-      const res = await Auth.register({
+      const res = await Auth.registerUser({
         body: {
           email: email,
-          password: password,
           role: role,
         },
       });
+
+      navigation.navigate("HomePage")
       // navigation.navigate("HomePage", {
       //   //user
       //   email: email,
