@@ -40,28 +40,67 @@ import {
   GreyInput,
   WhiteContainer,
   PictureButton,
+  RemoveButton,
   SendButton,
+  BlueFooter,
+  BlueKeyboard,
+  SelectedImage,
+  SelectedImagesContainer,
+  SelectedImageContainer,
+  BubbleContainer,
 } from "./index.style";
+
+import ChatBubble from "../../components/ChatBubble/index";
+import { async } from "@firebase/util";
 
 function ChatScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
+  const [currMessage, setCurrMessage] = useState("");
+
+  const [chatMessages, setChatMessages] = useState([
+    { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
+  ]);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const images = result.assets.map((asset) => asset.uri);
+      setImage(images);
     }
   };
 
+  const removeImage = (index) => {
+    const newImages = [...image]; // Create a new array copy
+    newImages.splice(index, 1); // Remove the item at the given index
+    setImage(newImages); // Update the state with the new array
+  };
+
+  const sendMessage = () => {
+    console.log("images =", image);
+    if (currMessage.trim() === "" &&  image === null) {
+      return;
+    } 
+    else {
+      setChatMessages([
+        ...chatMessages,
+        {
+          Message: currMessage,
+          TimeStamp: "12:30",
+          Sender: "Me",
+          Image: image,
+        },
+      ]);
+      setCurrMessage("");
+      setImage(null);
+    }
+  };
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -74,7 +113,7 @@ function ChatScreen({ navigation, route }) {
           />
         </CircleButton>
         <PageTitle>{route.params.paramKey}</PageTitle>
-        <CallButton>
+        {/* <CallButton>
           <Icon
             name="call-outline"
             type="ionicon"
@@ -82,11 +121,46 @@ function ChatScreen({ navigation, route }) {
             size={21}
           />
           <PhoneNumber>0814637245</PhoneNumber>
-        </CallButton>
+        </CallButton> */}
       </PageTitleContainer>
-      <ChatField></ChatField>
-      <WhiteContainer>
-        <KeyboardAvoidingView behavior="padding">
+      <ChatField>
+        {chatMessages.map((val, index) => {
+          return (
+            <BubbleContainer key={index}>
+              <ChatBubble
+                message={val.Message}
+                timeStamp={val.TimeStamp}
+                sender={val.Sender}
+                image={val.Image}
+              ></ChatBubble>
+            </BubbleContainer>
+          );
+        })}
+      </ChatField>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 0 }}
+      >
+        <BlueFooter>
+          {image && (
+            <SelectedImagesContainer horizontal={true}>
+              {image.map((val, index) => {
+                return (
+                  <SelectedImageContainer key={index}>
+                    <RemoveButton onPress={() => removeImage(index)}>
+                      <Icon
+                        name="close-outline"
+                        type="ionicon"
+                        color={Colors.white}
+                        size={21}
+                      />
+                    </RemoveButton>
+                    <SelectedImage source={{ uri: val }} />
+                  </SelectedImageContainer>
+                );
+              })}
+            </SelectedImagesContainer>
+          )}
           <ChatInputContainer>
             <PictureButton onPress={pickImage}>
               <Icon
@@ -96,8 +170,13 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
-            <GreyInput></GreyInput>
-            <SendButton>
+
+            <GreyInput
+              value={currMessage}
+              onChangeText={(text) => setCurrMessage(text)}
+            ></GreyInput>
+
+            <SendButton onPress={sendMessage}>
               <Icon
                 name="send-outline"
                 type="ionicon"
@@ -106,8 +185,8 @@ function ChatScreen({ navigation, route }) {
               />
             </SendButton>
           </ChatInputContainer>
-        </KeyboardAvoidingView>
-      </WhiteContainer>
+        </BlueFooter>
+      </KeyboardAvoidingView>
     </BlueContainer>
   );
 }
