@@ -62,16 +62,18 @@ function FirstaidScreen({ navigation }) {
   ];
   return (
     <FirstListContainer>
-      <NotificationTouchable
-        onPress={() => navigation.navigate("Notification")}
-      >
-        <Icon
-          name="notifications-outline"
-          type="ionicon"
-          color={Colors.blue}
-          size={30}
-        />
-      </NotificationTouchable>
+      <SafeAreaView>
+        <NotificationTouchable
+          onPress={() => navigation.navigate("Notification")}
+        >
+          <Icon
+            name="notifications-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+          />
+        </NotificationTouchable>
+      </SafeAreaView>
       <TitleContainer>
         <BlueCircleButton onPress={() => navigation.goBack()}>
           <Icon

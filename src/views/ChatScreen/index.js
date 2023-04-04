@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   SafeAreaView,
   Button,
@@ -6,6 +7,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import {
   Title,
@@ -28,6 +30,7 @@ import {
 } from "../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
+import * as ImagePicker from "expo-image-picker";
 import {
   ChatField,
   ChatInputContainer,
@@ -41,16 +44,24 @@ import {
 } from "./index.style";
 
 function ChatScreen({ navigation, route }) {
-  const chatsList = [
-    { Name: "Andy Doe", LastMassage: "" },
-    { Name: "Bill Doe", LastMassage: "" },
-    { Name: "Collin Doe", LastMassage: "Hello" },
-    { Name: "Derick Doe", LastMassage: "" },
-    { Name: "Evan Doe", LastMassage: "" },
-    { Name: "Frank Doe", LastMassage: "" },
-    { Name: "Gill Doe", LastMassage: "" },
-    { Name: "Harry Doe", LastMassage: "" },
-  ];
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -75,25 +86,27 @@ function ChatScreen({ navigation, route }) {
       </PageTitleContainer>
       <ChatField></ChatField>
       <WhiteContainer>
-        <ChatInputContainer>
-          <PictureButton>
-            <Icon
-              name="images-outline"
-              type="ionicon"
-              color={Colors.white}
-              size={21}
-            />
-          </PictureButton>
-          <GreyInput></GreyInput>
-          <SendButton>
-            <Icon
-              name="send-outline"
-              type="ionicon"
-              color={Colors.white}
-              size={21}
-            />
-          </SendButton>
-        </ChatInputContainer>
+        <KeyboardAvoidingView behavior="padding">
+          <ChatInputContainer>
+            <PictureButton onPress={pickImage}>
+              <Icon
+                name="images-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={21}
+              />
+            </PictureButton>
+            <GreyInput></GreyInput>
+            <SendButton>
+              <Icon
+                name="send-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={21}
+              />
+            </SendButton>
+          </ChatInputContainer>
+        </KeyboardAvoidingView>
       </WhiteContainer>
     </BlueContainer>
   );

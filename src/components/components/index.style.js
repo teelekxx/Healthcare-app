@@ -209,7 +209,6 @@ export const BlueCircleButton = styled.TouchableOpacity`
 `;
 
 export const NotificationTouchable = styled.TouchableOpacity`
-  margin-top: 25px;
   margin-left: auto;
   margin-right: 25px;
 `;

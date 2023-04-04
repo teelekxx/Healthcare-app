@@ -46,16 +46,18 @@ function ChatsListScreen({ navigation }) {
   ];
   return (
     <ChatListContainer>
-      <NotificationTouchable
-        onPress={() => navigation.navigate("Notification")}
-      >
-        <Icon
-          name="notifications-outline"
-          type="ionicon"
-          color={Colors.blue}
-          size={30}
-        />
-      </NotificationTouchable>
+      <SafeAreaView>
+        <NotificationTouchable
+          onPress={() => navigation.navigate("Notification")}
+        >
+          <Icon
+            name="notifications-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+          />
+        </NotificationTouchable>
+      </SafeAreaView>
       <ChatListTitle>Chats</ChatListTitle>
       <RoleSwitch>
         <SwitchSelector

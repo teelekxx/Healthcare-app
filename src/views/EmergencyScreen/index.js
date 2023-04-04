@@ -19,16 +19,18 @@ import {
 function EmergencyScreen({ navigation }) {
   return (
     <SosContainer>
-      <NotificationTouchable
-        onPress={() => navigation.navigate("Notification")}
-      >
-        <Icon
-          name="notifications-outline"
-          type="ionicon"
-          color={Colors.blue}
-          size={30}
-        />
-      </NotificationTouchable>
+      <SafeAreaView>
+        <NotificationTouchable
+          onPress={() => navigation.navigate("Notification")}
+        >
+          <Icon
+            name="notifications-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+          />
+        </NotificationTouchable>
+      </SafeAreaView>
       <SosTitle>Ambulance request</SosTitle>
       <PromptText1>Click the button below to request an ambulance</PromptText1>
       <SosButton onPress={() => navigation.navigate("Request")}>
