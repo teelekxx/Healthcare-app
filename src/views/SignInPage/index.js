@@ -104,7 +104,7 @@ function SignInPage({ navigation }) {
         <ForgotPassword onPress={() => navigation.navigate("ForgetPassword")}>
           Forgot password?
         </ForgotPassword>
-        <BlueButton>
+        <BlueButton onPress={handleSubmit}>
           <BlueButtonText>Sign in</BlueButtonText>
         </BlueButton>
       </Form>
