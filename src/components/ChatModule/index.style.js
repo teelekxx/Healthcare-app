@@ -20,7 +20,7 @@ export const DetailContainer = styled.View`
 
 export const ChatName = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 20px;
   margin-bottom: ${height * 0.007109}px;
@@ -28,6 +28,6 @@ export const ChatName = styled.Text`
 
 export const LastMassage = styled.Text`
   color: ${Colors.grey};
-  font-family: Monaco;
+  
   font-size: 15px;
 `;

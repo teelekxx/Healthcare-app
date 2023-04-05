@@ -16,7 +16,7 @@ export const ThemeButton = styled.Pressable`
 export const ThemeButtonText = styled.Text`
   font-size: 15px;
   align-self: center;
-  font-family: Monaco;
+  
   margin-left: 25px;
   color: ${Colors.grey};
 `;
@@ -24,7 +24,7 @@ export const ThemeButtonText = styled.Text`
 export const Or = styled.Text`
   font-size: 20px;
   align-self: center;
-  font-family: Monaco;
+  
   color: ${Colors.grey};
   padding-top: 30px;
 `;
@@ -34,7 +34,7 @@ export const ForgotPassword = styled.Text`
   text-decoration-color: ${Colors.grey};
   font-style: italic;
   align-self: flex-end;
-  font-family: Monaco;
+  
   color: ${Colors.grey};
   padding-top: 10px;
 `;

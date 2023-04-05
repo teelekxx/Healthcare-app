@@ -35,7 +35,9 @@ class Auth {
       method: HTTP_METHODS.post,
       url: `/user`,
       body: option.body,
+      token: option.token,
     };
+    console.log(config)
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
 

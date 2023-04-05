@@ -18,7 +18,7 @@ export const SosButton = styled.TouchableOpacity`
 export const SosButtonText = styled.Text`
   font-size: 64px;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
 `;
@@ -27,7 +27,7 @@ export const PromptText1 = styled.Text`
   width: ${width * 0.62564}px;
   font-size: 20px;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.12914}px;
@@ -36,7 +36,7 @@ export const PromptText1 = styled.Text`
 
 export const SosTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.023696}px;

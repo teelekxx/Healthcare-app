@@ -63,7 +63,7 @@ function SignUpPharmacistPage({ navigation, route }) {
       password:password,
       role: role,
       name: name,
-      dateOfBirth: text,
+      dateOfBirth: date,
       gender: gender,
       citizenId: id,
       phoneNumber: phone,

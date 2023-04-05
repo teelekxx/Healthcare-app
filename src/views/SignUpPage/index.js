@@ -90,15 +90,17 @@ function SignUpPage({ navigation }) {
     } else if (!passLength) {
       createAlert("Your password must have more than 6 characters");
     }
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      navigation.navigate("Role", { email: email, password: password });
-    } catch (err) {
-      if (err.code == "auth/email-already-in-use") {
-        createAlert("The account already exists for that email.");
-      }
-      console.log(err.message);
-    }
+    navigation.navigate("Role", { email: email, password: password });
+
+    // try {
+    //   const user = await createUserWithEmailAndPassword(auth, email, password);
+    //   navigation.navigate("Role", { email: email, password: password });
+    // } catch (err) {
+    //   if (err.code == "auth/email-already-in-use") {
+    //     createAlert("The account already exists for that email.");
+    //   }
+    //   console.log(err.message);
+    // }
 
     
   };

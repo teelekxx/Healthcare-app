@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("window");
 
 export const ChatListTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.023696}px;

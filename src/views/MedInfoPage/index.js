@@ -78,6 +78,7 @@ function MedInfoPage({ navigation, route }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [text, setText] = useState("select expiration date");
+  const [uid, setUid]= useState("");
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -93,15 +94,50 @@ function MedInfoPage({ navigation, route }) {
   };
   const handleSubmit = async (event) => {
     try{
-
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+      console.log(user._tokenResponse.idToken)
+      
       const res = await Auth.registerUser({
         body: {
-          email: email,
-          role: role,
-        },
+          "role" :"user",
+          "email" :email,
+          "verificationStatus" : "false",
+      
+          "name" : name,
+          "dateOfBirth" : dateOfBirth,
+          "gender" : gender,
+          "citizenId" : citizenId,
+          "phoneNumber" : phoneNumber,
+          "bloodType" : bloodType,
+          "congenitalDisease" : disease,
+          "regularMed" : medication,
+          "allergies" : allergy,
+          "DNRStatus" : checkedDNR,
+          "organDonour" : checkedDonor,
+          "powerOfAttorneyName" : emergencyName,
+          "powerOfAttorneyRelationship" : relationship,
+          "powerOfAttorneyPhoneNumber" : tel,
+      
+          "address" :address,
+          "city" : city,
+          "zipCode": zipCode,
+          // "district": "Phuket",
+          // "latitude" : "7.9519",
+          // "longitude" : "98.3381",
+          // "type" : "pharmacist",
+      
+          "provider":insuranceProvider,
+          "plan": insurancePlan,
+          "expirationDate" :date,
+      
+          // "pharmacistVerificationStatus" : false,
+          // "licenseId" : "1234000",
+          // "licenseExpireDate" : "02-27-2999"
+        },token: user._tokenResponse.idToken
       });
+      
 
-      navigation.navigate("HomePage")
+      navigation.navigate("SignIn")
       // navigation.navigate("HomePage", {
       //   //user
       //   email: email,

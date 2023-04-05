@@ -13,7 +13,7 @@ export const ChatField = styled.ScrollView`
 
 export const PageTitle = styled.Text`
   font-size: 24px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
   margin-top: 70px;
@@ -45,7 +45,7 @@ export const CallButton = styled.TouchableOpacity`
 
 export const PhoneNumber = styled.Text`
   font-size: 15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
 `;
