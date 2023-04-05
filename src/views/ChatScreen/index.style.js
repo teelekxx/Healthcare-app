@@ -1,6 +1,10 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
-import { Dimensions, KeyboardAvoidingView } from "react-native";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewComponent,
+} from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -34,7 +38,7 @@ export const WhiteContainer = styled.View`
   background-color: ${Colors.white};
 `;
 
-export const BlueFooter = styled.SafeAreaView`
+export const BlueFooter = styled.View`
   background-color: ${Colors.blue};
   align-items: center;
   justify-content: center;
@@ -64,7 +68,7 @@ export const PhoneNumber = styled.Text`
   color: ${Colors.blue};
 `;
 
-export const ChatInputContainer = styled.View`
+export const ChatInputContainer = styled.SafeAreaView`
   display: flex;
   flex-direction: row;
   align-items: center;

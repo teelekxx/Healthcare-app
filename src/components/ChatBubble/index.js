@@ -7,50 +7,47 @@ import {
   OthersTimeStamp,
   BlueMessage,
   SelectedImage,
-  SelectedImagesContainer
+  SelectedImagesContainer,
+  MySelectedImage,
 } from "./index.style";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 export default function ChatBubble({ message, timeStamp, sender, image }) {
-  if (image === null){
+  if (image === null) {
     image = [];
   }
-  if (image.length === 0 && message === ""){
+  if (image.length === 0 && message === "") {
     return;
-  }
-  else{
-  if (sender === "Me") {
-    return (
-      <MessageContainer>
-        {image.length !== 0 && (
-          <SelectedImagesContainer>
-            {image.map((val) => {
-              return (
-                <MyBubble>
-                <SelectedImage source={{ uri: val }} />
-                </MyBubble>);
-            })}
-            </SelectedImagesContainer>
-        )}
-        {message && (
-          <MyBubble>
-            <WhiteMessage>{message}</WhiteMessage>
-          </MyBubble>
-        )}
-
-        <MyTimeStamp>{timeStamp}</MyTimeStamp>
-      </MessageContainer>
-    );
   } else {
-    return (
-      <MessageContainer>
-        <OthersBubble>
-          <BlueMessage>{message}</BlueMessage>
-        </OthersBubble>
-        <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
-      </MessageContainer>
-    );
+    if (sender === "Me") {
+      return (
+        <MessageContainer>
+          {image.length !== 0 && (
+            <SelectedImagesContainer>
+              {image.map((val, index) => {
+                return <MySelectedImage source={{ uri: val }} key={index} />;
+              })}
+            </SelectedImagesContainer>
+          )}
+          {message && (
+            <MyBubble>
+              <WhiteMessage>{message}</WhiteMessage>
+            </MyBubble>
+          )}
+
+          <MyTimeStamp>{timeStamp}</MyTimeStamp>
+        </MessageContainer>
+      );
+    } else {
+      return (
+        <MessageContainer>
+          <OthersBubble>
+            <BlueMessage>{message}</BlueMessage>
+          </OthersBubble>
+          <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
+        </MessageContainer>
+      );
+    }
   }
-}
 }

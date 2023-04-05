@@ -48,6 +48,7 @@ import {
   SelectedImagesContainer,
   SelectedImageContainer,
   BubbleContainer,
+  Footer,
 } from "./index.style";
 
 import ChatBubble from "../../components/ChatBubble/index";
@@ -84,15 +85,14 @@ function ChatScreen({ navigation, route }) {
 
   const sendMessage = () => {
     console.log("images =", image);
-    if (currMessage.trim() === "" &&  image === null) {
+    if (currMessage.trim() === "" && image === null) {
       return;
-    } 
-    else {
+    } else {
       setChatMessages([
         ...chatMessages,
         {
           Message: currMessage,
-          TimeStamp: "12:30",
+          TimeStamp: new Date().toTimeString().slice(0, 5),
           Sender: "Me",
           Image: image,
         },
@@ -137,7 +137,7 @@ function ChatScreen({ navigation, route }) {
           );
         })}
       </ChatField>
-      <KeyboardAvoidingView
+      <BlueKeyboard
         behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 0 }}
       >
@@ -186,7 +186,7 @@ function ChatScreen({ navigation, route }) {
             </SendButton>
           </ChatInputContainer>
         </BlueFooter>
-      </KeyboardAvoidingView>
+      </BlueKeyboard>
     </BlueContainer>
   );
 }
