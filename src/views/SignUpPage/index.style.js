@@ -18,14 +18,14 @@ export const ThemeButton = styled.TouchableOpacity`
 export const ThemeButtonText = styled.Text`
   font-size: 15px;
   align-self: center;
-  font-family: Monaco;
+  
   margin-left: 25px;
   color: ${Colors.grey};
 `;
 export const Or = styled.Text`
   font-size: 20px;
   align-self: center;
-  font-family: Monaco;
+  
   color: ${Colors.grey};
   padding-top: 20px;
   

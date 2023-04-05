@@ -24,7 +24,7 @@ export const EditButton = styled.TouchableOpacity`
 export const EditButtonText = styled.Text`
   font-size: 18px;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
 `;

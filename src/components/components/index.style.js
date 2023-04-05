@@ -12,14 +12,12 @@ export const Container = styled.View`
 `;
 export const Title = styled.Text`
     color: ${Colors.blue}
-    font-family: Monaco;
     font-weight: bold;
     font-size: 40px;
     align-self: center;
 `;
 export const SubTitle = styled.Text`
     color: ${Colors.blue}
-    font-family: Monaco;
     font-weight: bold;
     font-size: 30px;
     
@@ -27,7 +25,7 @@ export const SubTitle = styled.Text`
 
 export const ItalicText = styled.Text`
     color: ${Colors.blue}
-    font-family: Monaco;
+    
     font-weight: light;
     font-style:italic;
     font-size: 15px;
@@ -35,7 +33,7 @@ export const ItalicText = styled.Text`
 `;
 export const ItalicText2 = styled.Text`
     color: ${Colors.blue}
-    font-family: Monaco;
+    
     font-weight: light;
     font-style:italic;
     font-size: 15px;
@@ -89,21 +87,21 @@ export const BlueButtonText = styled.Text`
   font-size: 20px;
   padding: 0;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
 `;
 
 export const Text = styled.Text`
   font-size: 20px;
-  font-family: Monaco;
+  
   font-weight: regular;
   color: ${Colors.blue};
 `;
 
 export const PageTitle = styled.Text`
   font-size: 24px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
   margin-top: 70px;
@@ -133,7 +131,7 @@ export const AvatarContainer = styled.View`
 
 export const FormText = styled.Text`
   font-size:15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   padding-top:10px
@@ -141,7 +139,7 @@ export const FormText = styled.Text`
 `;
 export const CenterFormText = styled.Text`
   font-size:15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   padding-top:10px
@@ -215,7 +213,7 @@ export const NotificationTouchable = styled.TouchableOpacity`
 
 export const GreyText = styled.Text`
   font-size: 15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.grey};
   padding-bottom: 5px;
@@ -226,7 +224,7 @@ export const InfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue}
   border-radius: 10px;
-  font-family: Monaco;
+  
   font-weight: bold;
   width: 340px;
   height: 40px;
@@ -238,7 +236,7 @@ export const SmallInfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue}
   border-radius: 10px;
-  font-family: Monaco;
+  
   font-weight: bold;
   width: 300px;
   height: 40px;
@@ -248,7 +246,7 @@ export const SmallInfoInput = styled.TextInput`
 export const BigInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue}
   border-radius: 10px;

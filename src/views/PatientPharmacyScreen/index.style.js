@@ -32,7 +32,7 @@ export const WaitingButton = styled.TouchableOpacity`
 export const FindButtonText = styled.Text`
   font-size: 24px;
   align-self: center;
-  font-family: Monaco;
+  
   text-align: center;
   color: ${Colors.white};
 `;
@@ -41,7 +41,7 @@ export const PromptText1 = styled.Text`
   width: ${width * 0.62564}px;
   font-size: 20px;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.12914}px;
@@ -50,7 +50,7 @@ export const PromptText1 = styled.Text`
 
 export const FindTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.023696}px;
@@ -73,7 +73,7 @@ export const ProfileIcon = styled.Image`
 
 export const FindingPrompt = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 20px;
   margin-top: ${height * 0.09004}px;
@@ -99,13 +99,13 @@ export const ChattingButton = styled.TouchableOpacity`
 export const WhiteButtonText = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  font-family: Monaco;
+  
   color: ${Colors.white};
 `;
 
 export const DetailText = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   text-align: center;
@@ -113,7 +113,7 @@ export const DetailText = styled.Text`
 
 export const TimeText = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 15px;
   text-align: center;

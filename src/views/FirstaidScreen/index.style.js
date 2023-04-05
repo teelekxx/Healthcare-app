@@ -10,7 +10,7 @@ export const TitleContainer = styled.View`
 
 export const FirstListTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.023696}px;
@@ -40,7 +40,7 @@ export const DetailContainer = styled.View`
 
 export const FirstName = styled.Text`
   color: ${Colors.red};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 20px;
   margin-bottom: ${height * 0.007109}px;
@@ -48,7 +48,7 @@ export const FirstName = styled.Text`
 
 export const Description = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-size: 15px;
 `;
 

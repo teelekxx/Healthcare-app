@@ -19,14 +19,14 @@ export const SosButton = styled.TouchableOpacity`
 export const SosButtonText = styled.Text`
   font-size: 64px;
   align-self: center;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.white};
 `;
 
 export const ContactPrompt = styled.Text`
   font-size: 20px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.01777}px;
@@ -44,7 +44,7 @@ export const GreyInput = styled.TextInput`
 
 export const BlueText = styled.Text`
   font-size: 15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.01777}px;
@@ -53,7 +53,7 @@ export const BlueText = styled.Text`
 
 export const GreyText = styled.Text`
   font-size: 15px;
-  font-family: Monaco;
+  
   font-weight: bold;
   color: ${Colors.grey};
   text-align: center;
@@ -63,7 +63,7 @@ export const GreyText = styled.Text`
 
 export const RequestTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.08886}px;
@@ -136,20 +136,20 @@ export const BlueButton = styled.Pressable`
 export const BlueButtonText = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  font-family: Monaco;
+  
   color: ${Colors.blue};
 `;
 
 export const WhiteButtonText = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  font-family: Monaco;
+  
   color: ${Colors.white};
 `;
 
 export const GreyButtonText = styled.Text`
   font-size: 15px;
-  font-family: Monaco;
+  
   color: ${Colors.grey};
 `;
 
