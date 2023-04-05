@@ -42,6 +42,20 @@ class Auth {
     return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
+  static registerPharmacy(option) {
+
+
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/pharmacy`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+
+  }
 
 }
 

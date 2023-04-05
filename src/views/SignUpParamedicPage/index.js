@@ -63,13 +63,15 @@ function SignUpParamedicPage({ navigation, route }) {
       password:password,
       role: role,
       name: name,
-      dateOfBirth: date,
+      dateOfBirth: text,
       gender: gender,
       citizenId: id,
       phoneNumber: phone,
       address: address,
       city:city,
       zipCode:zipCode,
+      licenseNum:licenseNum,
+      licenseDate: licenseText,
     });
   };
 

@@ -57,7 +57,7 @@ function SignUpRegularPage({ navigation, route }) {
       password:password,
       role: role,
       name: name,
-      dateOfBirth: date,
+      dateOfBirth: text,
       gender: gender,
       citizenId: id,
       phoneNumber: phone,

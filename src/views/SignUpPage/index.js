@@ -79,16 +79,18 @@ function SignUpPage({ navigation }) {
     const matchPass = checkPasswordMatch(password, confirmPassword);
     const passLength = checkPasswordLength(password);
 
-    if (!result) {
+    if (email === "" || password === "" || confirmPassword === "") {
+      createAlert("All fields are required");
+      return;
+    } else if (!result) {
       createAlert("Invalid email format");
       return;
     } else if (!matchPass) {
       createAlert("Password does not match");
       return;
-    } else if (email === "" || password === "" || confirmPassword === "") {
-      createAlert("All fields are required");
     } else if (!passLength) {
       createAlert("Your password must have more than 6 characters");
+      return;
     }
     navigation.navigate("Role", { email: email, password: password });
 
@@ -101,8 +103,6 @@ function SignUpPage({ navigation }) {
     //   }
     //   console.log(err.message);
     // }
-
-    
   };
 
   return (
