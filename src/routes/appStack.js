@@ -91,6 +91,7 @@ import SignUpParamedicPage from "../views/SignUpParamedicPage";
 import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
 import SignUpRegularPage from "../views/SignUpRegularPage";
 import MedInfoPage from "../views/MedInfoPage";
+import ForgetPasswordPage from "../views/ForgetPasswordPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -104,12 +105,16 @@ const MyStack = () => {
       >
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInPage} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPasswordPage} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="Map" component={MapPage} />
         <Stack.Screen name="Role" component={RolePage} />
         <Stack.Screen name="SignUpParamedic" component={SignUpParamedicPage} />
-        <Stack.Screen name="SignUpPharmacist" component={SignUpPharmacistPage} />
+        <Stack.Screen
+          name="SignUpPharmacist"
+          component={SignUpPharmacistPage}
+        />
         <Stack.Screen name="SignUpRegular" component={SignUpRegularPage} />
         <Stack.Screen name="MedInfo" component={MedInfoPage} />
       </Stack.Navigator>

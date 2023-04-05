@@ -70,6 +70,8 @@ function SignUpParamedicPage({ navigation, route }) {
       address: address,
       city:city,
       zipCode:zipCode,
+      licenseNum:licenseNum,
+      licenseDate: licenseText,
     });
   };
 

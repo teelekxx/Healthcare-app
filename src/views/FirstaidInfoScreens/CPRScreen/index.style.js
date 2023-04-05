@@ -10,7 +10,7 @@ export const TitleContainer = styled.View`
 
 export const FirstListTitle = styled.Text`
   color: ${Colors.red};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.023696}px;
@@ -46,7 +46,7 @@ export const BlueCircleButton = styled.TouchableOpacity`
 
 export const StepTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 20px;
   margin-top: ${height * 0.032696}px;
@@ -54,7 +54,7 @@ export const StepTitle = styled.Text`
 
 export const StepTitle2 = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.032696}px;
@@ -62,7 +62,7 @@ export const StepTitle2 = styled.Text`
 
 export const StepDetail = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-size: 15px;
 `;
 

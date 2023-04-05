@@ -35,7 +35,6 @@ export const FindButtonText = styled.Text`
   font-size: 24px;
   align-self: center;
 
-  font-weight: bold;
   text-align: center;
   color: ${Colors.white};
 `;
@@ -76,7 +75,7 @@ export const ProfileIcon = styled.Image`
 
 export const FindingPrompt = styled.Text`
   color: ${Colors.blue};
-  justify-content: center;
+
   font-weight: bold;
   font-size: 20px;
   margin-top: ${height * 0.09004}px;

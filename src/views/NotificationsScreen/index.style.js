@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("window");
 
 export const NotificationsTitle = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.08886}px;
@@ -37,20 +37,20 @@ export const NotificationBlock = styled.TouchableOpacity`
 
 export const NotificationsName = styled.Text`
   color: ${Colors.blue};
-  font-family: Monaco;
+  
   font-weight: bold;
   font-size: 20px;
 `;
 
 export const NotificationsMassage = styled.Text`
   color: ${Colors.grey};
-  font-family: Monaco;
+  
   font-size: 15px;
 `;
 
 export const NotificationsDate = styled.Text`
   color: ${Colors.grey};
-  font-family: Monaco;
+  
   font-size: 15px;
   margin-left: auto;
 `;

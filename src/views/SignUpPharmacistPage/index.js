@@ -40,7 +40,13 @@ function SignUpPharmacistPage({ navigation, route }) {
   const [text, setText] = useState('select date')
   const [licenseText, setLicenseText] = useState('select date')
   const [showLicense, setShowLicense] = useState(false)
-
+  const [pharName, setPharName] = useState("")
+  const [pharDescription, setPharDescription] = useState("")
+  const [pharAddress, setPharAddress] = useState("")
+  const [pharCity, setPharCity] = useState("")
+  const [pharZipCode, setPharZipcode] = useState("")
+  const [pharLatitude, setPharLatitude] = useState("")
+  const [pharLongitude, setPharLongitude] = useState("")
   const onChange = (event, selectedDate) => {  
     const currentDate = selectedDate || date
     setDate(currentDate)
@@ -70,6 +76,15 @@ function SignUpPharmacistPage({ navigation, route }) {
       address: address,
       city:city,
       zipCode:zipCode,
+      pharName: pharName,
+      pharDescription:pharDescription,
+      pharAddress: pharAddress,
+      pharCity:pharCity,
+      pharZipCode: pharZipCode,
+      pharLatitude: pharLatitude,
+      pharLongitude: pharLongitude,
+      licenseNum: licenseNum,
+      licenseDate: licenseText,
     });
   };
   return (
@@ -153,6 +168,23 @@ function SignUpPharmacistPage({ navigation, route }) {
         <FormInput onChangeText={onChangeCity} value={city} />
         <FormText>Zip Code</FormText>
         <FormInput onChangeText={onChangeZipCode} value={zipCode} />
+
+        {/* pharmacy store */}
+        <FormText>Pharmacy's name</FormText>
+        <FormInput onChangeText={setPharName} value={pharName} />
+        <FormText>Pharmacy's description</FormText>
+        <FormInput onChangeText={setPharDescription} value={pharDescription} />
+        <FormText>Pharmacy's address</FormText>
+        <BigFormInput multiline numberOfLines={3}  onChangeText={setPharAddress} value={pharAddress}/>
+        <FormText>Pharmacy's city</FormText>
+        <FormInput onChangeText={setPharCity} value={pharCity} />
+        <FormText>Pharmacy's zip Code</FormText>
+        <FormInput onChangeText={setPharZipcode} value={pharZipCode} />
+        <FormText>Pharmacy's latitude</FormText>
+        <FormInput onChangeText={setPharLatitude} value={pharLatitude} />
+        <FormText>Pharmacy's longitude</FormText>
+        <FormInput onChangeText={setPharLongitude} value={pharLongitude} />
+
         <BlueButton onPress={handleSubmit}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>

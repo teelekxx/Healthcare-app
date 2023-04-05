@@ -23,6 +23,7 @@ export const SelectedImagesContainer = styled.ScrollView`
 export const PageTitle = styled.Text`
   margin-top: 70px;
   font-size: 24px;
+
   font-weight: bold;
   color: ${Colors.white};
   margin-left: ${width * 0.035897}px;
@@ -64,6 +65,7 @@ export const CallButton = styled.TouchableOpacity`
 
 export const PhoneNumber = styled.Text`
   font-size: 15px;
+
   font-weight: bold;
   color: ${Colors.blue};
 `;

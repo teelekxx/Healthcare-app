@@ -16,7 +16,7 @@ export const ThemeButton = styled.Pressable`
 export const ThemeButtonText = styled.Text`
   font-size: 15px;
   align-self: center;
-  
+
   margin-left: 25px;
   color: ${Colors.grey};
 `;
@@ -24,7 +24,7 @@ export const ThemeButtonText = styled.Text`
 export const Or = styled.Text`
   font-size: 20px;
   align-self: center;
-  
+
   color: ${Colors.grey};
   padding-top: 30px;
 `;
@@ -34,7 +34,7 @@ export const ForgotPassword = styled.Text`
   text-decoration-color: ${Colors.grey};
   font-style: italic;
   align-self: flex-end;
-  
+
   color: ${Colors.grey};
   padding-top: 10px;
 `;
@@ -50,4 +50,15 @@ export const CircleButton = styled.Pressable`
   border-radius: 100px;
   justify-content: center;
   align-items: center;
+`;
+
+export const SendButton = styled.TouchableOpacity`
+  margin-top: 50px;
+  padding: 15px;
+  width: 340px;
+  height: 60px;
+  align-self: center;
+  box-shadow: 0px 4px 7px grey;
+  background-color: ${Colors.blue};
+  border-radius: 10px;
 `;
