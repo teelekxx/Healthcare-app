@@ -28,13 +28,13 @@ function ProfileScreen({ navigation }) {
   const [data, setData] = useState(null);
   
   const [edit, setEdit] = useState(false);
-  const [name, setName] = useState("Pattarin");
+  const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
-  const [gender, setGender] = useState("Male");
-  const [id, setID] = useState("12345678912345");
-  const [tel, setTel] = useState("0817977168");
+  const [gender, setGender] = useState("");
+  const [id, setID] = useState("");
+  const [tel, setTel] = useState("");
   const [address, setAddress] = useState(
-    "111, soi Chan 43 Yaek 18, Bangkhlo, Bangkholaem, Bkk, 10120"
+    ""
   );
   const [role, setRole] = useState("Regular user");
   const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ function ProfileScreen({ navigation }) {
     { label: "Female", value: "female" },
   ]);
 
-  const [text, setText] = useState("22/05/2009");
+  const [text, setText] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const editMode = () => {
@@ -96,7 +96,7 @@ function ProfileScreen({ navigation }) {
       console.error(error);
     }
   }, []);
-  console.log("user data: ", data);
+
 
 
 

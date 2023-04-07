@@ -20,29 +20,32 @@ import {
 } from "./index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { AsyncStorage } from "react-native";
+import Auth from "../../api/auth";
+
 function MedInfoSummaryScreen({ navigation }) {
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState("Edit");
-  const [allergy, setAllergy] = useState("Shrimp");
-  const [medication, setMedication] = useState("Accutane");
-  const [disease, setDisease] = useState("Heart Disease");
+  const [allergy, setAllergy] = useState("");
+  const [medication, setMedication] = useState("");
+  const [disease, setDisease] = useState("");
   const [open, setOpen] = useState(false);
-  const [bloodType, setBloodType] = useState("A");
+  const [bloodType, setBloodType] = useState("");
   const [items, setItems] = useState([
     { label: "A", value: "A" },
     { label: "B", value: "B" },
     { label: "O", value: "O" },
     { label: "AB", value: "AB" },
   ]);
-  const [checkedDNR, setCheckedDNR] = useState(true);
+  const [checkedDNR, setCheckedDNR] = useState(null);
   const toggleDNR = () => setCheckedDNR(!checkedDNR);
-  const [checkedDonor, setCheckedDonor] = useState(false);
+  const [checkedDonor, setCheckedDonor] = useState(null);
   const toggleDonor = () => setCheckedDonor(!checkedDonor);
-  const [name, setName] = useState("Mine Jung");
+  const [name, setName] = useState("");
   const [relationships, setRelationships] = useState([
     { label: "Father", value: "father" },
     { label: "Mother", value: "mother" },
@@ -51,13 +54,13 @@ function MedInfoSummaryScreen({ navigation }) {
     { label: "Friends", value: "friends" },
   ]);
   const [openRelationships, setOpenRelationships] = useState(false);
-  const [relationship, setRelationship] = useState("father");
-  const [tel, setTel] = useState("0817977168");
-  const [insuranceProvider, setInsuranceProvider] = useState("AIA");
-  const [insurancePlan, setInsurancePlan] = useState("Health care");
+  const [relationship, setRelationship] = useState("");
+  const [tel, setTel] = useState("");
+  const [insuranceProvider, setInsuranceProvider] = useState("");
+  const [insurancePlan, setInsurancePlan] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [text, setText] = useState("12/05/2023");
+  const [text, setText] = useState("");
   const editMode = () => {
     console.log(mode);
     if (mode === "Edit") {
@@ -68,6 +71,35 @@ function MedInfoSummaryScreen({ navigation }) {
       setMode("Edit");
     }
   };
+  useEffect(() => {
+    try {
+      const getUserData = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.getUserProfile({
+          token: token,
+        });
+        setAllergy(user.data.medicalInformation.allergies)
+        setBloodType(user.data.medicalInformation.bloodType)
+        setCheckedDNR(user.data.medicalInformation.DNRStatus)
+        setCheckedDonor(user.data.medicalInformation.organDonour)
+        setDisease(user.data.medicalInformation.congenitalDisease)
+        setMedication(user.data.medicalInformation.regularMed)
+        //power of attorney
+        setRelationship(user.data.medicalInformation.powerOfAttorneyRelationship)
+        setName(user.data.medicalInformation.powerOfAttorneyName)
+        setTel(user.data.medicalInformation.powerOfAttorneyPhoneNumber)
+        //insurance
+        setText(user.data.insurance.expirationDate)
+        setInsurancePlan(user.data.insurance.plan)
+        setInsuranceProvider(user.data.insurance.provider)
+
+      };
+      getUserData();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);

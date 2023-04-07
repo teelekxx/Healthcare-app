@@ -36,7 +36,6 @@ function SignInPage({ navigation }) {
   const handleSubmit = async (event) => {
     try {
       const res = await Auth.login(email, password);
-      console.log(res);
       navigation.navigate("HomePage");
     } catch (err) {
       if (err.code == "auth/user-not-found") {
