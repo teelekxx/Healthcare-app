@@ -53,56 +53,38 @@ function SignUpPage({ navigation }) {
     }
     return false;
   }
+  const checkEmail = async () => {
+    console.log(email)
+    const res = await Auth.checkUserEmail({
+      body: {
+        email: email,
+      },
+    });
+    return res.data
+  };
   const handleData = async () => {
-    //     fetch('http://192.168.1.179:3000/user', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     email:"minejung@gmail.com",
-    //     role:"user",
-    //   })
-    // });
-
-    // const res = await Auth.register({
-    //   body: {
-    //     email: "chanok993@mail.com",
-    //     password: "password",
-    //     role: "user",
-    //   },
-    // });
-    // console.log({res})
-
     const result = isValidEmail(email);
     const matchPass = checkPasswordMatch(password, confirmPassword);
     const passLength = checkPasswordLength(password);
+    const emailExist = await checkEmail();
 
     if (email === "" || password === "" || confirmPassword === "") {
-      createAlert("All fields are required");
+      createAlert("All fields are required.");
       return;
     } else if (!result) {
-      createAlert("Invalid email format");
+      createAlert("Invalid email format.");
       return;
     } else if (!matchPass) {
-      createAlert("Password does not match");
+      createAlert("Password does not match.");
       return;
     } else if (!passLength) {
-      createAlert("Your password must have more than 6 characters");
+      createAlert("Your password must have more than 6 characters.");
+      return;
+    }else if(emailExist===true){
+      createAlert("Email already existed.")
       return;
     }
     navigation.navigate("Role", { email: email, password: password });
-
-    // try {
-    //   const user = await createUserWithEmailAndPassword(auth, email, password);
-    //   navigation.navigate("Role", { email: email, password: password });
-    // } catch (err) {
-    //   if (err.code == "auth/email-already-in-use") {
-    //     createAlert("The account already exists for that email.");
-    //   }
-    //   console.log(err.message);
-    // }
   };
 
   return (

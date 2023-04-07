@@ -7,7 +7,7 @@ import {
   DateCalendar,
   BigInfoInput,
   BlueButton,
-  BlueButtonText
+  BlueButtonText,
 } from "../../components/components/index.style";
 import {
   Background,
@@ -15,12 +15,15 @@ import {
   EditButtonText,
   AvaContainer,
 } from "./index.style";
+
 import { useState } from "react";
+import { AsyncStorage } from "react-native";
 import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
-
+import { async } from "@firebase/util";
+import Auth from "../../api/auth";
 function ProfileScreen({ navigation }) {
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("John Doe");
@@ -28,13 +31,17 @@ function ProfileScreen({ navigation }) {
   const [gender, setGender] = useState("Male");
   const [id, setID] = useState("12345678912345");
   const [tel, setTel] = useState("0817977168");
-  const [address, setAddress] = useState("111, soi Chan 43 Yaek 18, Bangkhlo, Bangkholaem, Bkk, 10120");
-  const [role, setRole] = useState("regular user")
+  const [address, setAddress] = useState(
+    "111, soi Chan 43 Yaek 18, Bangkhlo, Bangkholaem, Bkk, 10120"
+  );
+  const [role, setRole] = useState("regular user");
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ]);
+
+  
   const [text, setText] = useState("22/05/2001");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -61,6 +68,20 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
+  const getUserData = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getUserProfile({
+      token: token,
+    })
+    return user.data;
+  }
+  const getUserDetails = async () =>{
+    const user = await getUserData()
+    console.log(user.address)
+    setAddress(user.address)
+  }
+
+
   return (
     <Background>
       <AvaContainer>
@@ -109,7 +130,11 @@ function ProfileScreen({ navigation }) {
           color: "#00a5cb",
         }}
         style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
-        textStyle={{ color: "#00a5cb", fontFamily: "Monaco", fontWeight: "bold" }}
+        textStyle={{
+          color: "#00a5cb",
+          fontFamily: "Monaco",
+          fontWeight: "bold",
+        }}
         disabled={!edit}
       />
       <GreyText>Citizen ID</GreyText>
@@ -117,7 +142,13 @@ function ProfileScreen({ navigation }) {
       <GreyText>Tel.</GreyText>
       <InfoInput onChangeText={setTel} value={tel} editable={edit} />
       <GreyText>Address</GreyText>
-      <BigInfoInput multiline numberOfLines={3}  onChangeText={setAddress} value={address} editable ={edit}/>
+      <BigInfoInput
+        multiline
+        numberOfLines={3}
+        onChangeText={setAddress}
+        value={address}
+        editable={edit}
+      />
       <GreyText>Role</GreyText>
       <InfoInput value={role} editable={false} />
       <BlueButton onPress={() => navigation.navigate("MedInfoSummary")}>
