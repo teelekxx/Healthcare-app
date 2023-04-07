@@ -138,7 +138,6 @@ function MedInfoSummaryScreen({ navigation }) {
           style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
           textStyle={{
             color: "#00a5cb",
-            fontFamily: "Monaco",
             fontWeight: "bold",
           }}
           disabled={!edit}
@@ -184,7 +183,6 @@ function MedInfoSummaryScreen({ navigation }) {
           style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
           textStyle={{
             color: "#00a5cb",
-            fontFamily: "Monaco",
             fontWeight: "bold",
           }}
           disabled={!edit}
