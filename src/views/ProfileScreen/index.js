@@ -8,6 +8,7 @@ import {
   BigInfoInput,
   BlueButton,
   BlueButtonText,
+  RedButton,
 } from "../../components/components/index.style";
 import {
   Background,
@@ -25,7 +26,6 @@ import { Colors } from "../../constants";
 import { async, jsonEval } from "@firebase/util";
 import Auth from "../../api/auth";
 function ProfileScreen({ navigation }) {
-  const [data, setData] = useState(null);
   
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
@@ -44,6 +44,8 @@ function ProfileScreen({ navigation }) {
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ]);
+  const [city, setCity] = useState("")
+  const [zipCode, setZipCode] = useState("")
 
   const [text, setText] = useState("");
   const [date, setDate] = useState(new Date());
@@ -51,13 +53,36 @@ function ProfileScreen({ navigation }) {
   const editMode = () => {
     console.log(mode);
     if (mode === "Edit") {
+      //editing
       setEdit(true);
       setMode("Save");
     } else {
+      //save
       setEdit(false);
+      const updateUser = async () =>{
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.updateUserProfile({
+          body:{
+            name:name,
+            dateOfBirth: text,
+            gender: gender,
+            citizenId: id,
+            phoneNumber: tel,
+            address: address,
+            city:city,
+            zipCode:zipCode,
+
+          },token:token
+        })
+      }
+      updateUser();
       setMode("Edit");
     }
   };
+  const handleLogOut = async () =>{
+    await Auth.logout();
+    navigation.navigate("SignIn")
+  }
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -92,6 +117,8 @@ function ProfileScreen({ navigation }) {
         setID(user.data.medicalInformation.citizenId)
         setTel(user.data.medicalInformation.phoneNumber)
         setAddress(user.data.address.address)
+        setCity(user.data.address.city)
+        setZipCode(user.data.address.zipCode)
       };
       getUserData();
     } catch (error) {
@@ -169,11 +196,19 @@ function ProfileScreen({ navigation }) {
         value={address}
         editable={edit}
       />
+      <GreyText>City</GreyText>
+      <InfoInput onChangeText={setCity} value={city} editable={edit} />
+      <GreyText>Zipcode</GreyText>
+      <InfoInput onChangeText={setZipCode} value={zipCode} editable={edit} />
       <GreyText>Role</GreyText>
       <InfoInput value={role} editable={false} />
-      <BlueButton onPress={() => navigation.navigate("MedInfoSummary")}>
+      <BlueButton style={{marginBottom:20}}onPress={() => navigation.navigate("MedInfoSummary")}>
         <BlueButtonText>View Medical Information</BlueButtonText>
       </BlueButton>
+      <RedButton onPress={handleLogOut}>
+        <BlueButtonText>Log out</BlueButtonText>
+      </RedButton>
+      
     </Background>
   );
 }

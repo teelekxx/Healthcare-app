@@ -96,6 +96,16 @@ export const BlueButton = styled.TouchableOpacity`
   background-color: ${Colors.blue};
   border-radius: 10px;
 `;
+export const RedButton = styled.TouchableOpacity`
+  margin-bottom: 50px
+  padding: 15px;
+  width: 340px;
+  height: 60px;
+  align-self: center;
+  box-shadow: 0px 4px 7px grey;
+  background-color: ${Colors.red};
+  border-radius: 10px;
+`;
 export const BlueButtonText = styled.Text`
   font-size: 20px;
   padding: 0;
