@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Colors } from "../../constants";
+import { Icon } from "react-native-elements";
 import {
   Title,
   ItalicText,
@@ -23,6 +24,7 @@ import {
   GreyInput,
   BlueText,
   GreyText,
+  BlueText2,
   BlueBorderButton,
   GreyButton,
   BlueButton,
@@ -32,6 +34,9 @@ import {
   SymptomList,
   SymptomIcon,
   CheckBoxContainer,
+  SelectedImage,
+  SelectedImageContainer,
+  RemoveButton,
 } from "./index.style";
 import {
   FormInput,
@@ -45,12 +50,33 @@ import {
   DateCalendar,
 } from "../../components/components/index.style";
 
+import * as ImagePicker from "expo-image-picker";
+
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
   const [isBreathlessness, setBreathlessness] = useState(false);
   const [isUnconsciousness, setUnconsciousness] = useState(false);
   const [isWeakness, setWeakness] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const removeImage = () => {
+    setImage(null);
+  };
 
   return (
     <RequestContainer>
@@ -61,22 +87,35 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <InputContainer>
         <BlueText>Attached image (optional)</BlueText>
-        <HorizonInput>
-          <GreyButton>
-            <GreyButtonText>Take photo</GreyButtonText>
-          </GreyButton>
-          <GreyButton>
+
+        {image && (
+          <SelectedImageContainer>
+            <RemoveButton onPress={removeImage}>
+              <Icon
+                name="close-outline"
+                type="ionicon"
+                color={Colors.red}
+                size={21}
+              />
+            </RemoveButton>
+            <SelectedImage source={{ uri: image }} />
+          </SelectedImageContainer>
+        )}
+        {!image && (
+          <GreyButton onPress={pickImage}>
             <GreyButtonText>Choose photo</GreyButtonText>
           </GreyButton>
-        </HorizonInput>
+        )}
       </InputContainer>
+
       <InputContainer>
         <BlueText>Type of emergencies (optional)</BlueText>
       </InputContainer>
       <SymptomList>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/fender-bender.png")} />
-          <GreyText>Accident</GreyText>
+          {isAccident && <BlueText2>Accident</BlueText2>}
+          {!isAccident && <GreyText>Accident</GreyText>}
           <CheckBoxContainer>
             <BouncyCheckbox
               fillColor="#00a5cb"
@@ -87,7 +126,8 @@ function RequestScreen({ navigation }) {
         </HorizonInput2>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/chest-pain.png")} />
-          <GreyText>Chest pain</GreyText>
+          {isChestPain && <BlueText2>Chest pain</BlueText2>}
+          {!isChestPain && <GreyText>Chest pain</GreyText>}
           <CheckBoxContainer>
             <BouncyCheckbox
               fillColor="#00a5cb"
@@ -98,7 +138,8 @@ function RequestScreen({ navigation }) {
         </HorizonInput2>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/lungs.png")} />
-          <GreyText>Breathlessness</GreyText>
+          {isBreathlessness && <BlueText2>Breathlessness</BlueText2>}
+          {!isBreathlessness && <GreyText>Breathlessness</GreyText>}
           <CheckBoxContainer>
             <BouncyCheckbox
               fillColor="#00a5cb"
@@ -109,7 +150,8 @@ function RequestScreen({ navigation }) {
         </HorizonInput2>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/insomnia.png")} />
-          <GreyText>Unconsciousness</GreyText>
+          {isUnconsciousness && <BlueText2>Unconsciousness</BlueText2>}
+          {!isUnconsciousness && <GreyText>Unconsciousness</GreyText>}
           <CheckBoxContainer>
             <BouncyCheckbox
               fillColor="#00a5cb"
@@ -120,7 +162,8 @@ function RequestScreen({ navigation }) {
         </HorizonInput2>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/weakness.png")} />
-          <GreyText>Sudden paralysis/weakness</GreyText>
+          {isWeakness && <BlueText2>Sudden paralysis/weakness</BlueText2>}
+          {!isWeakness && <GreyText>Sudden paralysis/weakness</GreyText>}
           <CheckBoxContainer>
             <BouncyCheckbox
               fillColor="#00a5cb"

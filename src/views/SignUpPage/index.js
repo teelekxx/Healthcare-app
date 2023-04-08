@@ -9,6 +9,7 @@ import {
   ItalicText2,
   BlueContainer,
   Form,
+  NonScrollForm,
   BlueButton,
   BlueButtonText,
 } from "../../components/components/index.style";
@@ -97,7 +98,7 @@ function SignUpPage({ navigation }) {
           size={20}
         />
       </CircleButton>
-      <Form>
+      <NonScrollForm>
         <SubTitle>Hello!</SubTitle>
         <ItalicText2>Create an account to continue</ItalicText2>
         <ThemeButton>
@@ -160,7 +161,7 @@ function SignUpPage({ navigation }) {
         <BlueButton onPress={handleData}>
           <BlueButtonText>Next</BlueButtonText>
         </BlueButton>
-      </Form>
+      </NonScrollForm>
     </BlueContainer>
   );
 }

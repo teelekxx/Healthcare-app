@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SafeAreaView, Text, Alert } from "react-native";
+import { SafeAreaView, Text, Alert, View } from "react-native";
 import {
   ThemeButton,
   ThemeButtonText,
@@ -15,6 +15,7 @@ import {
   ItalicText2,
   BlueContainer,
   Form,
+  NonScrollForm,
   BlueButton,
   BlueButtonText,
 } from "../../components/components/index.style";
@@ -46,7 +47,7 @@ function ForgetPasswordPage({ navigation }) {
           size={20}
         />
       </CircleButton>
-      <Form>
+      <NonScrollForm>
         <SubTitle>Password Recovery</SubTitle>
         <ItalicText2>
           Please enter your Email address, we will send you a password recovery
@@ -70,7 +71,7 @@ function ForgetPasswordPage({ navigation }) {
         <SendButton onPress={handleSubmit}>
           <BlueButtonText>Send</BlueButtonText>
         </SendButton>
-      </Form>
+      </NonScrollForm>
     </BlueContainer>
   );
 }

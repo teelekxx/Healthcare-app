@@ -25,7 +25,7 @@ import {
 } from "./index.style";
 
 function ChatsListScreen({ navigation }) {
-  const [isPatient, setPatient] = useState(false);
+  const [isPatient, setPatient] = useState(true);
   const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
     { Name: "Bill Doe", LastMassage: "" },

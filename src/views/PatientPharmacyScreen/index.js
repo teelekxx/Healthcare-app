@@ -90,7 +90,7 @@ function PatientPharmacyScreen({ navigation }) {
               name="checkmark-circle"
               type="ionicon"
               color={Colors.teal}
-              size={25}
+              size={20}
             />
           </FindingPrompt>
           <ChattingButton

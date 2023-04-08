@@ -30,6 +30,7 @@ function ProfileScreen({ navigation }) {
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
+
   const [gender, setGender] = useState("");
   const [id, setID] = useState("");
   const [tel, setTel] = useState("");
@@ -37,6 +38,7 @@ function ProfileScreen({ navigation }) {
     ""
   );
   const [role, setRole] = useState("Regular user");
+
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Male", value: "male" },
@@ -148,6 +150,7 @@ function ProfileScreen({ navigation }) {
           color: "#00a5cb",
         }}
         style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+
         textStyle={{
           color: "#00a5cb",
           fontWeight: "bold",

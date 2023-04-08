@@ -19,14 +19,14 @@ export const SosButton = styled.TouchableOpacity`
 export const SosButtonText = styled.Text`
   font-size: 64px;
   align-self: center;
-  
+
   font-weight: bold;
   color: ${Colors.white};
 `;
 
 export const ContactPrompt = styled.Text`
   font-size: 20px;
-  
+
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.01777}px;
@@ -44,7 +44,7 @@ export const GreyInput = styled.TextInput`
 
 export const BlueText = styled.Text`
   font-size: 15px;
-  
+
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.01777}px;
@@ -53,7 +53,7 @@ export const BlueText = styled.Text`
 
 export const GreyText = styled.Text`
   font-size: 15px;
-  
+
   font-weight: bold;
   color: ${Colors.grey};
   text-align: center;
@@ -61,9 +61,19 @@ export const GreyText = styled.Text`
   margin-left: ${width * 0.04359}px;
 `;
 
+export const BlueText2 = styled.Text`
+  font-size: 15px;
+
+  font-weight: bold;
+  color: ${Colors.blue};
+  text-align: center;
+  margin-top: ${height * 0.00592}px;
+  margin-left: ${width * 0.04359}px;
+`;
+
 export const RequestTitle = styled.Text`
   color: ${Colors.blue};
-  
+
   font-weight: bold;
   font-size: 25px;
   margin-top: ${height * 0.08886}px;
@@ -92,7 +102,7 @@ export const RequestContainer = styled.ScrollView`
   margin-left: ${width * 0.0641}px;
 `;
 
-export const GreyButton = styled.Pressable`
+export const GreyButton = styled.TouchableOpacity`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
@@ -136,20 +146,20 @@ export const BlueButton = styled.Pressable`
 export const BlueButtonText = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  
+
   color: ${Colors.blue};
 `;
 
 export const WhiteButtonText = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  
+
   color: ${Colors.white};
 `;
 
 export const GreyButtonText = styled.Text`
   font-size: 15px;
-  
+
   color: ${Colors.grey};
 `;
 
@@ -162,4 +172,18 @@ export const SymptomIcon = styled.Image`
 
 export const CheckBoxContainer = styled.View`
   margin-left: auto;
+`;
+
+export const SelectedImage = styled.Image`
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+`;
+
+export const SelectedImageContainer = styled.View``;
+
+export const RemoveButton = styled.TouchableOpacity`
+  position: absolute;
+  z-index: 99;
+  margin-left: 100px;
 `;

@@ -3,23 +3,39 @@ import React from "react";
 import { Container, CircleButton, BoxWrapper, RoleImage } from "./index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
-import { SubTitle, Text, BlueButton, BlueButtonText } from "../../components/components/index.style";
+import {
+  SubTitle,
+  Text,
+  BlueButton,
+  BlueButtonText,
+} from "../../components/components/index.style";
 import { RadioButton } from "react-native-paper";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 function RolePage({ route, navigation }) {
   const [checked, setChecked] = React.useState("Regular user");
-  const {email, password} = route.params;
-  function next(){
-    console.log(checked)
-    if(checked === "Regular user"){
-      navigation.navigate("SignUpRegular", {role: checked, email: email, password:password})
+  const { email, password } = route.params;
+  function next() {
+    console.log(checked);
+    if (checked === "Regular user") {
+      navigation.navigate("SignUpRegular", {
+        role: checked,
+        email: email,
+        password: password,
+      });
+    } else if (checked === "Paramedic") {
+      navigation.navigate("SignUpParamedic", {
+        role: checked,
+        email: email,
+        password: password,
+      });
+    } else {
+      navigation.navigate("SignUpPharmacist", {
+        role: checked,
+        email: email,
+        password: password,
+      });
     }
-    else if(checked === "Paramedic"){
-      navigation.navigate("SignUpParamedic",  {role: checked, email: email, password:password})
-    }
-    else{
-      navigation.navigate("SignUpPharmacist",  {role: checked, email: email, password:password})
-    }
-      
   }
   return (
     <Container>
@@ -33,7 +49,7 @@ function RolePage({ route, navigation }) {
       </CircleButton>
       <Image source={require("../../../assets/role.png")} />
       <SubTitle>- Choose your role -</SubTitle>
-      <BoxWrapper>
+      <BoxWrapper onPress={() => setChecked("Regular user")}>
         <RoleImage source={require("../../../assets/regularUser.png")} />
         <Text>Regular user</Text>
         <RadioButton
@@ -41,21 +57,20 @@ function RolePage({ route, navigation }) {
           uncheckedColor={Colors.grey}
           value="Regular user"
           status={checked === "Regular user" ? "checked" : "unchecked"}
-          onPress={() => setChecked("Regular user")}
         />
       </BoxWrapper>
-      <BoxWrapper>
+      <BoxWrapper onPress={() => setChecked("Paramedic")}>
         <RoleImage source={require("../../../assets/paramedicUser.png")} />
         <Text>Paramedic</Text>
+
         <RadioButton
           color={Colors.blue}
-          uncheckedColor={Colors.grey}
+          uncheckedColor={Colors.red}
           value="Paramedic"
           status={checked === "Paramedic" ? "checked" : "unchecked"}
-          onPress={() => setChecked("Paramedic")}
         />
       </BoxWrapper>
-      <BoxWrapper>
+      <BoxWrapper onPress={() => setChecked("Pharmacist")}>
         <RoleImage source={require("../../../assets/pharmacistUser.png")} />
         <Text>Pharmacist</Text>
         <RadioButton
@@ -63,12 +78,11 @@ function RolePage({ route, navigation }) {
           uncheckedColor={Colors.grey}
           value="Pharmacist"
           status={checked === "Pharmacist" ? "checked" : "unchecked"}
-          onPress={() => setChecked("Pharmacist")}
         />
       </BoxWrapper>
-      <BlueButton  onPress={next}>
-          <BlueButtonText>Next</BlueButtonText>
-        </BlueButton>
+      <BlueButton onPress={next}>
+        <BlueButtonText>Next</BlueButtonText>
+      </BlueButton>
     </Container>
   );
 }
