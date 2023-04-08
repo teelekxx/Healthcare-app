@@ -15,29 +15,37 @@ import {
   EditButtonText,
   AvaContainer,
 } from "./index.style";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+import { AsyncStorage } from "react-native";
 import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
-
+import { async, jsonEval } from "@firebase/util";
+import Auth from "../../api/auth";
 function ProfileScreen({ navigation }) {
+  const [data, setData] = useState(null);
+  
   const [edit, setEdit] = useState(false);
-  const [name, setName] = useState("John Doe");
+  const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
-  const [gender, setGender] = useState("Male");
-  const [id, setID] = useState("12345678912345");
-  const [tel, setTel] = useState("0817977168");
+
+  const [gender, setGender] = useState("");
+  const [id, setID] = useState("");
+  const [tel, setTel] = useState("");
   const [address, setAddress] = useState(
-    "111, soi Chan 43 Yaek 18, Bangkhlo, Bangkholaem, Bkk, 10120"
+    ""
   );
-  const [role, setRole] = useState("regular user");
+  const [role, setRole] = useState("Regular user");
+
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ]);
-  const [text, setText] = useState("22/05/2001");
+
+  const [text, setText] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const editMode = () => {
@@ -50,6 +58,7 @@ function ProfileScreen({ navigation }) {
       setMode("Edit");
     }
   };
+
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -63,6 +72,36 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
+  const getUserData = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getUserProfile({
+      token: token,
+    });
+    return user.data;
+  };
+  useEffect(() => {
+    try {
+      const getUserData = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.getUserProfile({
+          token: token,
+        });
+        setName(user.data.medicalInformation.name)
+        setText(user.data.medicalInformation.dateOfBirth)
+        setGender(user.data.medicalInformation.gender)
+        setID(user.data.medicalInformation.citizenId)
+        setTel(user.data.medicalInformation.phoneNumber)
+        setAddress(user.data.address.address)
+      };
+      getUserData();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+
+
+
   return (
     <Background>
       <AvaContainer>
@@ -111,7 +150,11 @@ function ProfileScreen({ navigation }) {
           color: "#00a5cb",
         }}
         style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
-        textStyle={{ color: "#00a5cb", fontWeight: "bold" }}
+
+        textStyle={{
+          color: "#00a5cb",
+          fontWeight: "bold",
+        }}
         disabled={!edit}
       />
       <GreyText>Citizen ID</GreyText>

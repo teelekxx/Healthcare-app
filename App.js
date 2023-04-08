@@ -42,6 +42,20 @@ export default function App() {
       }
     });
   }, []);
+  useEffect(()=> {
+    firebaseAuth.onIdTokenChanged(async (user) => {
+      if (user) {
+        const idTokenResult = await user.getIdTokenResult();
+        const { authTimeMillis, expirationTimeMillis } = idTokenResult;
+        const timeToExpiration = expirationTimeMillis - authTimeMillis;
+        const refreshTokenTimeToExpiration = user.refreshTokenTimeToExpiration;
+        if (refreshTokenTimeToExpiration && refreshTokenTimeToExpiration < timeToExpiration) {
+          // The refresh token is expiring soon, refresh it.
+          await user.getIdToken(/* forceRefresh */ true);
+        }
+      }
+    });
+  }, [])
 
   return <Navigator />;
 }
