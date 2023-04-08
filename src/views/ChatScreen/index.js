@@ -18,7 +18,6 @@ import {
   FormInput,
   SmallFormInput,
   BigFormInput,
-  BlueContainer,
   SignUpForm,
   FormText,
   PageTitleContainer,
@@ -49,6 +48,7 @@ import {
   SelectedImageContainer,
   BubbleContainer,
   Footer,
+  BlueContainer,
 } from "./index.style";
 
 import ChatBubble from "../../components/ChatBubble/index";
@@ -170,8 +170,8 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
-
             <GreyInput
+              multiline={true}
               value={currMessage}
               onChangeText={(text) => setCurrMessage(text)}
             ></GreyInput>

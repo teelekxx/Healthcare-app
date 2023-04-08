@@ -7,8 +7,8 @@ import {
   OthersTimeStamp,
   BlueMessage,
   SelectedImage,
-  SelectedImagesContainer,
-  MySelectedImage,
+  ImagesContainer,
+  MyImage,
 } from "./index.style";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
@@ -24,11 +24,11 @@ export default function ChatBubble({ message, timeStamp, sender, image }) {
       return (
         <MessageContainer>
           {image.length !== 0 && (
-            <SelectedImagesContainer>
+            <ImagesContainer>
               {image.map((val, index) => {
-                return <MySelectedImage source={{ uri: val }} key={index} />;
+                return <MyImage source={{ uri: val }} key={index} />;
               })}
-            </SelectedImagesContainer>
+            </ImagesContainer>
           )}
           {message && (
             <MyBubble>

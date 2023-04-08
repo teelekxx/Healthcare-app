@@ -72,6 +72,19 @@ export const Form = styled.ScrollView`
   padding: 50px 25px 0px 25px;
   flexGrow: 0;
 `;
+
+export const NonScrollForm = styled.View`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  height: 70%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: ${Colors.white};
+  padding: 50px 25px 0px 25px;
+  flexGrow: 0;
+`;
+
 export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;
   margin-bottom: 50px

@@ -14,6 +14,7 @@ import {
   ItalicText2,
   BlueContainer,
   Form,
+  NonScrollForm,
   BlueButton,
   BlueButtonText,
 } from "../../components/components/index.style";
@@ -57,7 +58,7 @@ function SignInPage({ navigation }) {
           size={20}
         />
       </CircleButton>
-      <Form>
+      <NonScrollForm>
         <SubTitle>Welcome back!</SubTitle>
         <ItalicText2>Hello there, sign in to continue</ItalicText2>
         <ThemeButton>
@@ -104,10 +105,10 @@ function SignInPage({ navigation }) {
         <ForgotPassword onPress={() => navigation.navigate("ForgetPassword")}>
           Forgot password?
         </ForgotPassword>
-        <BlueButton>
+        <BlueButton onPress={handleSubmit}>
           <BlueButtonText>Sign in</BlueButtonText>
         </BlueButton>
-      </Form>
+      </NonScrollForm>
     </BlueContainer>
   );
 }

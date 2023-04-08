@@ -85,9 +85,7 @@ export const GreyInput = styled.TextInput`
   background-color: ${Colors.white};
   border-radius: 10px;
   width: ${width * 0.7}px;
-  height: ${height * 0.047393}px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px;
   margin-right: ${width * 0.046153}px;
 `;
 
@@ -111,3 +109,10 @@ export const SelectedImage = styled.Image`
 export const SelectedImageContainer = styled.View``;
 
 export const BubbleContainer = styled.View``;
+
+export const BlueContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${Colors.blue};
+  width: 100%;
+`;

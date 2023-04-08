@@ -16,6 +16,7 @@ export const MyBubble = styled.View`
   max-width: ${width * 0.7435}px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   elevation: 10;
+  margin-bottom: 5px;
 `;
 
 export const WhiteMessage = styled.Text`
@@ -32,7 +33,6 @@ export const MyTimeStamp = styled.Text`
   font-size: 10px;
   text-align: right;
   padding-right: 20px;
-  padding-top: 10px;
 `;
 
 export const OthersBubble = styled.View`
@@ -46,6 +46,7 @@ export const OthersBubble = styled.View`
   max-width: ${width * 0.7435}px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   elevation: 10;
+  margin-bottom: 5px;
 `;
 
 export const BlueMessage = styled.Text`
@@ -62,16 +63,15 @@ export const OthersTimeStamp = styled.Text`
   font-size: 10px;
   text-align: left;
   padding-right: 20px;
-  padding-top: 10px;
 `;
 
-export const MySelectedImage = styled.Image`
+export const MyImage = styled.Image`
   width: 200px;
   height: 200px;
-  border-radius: 50px;
+  margin-bottom: 10px;
   margin-left: auto;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   elevation: 10;
 `;
 
-export const SelectedImagesContainer = styled.View``;
+export const ImagesContainer = styled.View``;

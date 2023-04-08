@@ -61,7 +61,7 @@ function PharmacyStack() {
       })}
     >
       <Stack.Screen name="PatientPharmacy" component={PatientPharmacyScreen} />
-      <Stack.Screen name="Chatting" component={ChatScreen} />
+      {/* <Stack.Screen name="Chatting" component={ChatScreen} /> */}
       <Stack.Screen name="Notification" component={NotificationStack} />
     </Stack.Navigator>
   );
@@ -97,7 +97,7 @@ function NotificationStack() {
       })}
     >
       <Stack.Screen name="NotificationList" component={NotificationsScreen} />
-      <Stack.Screen name="Chatting" component={ChatScreen} />
+      {/* <Stack.Screen name="Chatting" component={ChatScreen} /> */}
     </Stack.Navigator>
   );
 }
@@ -113,7 +113,7 @@ function ChatStack({ navigation, route }) {
       })}
     >
       <Stack.Screen name="ChatList" component={ChatsListScreen} />
-      <Stack.Screen name="Chatting" component={ChatScreen} />
+      {/* <Stack.Screen name="Chatting" component={ChatScreen} /> */}
       <Stack.Screen name="Notification" component={NotificationStack} />
     </Stack.Navigator>
   );
@@ -126,7 +126,7 @@ function ProfileStack() {
       })}
     >
       <Stack.Screen name="ProfileMain" component={ProfileScreen} />
-      <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} />
+      {/* <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} /> */}
     </Stack.Navigator>
   );
 }
@@ -168,9 +168,9 @@ function HomePage({ navigation }) {
         options={({ route }) => ({
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            if (routeName === "Chatting") {
-              return { display: "none" };
-            }
+            // if (routeName === "Chatting") {
+            //   return { display: "none" };
+            // }
             return;
           })(route),
         })}
@@ -181,9 +181,12 @@ function HomePage({ navigation }) {
         options={({ route }) => ({
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            if (routeName === "Chatting" || routeName === "Notification") {
+            if (routeName === "Notification") {
               return { display: "none" };
             }
+            // if (routeName === "Chatting" || routeName === "Notification") {
+            //   return { display: "none" };
+            // }
             return;
           })(route),
         })}
@@ -217,9 +220,6 @@ function HomePage({ navigation }) {
         options={({ route }) => ({
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            if (routeName === "MedInfoSummary") {
-              return { display: "none" };
-            }
             return;
           })(route),
         })}
