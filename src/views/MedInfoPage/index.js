@@ -241,35 +241,6 @@ function MedInfoPage({ navigation, route }) {
       }
 
       navigation.navigate("SignIn");
-      // navigation.navigate("HomePage", {
-      //   //user
-      //   email: email,
-      //   role: role,
-      //   password:password,
-      //   //med info
-      //   name: name,
-      //   dateOfBirth: dateOfBirth,
-      //   gender: gender,
-      //   citizenId: citizenId,
-      //   phoneNumber: phoneNumber,
-      //   bloodType: bloodType,
-      //   congenitalDisease: disease,
-      //   regularMed: medication,
-      //   allergies: allergy,
-      //   DNRStatus: checkedDNR,
-      //   organDonor: checkedDonor,
-      //   powerOfAttorneyName: emergencyName,
-      //   powerOfAttorneyRelationship: relationship,
-      //   powerOfAttorneyPhoneNumber: tel,
-      //   //address
-      //   address: address,
-      //   city: city,
-      //   zipCode: zipCode,
-      //   //insurance
-      //   provider: insuranceProvider,
-      //   plan: insurancePlan,
-      //   expirationDate: text,
-      // });
     } catch (err) {
       console.log(err);
     }
@@ -363,7 +334,7 @@ function MedInfoPage({ navigation, route }) {
           style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
         />
         <FormText>Tel.</FormText>
-        <FormInput onChangeText={setTel} value={tel} />
+        <FormInput onChangeText={setTel} value={tel} maxLength={10}/>
         <Space></Space>
         <CenterFormText>Insurance information</CenterFormText>
         <FormText>Insurance Provider</FormText>

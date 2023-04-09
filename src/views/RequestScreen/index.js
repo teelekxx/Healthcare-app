@@ -49,9 +49,10 @@ import {
   PageTitle,
   DateCalendar,
 } from "../../components/components/index.style";
-
+import * as Location from "expo-location";
+import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-
+import { AsyncStorage } from "react-native";
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -59,6 +60,40 @@ function RequestScreen({ navigation }) {
   const [isUnconsciousness, setUnconsciousness] = useState(false);
   const [isWeakness, setWeakness] = useState(false);
   const [image, setImage] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otherInformation, setOtherInformation] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const symptoms = [];
+
+  useEffect(() => {
+    try {
+      (async () => {
+      
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.log('Permission to access location was denied');
+          return;
+        }
+        
+  
+        let location = await Location.getCurrentPositionAsync({});
+        console.log(latitude)
+        setLatitude(location.coords.latitude)
+        setLongitude(location.coords.longitude)
+      })();
+      const getUserData = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.getUserProfile({
+          token: token,
+        });
+        setPhoneNumber(user.data.medicalInformation.phoneNumber);
+      };
+      getUserData();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -77,13 +112,61 @@ function RequestScreen({ navigation }) {
   const removeImage = () => {
     setImage(null);
   };
+  const checkSymptoms =()=>{
+    if(isAccident){
+      symptoms.push("Accident")
+    }
+    if(isBreathlessness){
+      symptoms.push("Breathlessness")
+    }
+    if(isChestPain){
+      symptoms.push("Chest pain")
+    }
+    if(isUnconsciousness){
+      symptoms.push("Unconscious")
+    }
+    if(isWeakness){
+      symptoms.push("Physical weaknesses")
+    }
+  }
+
+  const sendEmergencyCase = async () => {
+    try {
+      checkSymptoms();
+      console.log(image)
+      const postEmergency = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.postEmergencyCase({
+          body: {
+            contactNumber: phoneNumber,
+            symptoms: symptoms,
+            otherInformation: otherInformation,
+            acceptanceStatus: "waiting",
+            deliveringStatus: "waiting",
+            latitude:latitude,
+            longitude:longitude,
+
+          },
+          token: token,
+        });
+      };
+      postEmergency();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <RequestContainer>
       <RequestTitle>Ambulance request detail</RequestTitle>
       <InputContainer>
         <BlueText>Contact number*</BlueText>
-        <GreyInput placeholder="0817977168"></GreyInput>
+        <GreyInput
+          keyboardType="phone-pad"
+          onChangeText={setPhoneNumber}
+          value={phoneNumber}
+          maxLength={10}
+        ></GreyInput>
       </InputContainer>
       <InputContainer>
         <BlueText>Attached image (optional)</BlueText>
@@ -175,14 +258,19 @@ function RequestScreen({ navigation }) {
       </SymptomList>
       <InputContainer behavior="padding">
         <BlueText>Other/ more information (optional)</BlueText>
-        <GreyInput></GreyInput>
+        <GreyInput
+          multiline
+          numberOfLines={3}
+          onChangeText={setOtherInformation}
+          value={otherInformation}
+        ></GreyInput>
       </InputContainer>
       <HorizonInput3>
         <BlueBorderButton onPress={() => navigation.goBack()}>
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
-        <BlueButton onPress={() => navigation.navigate("Firstaid")}>
+        <BlueButton onPress={sendEmergencyCase}>
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>

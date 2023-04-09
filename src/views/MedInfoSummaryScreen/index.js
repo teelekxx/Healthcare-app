@@ -241,7 +241,7 @@ function MedInfoSummaryScreen({ navigation }) {
           disabled={!edit}
         />
         <GreyText>Tel.</GreyText>
-        <InfoInput onChangeText={setTel} value={tel} editable={edit} />
+        <InfoInput onChangeText={setTel} value={tel} maxLength = {10} editable={edit} />
         <CenterFormText>Insurance Information</CenterFormText>
         <GreyText>Insurance Provider</GreyText>
         <InfoInput
