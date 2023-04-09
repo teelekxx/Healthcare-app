@@ -139,9 +139,9 @@ function SignUpPharmacistPage({ navigation, route }) {
           style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
         />
         <FormText>Citizen ID</FormText>
-        <FormInput onChangeText={onChangeID} value={id} />
+        <FormInput onChangeText={onChangeID} value={id} maxLength={14}/>
         <FormText>Tel.</FormText>
-        <FormInput onChangeText={onChangePhone} value={phone} />
+        <FormInput onChangeText={onChangePhone} value={phone} maxLength={10}/>
         <FormText>Pharmacist license No.</FormText>
         <FormInput onChangeText={setLicenseNum} value={licenseNum} />
         <FormText>Pharmacist license expiration date</FormText>

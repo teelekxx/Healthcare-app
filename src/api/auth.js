@@ -28,7 +28,7 @@ class Auth {
   }
 
 
-  static registerUser(option) {
+  static async registerUser(option) {
 
 
     const config = {
@@ -42,7 +42,7 @@ class Auth {
     return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
-  static registerPharmacy(option) {
+  static async registerPharmacy(option) {
 
 
     const config = {
@@ -56,7 +56,7 @@ class Auth {
     return request(config).catch((err) => ({ ...err, isOk: false }));
 
   }
-  static getUserProfile(option){
+  static async getUserProfile(option){
     const config = {
       method: HTTP_METHODS.get,
       url: `/user`,
@@ -67,7 +67,7 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static checkUserEmail(option){
+  static async checkUserEmail(option){
     const config = {
       method: HTTP_METHODS.post,
       url: `/register/email`,
@@ -78,7 +78,7 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static updateUserProfile(option){
+  static async updateUserProfile(option){
     const config = {
       method: HTTP_METHODS.put,
       url: `/user`,
@@ -89,6 +89,18 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async postEmergencyCase(option){
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/emergency/case`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
 
 }
 

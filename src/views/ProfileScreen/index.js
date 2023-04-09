@@ -97,13 +97,7 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-  const getUserData = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const user = await Auth.getUserProfile({
-      token: token,
-    });
-    return user.data;
-  };
+
   useEffect(() => {
     try {
       const getUserData = async () => {
@@ -185,9 +179,9 @@ function ProfileScreen({ navigation }) {
         disabled={!edit}
       />
       <GreyText>Citizen ID</GreyText>
-      <InfoInput onChangeText={setID} value={id} editable={edit} />
+      <InfoInput onChangeText={setID} value={id} maxLength={14} editable={edit} />
       <GreyText>Tel.</GreyText>
-      <InfoInput onChangeText={setTel} value={tel} editable={edit} />
+      <InfoInput onChangeText={setTel} value={tel} maxLength={10} editable={edit} />
       <GreyText>Address</GreyText>
       <BigInfoInput
         multiline
