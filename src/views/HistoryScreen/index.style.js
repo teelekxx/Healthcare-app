@@ -14,7 +14,7 @@ export const Title = styled.Text`
   margin-top:45px;
   margin-bottom:50px;
 `;
-export const Block = styled.ScrollView`
+export const Block = styled.TouchableOpacity`
 border: 1px solid ${Colors.blue};
 width:340px;
 height:120px;

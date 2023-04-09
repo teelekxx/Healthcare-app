@@ -56,11 +56,11 @@ function HistoryScreen({ navigation }) {
       <Title>History</Title>
       {orders.map((order, index) => {
         return (
-          <Block key={index}>
-            <IdContainer>
+          <Block key={index} onPress={()=>navigation.navigate("HistoryDetail")}>
+            {/* <IdContainer>
               <Id>ID: {order.id}</Id>
               <Status>{order.status}</Status>
-            </IdContainer>
+            </IdContainer> */}
             <Name>{order.name}</Name>
             {order.medication.map((med, index)=>{
                 return(
