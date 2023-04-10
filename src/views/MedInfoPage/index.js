@@ -12,6 +12,7 @@ import {
   DateCalendar,
   CenterFormText,
   BlueButton,
+  WhiteKeyboard,
 } from "../../components/components/index.style";
 import {
   CircleButton,
@@ -287,7 +288,9 @@ function MedInfoPage({ navigation, route }) {
         </CircleButton>
         <PageTitle>Medical Information</PageTitle>
       </PageTitleContainer>
-      <SignUpForm vertical={true} keyboardDismissMode="on-drag">
+      <WhiteKeyboard behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}>
+      <SignUpForm >
         <FormText>Blood type</FormText>
         <DropDownPicker
           open={open}
@@ -414,6 +417,7 @@ function MedInfoPage({ navigation, route }) {
           <BlueButtonText>Create account</BlueButtonText>
         </BlueButton>
       </SignUpForm>
+      </WhiteKeyboard>
     </BlueContainer>
   );
 }

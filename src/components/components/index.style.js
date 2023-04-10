@@ -1,5 +1,10 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
+import { Dimensions, Platform } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+const marginMultiplier = Platform.OS === "ios" ? 0 : 0.0632;
+const backButtonMargin = Platform.OS === "ios" ? 0 : 60;
 
 export const Container = styled.View`
   flex: 1;
@@ -44,6 +49,7 @@ export const InputGroup = styled.View`
   justify-content: space-between;
   align-items: center;
   padding-top: 25px;
+  margin-top: 10px;
 `;
 export const Input = styled.TextInput`
   font-size: 15px;
@@ -70,19 +76,26 @@ export const Form = styled.ScrollView`
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 50px 25px 0px 25px;
-  flexGrow: 0;
+  flexgrow: 0;
 `;
 
 export const NonScrollForm = styled.View`
-  margin-top: auto;
-  display: flex;
+
+  height: 100%;
   flex-direction: column;
-  height: 70%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-color: ${Colors.white};
   padding: 50px 25px 0px 25px;
-  flexGrow: 0;
+  flexgrow: 0;
+`;
+
+export const SignUpForm = styled.ScrollView`
+  flex-direction: column;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: ${Colors.white};
+  padding: 25px 25px 0px 25px;
 `;
 
 export const BlueButton = styled.TouchableOpacity`
@@ -100,42 +113,38 @@ export const BlueButtonText = styled.Text`
   font-size: 20px;
   padding: 0;
   align-self: center;
-  
+
   font-weight: bold;
   color: ${Colors.white};
 `;
 
 export const Text = styled.Text`
   font-size: 20px;
-  
+
   font-weight: regular;
   color: ${Colors.blue};
 `;
 
 export const PageTitle = styled.Text`
   font-size: 24px;
-  
+
   font-weight: bold;
   color: ${Colors.white};
   margin-top: 70px;
   margin-left: 20px;
 `;
 
-export const PageTitleContainer = styled.View`
-  flex: 1;
+export const PageTitleContainer = styled.SafeAreaView`
+  margin-bottom: 40px;
   flex-direction: row;
-  width: 100%;
+  align-items: center;
 `;
-export const SignUpForm = styled.ScrollView`
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  height: 80%;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  background-color: ${Colors.white};
-  padding: 25px 25px 0px 25px;
-  flexGrow: 0;
+
+export const HomeTitleContainer = styled.SafeAreaView`
+  margin-top: ${height * marginMultiplier}px;
+  margin-bottom: 40px;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 export const AvatarContainer = styled.View`
@@ -194,7 +203,7 @@ export const DateCalendar = styled.View`
 `;
 
 export const CircleButton = styled.TouchableOpacity`
-  margin-top: 60px;
+  margin-top: ${backButtonMargin}px;
   margin-left: 25px;
   padding: 10px;
   width: 50px;
@@ -226,7 +235,7 @@ export const NotificationTouchable = styled.TouchableOpacity`
 
 export const GreyText = styled.Text`
   font-size: 15px;
-  
+
   font-weight: bold;
   color: ${Colors.grey};
   padding-bottom: 5px;
@@ -267,4 +276,10 @@ export const BigInfoInput = styled.TextInput`
   height: 80px;
   padding-left:10px;
   padding-right:10px;
+`;
+
+export const WhiteKeyboard = styled.KeyboardAvoidingView`
+  background-color: ${Colors.white};
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;

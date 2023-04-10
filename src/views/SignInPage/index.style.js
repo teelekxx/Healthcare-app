@@ -1,5 +1,10 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
+import { Formik, ErrorMessage } from 'formik';
+import { Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+const marginMultiplier = Platform.OS === 'ios' ? 0.2232 : 0.1232;
 
 export const ThemeButton = styled.Pressable`
   flex-direction: row;
@@ -8,6 +13,7 @@ export const ThemeButton = styled.Pressable`
   height: 40px;
   border: 1px solid ${Colors.grey};
   box-shadow: 0px 2px 2px grey;
+  elevation: 10;
   background-color: ${Colors.white};
   border-radius: 10px;
   align-items: center;
@@ -26,7 +32,7 @@ export const Or = styled.Text`
   align-self: center;
   
   color: ${Colors.grey};
-  padding-top: 30px;
+  padding-top: 20px;
 `;
 export const ForgotPassword = styled.Text`
   font-size: 15px;
@@ -39,8 +45,9 @@ export const ForgotPassword = styled.Text`
   padding-top: 10px;
 `;
 
-export const CircleButton = styled.Pressable`
+export const CircleButton = styled.TouchableOpacity`
   margin-top: 60px;
+  margin-bottom: ${height * marginMultiplier}px;
   margin-left: 25px;
   padding: 10px;
   width: 50px;
@@ -51,3 +58,4 @@ export const CircleButton = styled.Pressable`
   justify-content: center;
   align-items: center;
 `;
+

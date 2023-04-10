@@ -25,18 +25,7 @@ import {
 function SplintScreen({ navigation }) {
   return (
     <FirstListContainer>
-      <SafeAreaView>
-        <NotificationTouchable
-          onPress={() => navigation.navigate("Notification")}
-        >
-          <Icon
-            name="notifications-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-          />
-        </NotificationTouchable>
-      </SafeAreaView>
+    <SafeAreaView>
       <TitleContainer>
         <BlueCircleButton onPress={() => navigation.goBack()}>
           <Icon
@@ -48,6 +37,7 @@ function SplintScreen({ navigation }) {
         </BlueCircleButton>
         <FirstListTitle>Set a Splint</FirstListTitle>
       </TitleContainer>
+      </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
           <StepPicture source={require("../../../../assets/splint.jpg")} />

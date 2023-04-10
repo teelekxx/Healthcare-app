@@ -7,6 +7,7 @@ import {
   ItalicText,
   Container,
   NotificationTouchable,
+  HomeTitleContainer,
 } from "../../components/components/index.style";
 import {
   FindButton,
@@ -33,19 +34,19 @@ function PatientPharmacyScreen({ navigation }) {
 
   return (
     <FindContainer>
-      <SafeAreaView>
-        <NotificationTouchable
-          onPress={() => navigation.navigate("Notification")}
-        >
-          <Icon
-            name="notifications-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-          />
-        </NotificationTouchable>
-      </SafeAreaView>
-      <FindTitle>Pharmacy</FindTitle>
+        <HomeTitleContainer>
+          <FindTitle>Pharmacy</FindTitle>
+          <NotificationTouchable
+            onPress={() => navigation.navigate("Notification")}
+          >
+            <Icon
+              name="notifications-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={30}
+            />
+          </NotificationTouchable>
+        </HomeTitleContainer>
       {!isWaiting && !isFound ? (
         <ButtonContainer>
           <PharmacyIcon

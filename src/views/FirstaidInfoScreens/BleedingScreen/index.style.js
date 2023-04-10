@@ -3,9 +3,11 @@ import { Colors } from "../../../constants";
 import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
+const titleMargin = Platform.OS === "ios" ? 0 : 60;
 
 export const TitleContainer = styled.View`
   flex-direction: row;
+  margin-top: ${titleMargin}px ;
 `;
 
 export const FirstListTitle = styled.Text`

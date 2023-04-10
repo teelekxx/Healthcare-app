@@ -63,17 +63,6 @@ function FirstaidScreen({ navigation }) {
   return (
     <FirstListContainer>
       <SafeAreaView>
-        <NotificationTouchable
-          onPress={() => navigation.navigate("Notification")}
-        >
-          <Icon
-            name="notifications-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-          />
-        </NotificationTouchable>
-      </SafeAreaView>
       <TitleContainer>
         <BlueCircleButton onPress={() => navigation.goBack()}>
           <Icon
@@ -85,6 +74,7 @@ function FirstaidScreen({ navigation }) {
         </BlueCircleButton>
         <FirstListTitle>Firstaid</FirstListTitle>
       </TitleContainer>
+      </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
           {firstList.map((val, index) => {

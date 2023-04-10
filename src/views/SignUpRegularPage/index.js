@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Text, Platform } from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -11,6 +12,7 @@ import {
   BlueButton,
   BlueButtonText,
   DateCalendar,
+  WhiteKeyboard,
 } from "../../components/components/index.style";
 import { CircleButton } from "./index.style";
 import { Icon } from "react-native-elements";
@@ -18,6 +20,7 @@ import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Formik, ErrorMessage } from "formik";
 
 function SignUpRegularPage({ navigation, route }) {
   const { email, password, role } = route.params;
@@ -51,19 +54,19 @@ function SignUpRegularPage({ navigation, route }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
     navigation.navigate("MedInfo", {
       email: email,
-      password:password,
+      password: password,
       role: role,
-      name: name,
-      dateOfBirth: text,
+      name: values.name,
+      dateOfBirth: values.dateOfBirth,
       gender: gender,
-      citizenId: id,
-      phoneNumber: phone,
+      citizenId: values.citizenId,
+      phoneNumber: values.phone,
       address: address,
-      city:city,
-      zipCode:zipCode,
+      city: city,
+      zipCode: zipCode,
     });
   };
   return (
@@ -79,64 +82,143 @@ function SignUpRegularPage({ navigation, route }) {
         </CircleButton>
         <PageTitle>Sign Up</PageTitle>
       </PageTitleContainer>
-      <SignUpForm vertical={true} keyboardDismissMode="on-drag">
-        <AvatarContainer />
-        <FormText>Name</FormText>
-        <FormInput onChangeText={onChangeName} value={name} />
-        <FormText>Date of Birth</FormText>
-        <DateCalendar>
-          <SmallFormInput value={text} />
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onChange}
-            />
-          )}
-          <Icon
-            name="calendar-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-            onPress={() => setShow(true)}
-          />
-        </DateCalendar>
+      <Formik
+        initialValues={{
+          name: "",
+          dateOfBirth: new Date(),
+          citizenId: "",
+          phoneNumber: "",
+        }}
+        onSubmit={handleSubmit}
+        validate={(values) => {
+          const errors = {};
 
-        <FormText>Gender</FormText>
-        <DropDownPicker
-          open={open}
-          value={gender}
-          items={items}
-          setOpen={setOpen}
-          setValue={setGender}
-          setItems={setItems}
-          placeholder="select your gender"
-          placeholderStyle={{
-            fontSize: 15,
-          }}
-          style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
-        />
-        <FormText>Citizen ID</FormText>
-        <FormInput onChangeText={onChangeID} value={id} />
-        <FormText>Tel.</FormText>
-        <FormInput onChangeText={onChangePhone} value={phone} />
-        <FormText>Address</FormText>
-        <BigFormInput
-          multiline
-          numberOfLines={3}
-          onChangeText={onChangeAddress}
-          value={address}
-        />
-        <FormText>City</FormText>
-        <FormInput onChangeText={onChangeCity} value={city} />
-        <FormText>Zip Code</FormText>
-        <FormInput onChangeText={onChangeZipCode} value={zipCode} />
-        <BlueButton onPress={handleSubmit}>
-          <BlueButtonText>Next</BlueButtonText>
-        </BlueButton>
-      </SignUpForm>
+          if (!values.name) {
+            errors.name = "Name is required";
+          }
+          if (!values.dateOfBirth) {
+            errors.dateOfBirth = "Date of Birth is required";
+          }
+          if (!values.citizenId) {
+            errors.citizenId = "Citizen ID is required";
+          } else if (!/^\d+$/.test(values.citizenId)) {
+            errors.citizenId = "Citizen ID is in a wrong format";
+          } else if (values.citizenId.length < 13) {
+            errors.citizenId = "Citizen ID must be 13 characters long";
+          }
+          if (!values.phoneNumber) {
+            errors.phoneNumber = "Phone number is required";
+          } else if (!/^\d+$/.test(values.phoneNumber)) {
+            errors.phoneNumber = "Phone number is in a wrong format";
+          }
+          return errors;
+        }}
+        validateOnChange={false}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+          <WhiteKeyboard
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+          >
+            <SignUpForm>
+              <AvatarContainer />
+              <FormText>Name</FormText>
+              <FormInput
+                type="text"
+                placeholderTextColor={Colors.grey}
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                value={values.name}
+              />
+              <ErrorMessage
+                name="name"
+                component={Text}
+                style={{ color: "red" }}
+              />
+              <FormText>Date of Birth</FormText>
+              <DateCalendar>
+                <SmallFormInput value={text} />
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={values.dateOfBirth}
+                    mode="date"
+                    display="default"
+                    onChange={onChange}
+                    onBlur={handleBlur("dateOfBirth")}
+                  />
+                )}
+                <Icon
+                  name="calendar-outline"
+                  type="ionicon"
+                  color={Colors.blue}
+                  size={30}
+                  onPress={() => setShow(true)}
+                />
+              </DateCalendar>
+              <ErrorMessage
+                name="dateOfBirth"
+                component={Text}
+                style={{ color: "red" }}
+              />
+              <FormText>Gender</FormText>
+              <DropDownPicker
+                open={open}
+                value={gender}
+                items={items}
+                setOpen={setOpen}
+                setValue={setGender}
+                setItems={setItems}
+                placeholder="select your gender"
+                placeholderStyle={{
+                  fontSize: 15,
+                }}
+                style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+              />
+              <FormText>Citizen ID</FormText>
+              <FormInput
+                type="text"
+                placeholderTextColor={Colors.grey}
+                onChangeText={handleChange("citizenId")}
+                onBlur={handleBlur("citizenId")}
+                value={values.citizenId}
+              />
+              <ErrorMessage
+                name="citizenId"
+                component={Text}
+                style={{ color: "red" }}
+              />
+              <FormText>Tel.</FormText>
+              <FormInput
+                type="text"
+                placeholderTextColor={Colors.grey}
+                onChangeText={handleChange("phoneNumber")}
+                onBlur={handleBlur("phoneNumber")}
+                value={values.phoneNumber}
+              />
+              <ErrorMessage
+                name="phoneNumber"
+                component={Text}
+                style={{ color: "red" }}
+              />
+              <FormText>Address</FormText>
+              <BigFormInput
+                multiline
+                numberOfLines={3}
+                onChangeText={onChangeAddress}
+                value={address}
+              />
+              <FormText>City</FormText>
+              <FormInput onChangeText={onChangeCity} value={city} />
+              <FormText>Zip Code</FormText>
+              <FormInput onChangeText={onChangeZipCode} value={zipCode} />
+              <BlueButton onPress={handleSubmit}>
+                <BlueButtonText>Next</BlueButtonText>
+              </BlueButton>
+            </SignUpForm>
+          </WhiteKeyboard>
+        )}
+      </Formik>
     </BlueContainer>
   );
 }

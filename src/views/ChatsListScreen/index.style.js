@@ -9,8 +9,6 @@ export const ChatListTitle = styled.Text`
   
   font-weight: bold;
   font-size: 25px;
-  margin-top: ${height * 0.023696}px;
-  margin-bottom: ${height * 0.039099}px;
 `;
 
 export const ChatListContainer = styled.View`

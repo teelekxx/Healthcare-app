@@ -26,17 +26,6 @@ function HeimlichScreen({ navigation }) {
   return (
     <FirstListContainer>
       <SafeAreaView>
-        <NotificationTouchable
-          onPress={() => navigation.navigate("Notification")}
-        >
-          <Icon
-            name="notifications-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-          />
-        </NotificationTouchable>
-      </SafeAreaView>
       <TitleContainer>
         <BlueCircleButton onPress={() => navigation.goBack()}>
           <Icon
@@ -48,6 +37,7 @@ function HeimlichScreen({ navigation }) {
         </BlueCircleButton>
         <FirstListTitle>Heimlich Maneuver</FirstListTitle>
       </TitleContainer>
+      </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
           <StepPicture source={require("../../../../assets/Heimlich.png")} />

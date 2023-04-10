@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
+
 export const CircleButton = styled.TouchableOpacity`
   margin-top:60px;
   margin-left:25px;
