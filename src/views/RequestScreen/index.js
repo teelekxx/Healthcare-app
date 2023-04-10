@@ -271,6 +271,7 @@ function RequestScreen({ navigation }) {
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
         <BlueButton onPress={sendEmergencyCase}>
+
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>

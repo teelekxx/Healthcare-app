@@ -26,17 +26,6 @@ function BleedingScreen({ navigation }) {
   return (
     <FirstListContainer>
       <SafeAreaView>
-        <NotificationTouchable
-          onPress={() => navigation.navigate("Notification")}
-        >
-          <Icon
-            name="notifications-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={30}
-          />
-        </NotificationTouchable>
-      </SafeAreaView>
       <TitleContainer>
         <BlueCircleButton onPress={() => navigation.goBack()}>
           <Icon
@@ -48,6 +37,7 @@ function BleedingScreen({ navigation }) {
         </BlueCircleButton>
         <FirstListTitle>Stop the Bleeding</FirstListTitle>
       </TitleContainer>
+      </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
           <StepPicture source={require("../../../../assets/bleeding.jpg")} />

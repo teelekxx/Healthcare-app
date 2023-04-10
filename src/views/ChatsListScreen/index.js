@@ -12,6 +12,7 @@ import {
   ItalicText,
   Container,
   NotificationTouchable,
+  HomeTitleContainer,
 } from "../../components/components/index.style";
 import ChatModule from "../../components/ChatModule/index";
 import { Icon } from "react-native-elements";
@@ -46,7 +47,8 @@ function ChatsListScreen({ navigation }) {
   ];
   return (
     <ChatListContainer>
-      <SafeAreaView>
+      <HomeTitleContainer>
+      <ChatListTitle>Chats</ChatListTitle>
         <NotificationTouchable
           onPress={() => navigation.navigate("Notification")}
         >
@@ -57,8 +59,8 @@ function ChatsListScreen({ navigation }) {
             size={30}
           />
         </NotificationTouchable>
-      </SafeAreaView>
-      <ChatListTitle>Chats</ChatListTitle>
+        </HomeTitleContainer>
+      
       <RoleSwitch>
         <SwitchSelector
           options={options}
