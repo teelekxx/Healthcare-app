@@ -36,8 +36,8 @@ export const GreyInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width: ${width * 0.87175}px;
-  height: ${height * 0.05924}px;
+  width: 340px;
+  height: 80px;
   padding-left: 10px;
   padding-right: 10px;
 `;

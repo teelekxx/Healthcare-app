@@ -92,7 +92,6 @@ function SignUpRegularPage({ navigation, route }) {
         onSubmit={handleSubmit}
         validate={(values) => {
           const errors = {};
-
           if (!values.name) {
             errors.name = "Name is required";
           }
@@ -219,6 +218,7 @@ function SignUpRegularPage({ navigation, route }) {
           </WhiteKeyboard>
         )}
       </Formik>
+
     </BlueContainer>
   );
 }

@@ -68,6 +68,27 @@ function MedInfoSummaryScreen({ navigation }) {
       setMode("Save");
     } else {
       setEdit(false);
+      //update data in database
+      const updateUser = async () =>{
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.updateUserProfile({
+          body:{
+            bloodType:bloodType,
+            congenitalDisease: disease,
+            regularMed: medication,
+            allergies: allergy,
+            DNRStatus: checkedDNR,
+            organDonour: checkedDonor,
+            powerOfAttorneyName:name,
+            powerOfAttorneyPhoneNumber: tel,
+            powerOfAttorneyRelationship: relationship,
+            provider: insuranceProvider,
+            plan: insurancePlan,
+            expirationDate: text
+          },token:token
+        })
+      }
+      updateUser();
       setMode("Edit");
     }
   };
@@ -78,7 +99,7 @@ function MedInfoSummaryScreen({ navigation }) {
         const user = await Auth.getUserProfile({
           token: token,
         });
-        setAllergy(user.data.medicalInformation.allergies)
+        setAllergy(user.data.medicalInformation.allergies[0])
         setBloodType(user.data.medicalInformation.bloodType)
         setCheckedDNR(user.data.medicalInformation.DNRStatus)
         setCheckedDonor(user.data.medicalInformation.organDonour)
@@ -92,7 +113,7 @@ function MedInfoSummaryScreen({ navigation }) {
         setText(user.data.insurance.expirationDate)
         setInsurancePlan(user.data.insurance.plan)
         setInsuranceProvider(user.data.insurance.provider)
-
+        console.log(user.data)
       };
       getUserData();
     } catch (error) {
@@ -220,7 +241,7 @@ function MedInfoSummaryScreen({ navigation }) {
           disabled={!edit}
         />
         <GreyText>Tel.</GreyText>
-        <InfoInput onChangeText={setTel} value={tel} editable={edit} />
+        <InfoInput onChangeText={setTel} value={tel} maxLength = {10} editable={edit} />
         <CenterFormText>Insurance Information</CenterFormText>
         <GreyText>Insurance Provider</GreyText>
         <InfoInput

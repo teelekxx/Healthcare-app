@@ -113,6 +113,7 @@ function SignUpPharmacistPage({ navigation, route }) {
         </CircleButton>
         <PageTitle>Sign Up</PageTitle>
       </PageTitleContainer>
+
       <Formik
         initialValues={{
           name: "",
