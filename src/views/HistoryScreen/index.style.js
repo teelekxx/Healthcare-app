@@ -14,7 +14,7 @@ export const Title = styled.Text`
   margin-top:45px;
   margin-bottom:50px;
 `;
-export const Block = styled.ScrollView`
+export const Block = styled.TouchableOpacity`
 border: 1px solid ${Colors.blue};
 width:340px;
 height:120px;
@@ -40,13 +40,17 @@ color: ${Colors.grey};
 `
 export const Name = styled.Text`
   color: ${Colors.blue};
-  
+  margin-bottom: 10px;
   font-weight: bold;
-  font-size: 17px;
+  font-size: 18px;
+`
+export const DateFormat = styled.Text`
+  color: ${Colors.blue};
+  font-size: 15px;
+  ${'' /* font-weight: bold; */}
 `
 export const Medication = styled.Text`
 color: ${Colors.blue};
-  
   font-size: 14px;
 `
 export const Space = styled.View`
