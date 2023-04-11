@@ -10,7 +10,7 @@ import {
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import { Container, Row, Cell, CellHeader, BigCell } from "./index.style";
-const HistoryDetailScreen = () => {
+const HistoryDetailScreen = ({navigation}) => {
   const meds = [
     {
       name: "Tylenol",

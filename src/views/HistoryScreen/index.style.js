@@ -40,13 +40,17 @@ color: ${Colors.grey};
 `
 export const Name = styled.Text`
   color: ${Colors.blue};
-  
+  margin-bottom: 10px;
   font-weight: bold;
-  font-size: 17px;
+  font-size: 18px;
+`
+export const DateFormat = styled.Text`
+  color: ${Colors.blue};
+  font-size: 15px;
+  ${'' /* font-weight: bold; */}
 `
 export const Medication = styled.Text`
 color: ${Colors.blue};
-  
   font-size: 14px;
 `
 export const Space = styled.View`
