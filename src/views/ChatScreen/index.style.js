@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 const { width, height } = Dimensions.get("window");
+const titleMargin = Platform.OS === "ios" ? 0 : 50;
 
 export const ChatField = styled.ScrollView`
   height: ${height * 0.55128}px;
@@ -21,13 +22,13 @@ export const SelectedImagesContainer = styled.ScrollView`
 `;
 
 export const PageTitle = styled.Text`
-  margin-top: 70px;
+  align-self: center;
   font-size: 24px;
-
   font-weight: bold;
   color: ${Colors.white};
   margin-left: ${width * 0.035897}px;
   margin-right: ${width * 0.035897}px;
+  margin-top: ${titleMargin}px;
 `;
 
 export const HorizonTitle = styled.View`

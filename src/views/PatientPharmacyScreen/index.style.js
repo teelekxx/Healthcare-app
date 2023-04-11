@@ -55,7 +55,6 @@ export const FindTitle = styled.Text`
 
   font-weight: bold;
   font-size: 25px;
-  margin-top: ${height * 0.023696}px;
   margin-left: ${width * 0.0641}px;
 `;
 

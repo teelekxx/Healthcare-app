@@ -1,5 +1,9 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
+import { Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+const marginMultiplier = Platform.OS === 'ios' ? 0.2232 : 0.1232;
 
 export const ThemeButton = styled.Pressable`
   flex-direction: row;
@@ -39,8 +43,9 @@ export const ForgotPassword = styled.Text`
   padding-top: 10px;
 `;
 
-export const CircleButton = styled.Pressable`
+export const CircleButton = styled.TouchableOpacity`
   margin-top: 60px;
+  margin-bottom: ${height * marginMultiplier}px;
   margin-left: 25px;
   padding: 10px;
   width: 50px;

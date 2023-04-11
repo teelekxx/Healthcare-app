@@ -65,7 +65,7 @@ function RolePage({ route, navigation }) {
 
         <RadioButton
           color={Colors.blue}
-          uncheckedColor={Colors.red}
+          uncheckedColor={Colors.grey}
           value="Paramedic"
           status={checked === "Paramedic" ? "checked" : "unchecked"}
         />
