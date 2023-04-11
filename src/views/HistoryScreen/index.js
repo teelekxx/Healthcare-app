@@ -67,10 +67,6 @@ function HistoryScreen({ navigation }) {
           token: token,
         });
         setOrders(res.data);
-        console.log(res.data);
-        console.log("orders: ", orders[0].pharmacistMedicalInformation.name);
-        // const mongoDate = res.data.created_at
-        // setDate(mongoDate.toLocaleString())
       };
       getOrderData();
     } catch (error) {
@@ -97,7 +93,7 @@ function HistoryScreen({ navigation }) {
         return (
           <Block
             key={index}
-            onPress={() => navigation.navigate("HistoryDetail")}
+            onPress={() => navigation.navigate("HistoryDetail", {orderId: order._id, pharName: order.pharmacistMedicalInformation.name, orderDate: order.created_at, totalPrice: order.total})}
           >
             {/* <IdContainer>
               <Id>ID: {order.id}</Id>
