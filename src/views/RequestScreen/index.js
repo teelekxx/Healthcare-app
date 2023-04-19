@@ -148,23 +148,38 @@ function RequestScreen({ navigation }) {
   const sendEmergencyCase = async () => {
     try {
       checkSymptoms();
-      console.log(image);
-      const formData = new FormData();
-      console.log("here")
-      // const localUri = await AssetToLocalUri(image)
-      // formData.append("attachedImages", localUri);
-      formData.append("contactNumber", phoneNumber);
-      formData.append("symptoms", symptoms);
-      formData.append("otherInformation", otherInformation);
-      formData.append("acceptanceStatus", "waiting");
-      formData.append("deliveringStatus", "waiting");
-      formData.append("latitude", latitude);
-      formData.append("longitude", longitude);
-      console.log(formData);
+      // console.log(image);
+      // const formData = new FormData();
+      // console.log("here")
+      // // const localUri = await AssetToLocalUri(image)
+      // // formData.append("attachedImages", localUri);
+      // formData.append("contactNumber", phoneNumber);
+      // formData.append("symptoms", symptoms);
+      // formData.append("otherInformation", otherInformation);
+      // formData.append("acceptanceStatus", "waiting");
+      // formData.append("deliveringStatus", "waiting");
+      // formData.append("latitude", latitude);
+      // formData.append("longitude", longitude);
+      // console.log(formData);
+      // const postEmergency = async () => {
+      //   const token = await AsyncStorage.getItem("token");
+      //   const user = await Auth.postEmergencyCase({
+      //     body: formData,
+      //     token: token,
+      //   });
+      // };
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
-          body: formData,
+          body: {
+            contactNumber: phoneNumber,
+            symptoms: symptoms,
+            otherInformation: otherInformation,
+            acceptanceStatus: "waiting",
+            deliveringStatus: "waiting",
+            latitude: latitude,
+            longitude: longitude,
+          },
           token: token,
         });
       };
@@ -220,7 +235,7 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <SymptomList>
         <HorizonInput2>
-        <SymptomIcon source={require("../../../assets/fender-bender.png")} />
+          <SymptomIcon source={require("../../../assets/fender-bender.png")} />
           {isAccident && <BlueText2>Accident</BlueText2>}
           {!isAccident && <GreyText>Accident</GreyText>}
           <CheckBoxContainer>

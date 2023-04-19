@@ -42,12 +42,12 @@ export const BigCellHeader = styled(CellHeader)`
 export const PharName = styled.Text`
   color: ${Colors.blue};
   font-weight: bold;
-  font-size: 15px;
+  font-size: 20px;
   margin-bottom: 5px;
 `;
 export const Text20 = styled.Text`
   color: ${Colors.blue};
   font-weight: bold;
-  font-size: 15  px;
+  font-size: 15px;
   margin-bottom: 20px;
 `;

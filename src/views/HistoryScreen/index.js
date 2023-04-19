@@ -16,65 +16,74 @@ import { useEffect, useState } from "react";
 import { AsyncStorage } from "react-native";
 import Auth from "../../api/auth";
 function HistoryScreen({ navigation }) {
-  // const orders = [
-  //   {
-  //     id: "000001",
-  //     status: "in progress",
-  //     name: "Pharm. D. Tee Lek",
-  //     medication: [
-  //       { medName: "Para", num: 5 },
-  //       { medName: "Para", num: 5 },
-  //     ],
-  //   },
-  //   {
-  //     id: "000002",
-  //     status: "completed",
-  //     name: "Pharm. D. Jojo Sung",
-  //     medication: [
-  //       { medName: "Para", num: 5 },
-  //       { medName: "Tylenol", num: 5 },
-  //     ],
-  //   },
-  //   {
-  //     id: "000003",
-  //     status: "in progress",
-  //     name: "Pharm. D. Esu Esu",
-  //     medication: [
-  //       { medName: "Ponstan", num: 5 },
-  //       { medName: "Para", num: 5 },
-  //     ],
-  //   },
-  //   {
-  //     id: "000004",
-  //     status: "in progress",
-  //     name: "Pharm. D. Mine Jung",
-  //     medication: [
-  //       { medName: "Para", num: 5 },
-  //       { medName: "Para", num: 5 },
-  //       { medName: "Para", num: 5 },
-  //     ],
-  //   },
-
-  // ];
 
   const [orders, setOrders] = useState([]);
+  const [pharmaOrders, setPharmaOrders] = useState([])
+  const [isPharma, setIsPharma] = useState(false)
 
   useEffect(() => {
     try {
+      // get role from user
+      const getUserRole = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.getUserProfile({
+          token: token,
+        });
+        if(user.data.user.role==="pharmacist"){
+            setIsPharma(true);
+        }
+        
+      };
+
+      //when the user is regular user
       const getOrderData = async () => {
         const token = await AsyncStorage.getItem("token");
         const res = await Auth.getOrders({
           token: token,
         });
-        setOrders(res.data);
+        setOrders(res.data.orders);
+        console.log("user order: ", res.data.orders)
       };
-      getOrderData();
+
+      //when the user is pharmacist (selling history)
+      const getPharmaData = async () =>{
+        const token = await AsyncStorage.getItem("token");
+        const res = await Auth.pharmaGetOrders({
+          token:token,
+        });
+
+        setPharmaOrders(res.data.orders)
+        
+      };
+      getUserRole();
+      if(isPharma){
+        getPharmaData();
+      }else{
+        getOrderData();
+      }
+      
+      
+
+      
     } catch (error) {
       console.error(error);
     }
   }, []);
+  // const getBuyerName = async (id) => {
+  //     const res = await Auth.getUserById({
+  //       params: { id : id},
+  //     });
+  //     if(res.isOk){
+  //       console.log("isok:", res.data.medicalInformation.name)
+  //       return res.data.medicalInformation.name
+  //     }
+  //     // return
+      
+    
+  // };
+
   const dateFormat = (date) => {
-    const mongodbDate = new Date("2022-03-15T08:30:45.123Z");
+    const mongodbDate = new Date(date);
     // Extract year, month, and day from the MongoDB date
     const year = mongodbDate.getFullYear();
     const month = mongodbDate.getMonth() + 1; // Add 1 to get 1-based month index
@@ -86,29 +95,32 @@ function HistoryScreen({ navigation }) {
     }-${month < 10 ? "0" + month : month}-${year}`;
     return dateString;
   };
+  
   return (
     <Background>
       <Title>History</Title>
-      {orders.map((order, index) => {
+      {pharmaOrders && pharmaOrders.map((order, index) => {
         return (
           <Block
             key={index}
-            onPress={() => navigation.navigate("HistoryDetail", {orderId: order._id, pharName: order.pharmacistMedicalInformation.name, orderDate: order.created_at, totalPrice: order.total})}
+            onPress={() => navigation.navigate("HistoryDetail", {orderId: order.order._id, userName: order.buyerInfo.name,orderDate: order.order.created_at, totalPrice: order.order.total})}
           >
-            {/* <IdContainer>
-              <Id>ID: {order.id}</Id>
-              <Status>{order.status}</Status>
-            </IdContainer> */}
-            <Name>{order.pharmacistMedicalInformation.name}</Name>
-            <DateFormat>{dateFormat(order.created_at)}</DateFormat>
-            <DateFormat>Total Price: {order.total} Baht</DateFormat>
-            {/* {order.medicines.map((med, index) => {
-              return (
-                <View key={index}>
-                  <Medication>{med.name}</Medication>
-                </View>
-              );
-            })} */}
+            <Name>{order.buyerInfo.name}</Name>
+            <DateFormat>{dateFormat(order.order.created_at)}</DateFormat>
+            <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
+            <Space></Space>
+          </Block>
+        );
+      })}
+      {orders && orders.map((order, index) => {
+        return (
+          <Block
+            key={index}
+            onPress={() => navigation.navigate("HistoryDetail", {orderId: order.order._id, userName: order.pharmacistInfo.name, orderDate: order.order.created_at, totalPrice: order.order.total})}
+          >
+            <Name>{order.pharmacistInfo.name}</Name>
+            <DateFormat>{dateFormat(order.order.created_at)}</DateFormat>
+            <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
             <Space></Space>
           </Block>
         );
