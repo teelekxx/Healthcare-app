@@ -55,6 +55,7 @@ import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import { View } from "react-native";
+import { AssetToLocalUri } from "../../lib/imageConverter";
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -113,15 +114,12 @@ function RequestScreen({ navigation }) {
 
     if (!result.canceled) {
       const images = result.assets.map((asset) => asset.uri);
-      if(images.length <=3){
+      if (images.length <= 3) {
         setImage(images);
+      } else {
+        createAlert("You can only pick up to 3 photos");
       }
-      else{
-        createAlert("You can only pick up to 3 photos")
-      }
-      
     }
-    
   };
 
   const removeImage = (index) => {
@@ -152,19 +150,17 @@ function RequestScreen({ navigation }) {
       checkSymptoms();
       console.log(image);
       const formData = new FormData();
-
-      for(let i = 0; i < image.length; i++){
-        const name = "attachImg"+(i+1)
-        formData.append(name, image[i])
-      }
-      formData.append("contactNumber", phoneNumber)
-      formData.append("symptoms", symptoms)
-      formData.append("otherInformation", otherInformation)
-      formData.append("acceptanceStatus", "waiting")
-      formData.append("deliveringStatus", "waiting")
-      formData.append("latitude", latitude)
-      formData.append("longitude", longitude)
-      console.log(formData)
+      console.log("here")
+      // const localUri = await AssetToLocalUri(image)
+      // formData.append("attachedImages", localUri);
+      formData.append("contactNumber", phoneNumber);
+      formData.append("symptoms", symptoms);
+      formData.append("otherInformation", otherInformation);
+      formData.append("acceptanceStatus", "waiting");
+      formData.append("deliveringStatus", "waiting");
+      formData.append("latitude", latitude);
+      formData.append("longitude", longitude);
+      console.log(formData);
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
@@ -223,7 +219,18 @@ function RequestScreen({ navigation }) {
         <BlueText>Type of emergencies (optional)</BlueText>
       </InputContainer>
       <SymptomList>
-        <HorizonInput2></HorizonInput2>
+        <HorizonInput2>
+        <SymptomIcon source={require("../../../assets/fender-bender.png")} />
+          {isAccident && <BlueText2>Accident</BlueText2>}
+          {!isAccident && <GreyText>Accident</GreyText>}
+          <CheckBoxContainer>
+            <BouncyCheckbox
+              fillColor="#00a5cb"
+              isChecked={isAccident}
+              onPress={() => setAccident(!isAccident)}
+            />
+          </CheckBoxContainer>
+        </HorizonInput2>
         <HorizonInput2>
           <SymptomIcon source={require("../../../assets/chest-pain.png")} />
           {isChestPain && <BlueText2>Chest pain</BlueText2>}
