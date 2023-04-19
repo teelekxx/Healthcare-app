@@ -174,16 +174,26 @@ export const CheckBoxContainer = styled.View`
   margin-left: auto;
 `;
 
-export const SelectedImage = styled.Image`
+export const SelectedImage = styled.ImageBackground`
   width: 100px;
   height: 100px;
+
+
   border-radius: 10px;
 `;
-
-export const SelectedImageContainer = styled.View``;
+export const ImageWrapper = styled.View`
+flex:1;
+flex-direction:row;
+`
+export const SelectedImageContainer = styled.View`
+margin-right:10px;
+`;
 
 export const RemoveButton = styled.TouchableOpacity`
-  position: absolute;
-  z-index: 99;
-  margin-left: 100px;
+margin-left:auto;
+
+`;
+
+export const SelectedImagesContainer = styled.ScrollView`
+  padding: 0px 10px 0px 10px;
 `;

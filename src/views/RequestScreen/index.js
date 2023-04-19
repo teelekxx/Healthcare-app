@@ -37,6 +37,7 @@ import {
   SelectedImage,
   SelectedImageContainer,
   RemoveButton,
+  SelectedImagesContainer,
 } from "./index.style";
 import {
   FormInput,
@@ -52,35 +53,42 @@ import {
 import * as Location from "expo-location";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Alert } from "react-native";
+import { View } from "react-native";
+import { AssetToLocalUri } from "../../lib/imageConverter";
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
   const [isBreathlessness, setBreathlessness] = useState(false);
   const [isUnconsciousness, setUnconsciousness] = useState(false);
   const [isWeakness, setWeakness] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otherInformation, setOtherInformation] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const symptoms = [];
-
+  function createAlert(message) {
+    Alert.alert("Try Again", message, [
+      {
+        text: "Ok",
+        style: "cancel",
+      },
+    ]);
+  }
   useEffect(() => {
     try {
       (async () => {
-      
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          console.log('Permission to access location was denied');
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
           return;
         }
-        
-  
+
         let location = await Location.getCurrentPositionAsync({});
-        console.log(latitude)
-        setLatitude(location.coords.latitude)
-        setLongitude(location.coords.longitude)
+        console.log(latitude);
+        setLatitude(location.coords.latitude);
+        setLongitude(location.coords.longitude);
       })();
       const getUserData = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -99,54 +107,64 @@ function RequestScreen({ navigation }) {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: false,
+      allowsMultipleSelection: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const images = result.assets.map((asset) => asset.uri);
+      if (images.length <= 3) {
+        setImage(images);
+      } else {
+        createAlert("You can only pick up to 3 photos");
+      }
     }
   };
 
-  const removeImage = () => {
-    setImage(null);
+  const removeImage = (index) => {
+    const newImages = [...image]; // Create a new array copy
+    newImages.splice(index, 1); // Remove the item at the given index
+    setImage(newImages); // Update the state with the new array
   };
-  const checkSymptoms =()=>{
-    if(isAccident){
-      symptoms.push("Accident")
+  const checkSymptoms = () => {
+    if (isAccident) {
+      symptoms.push("Accident");
     }
-    if(isBreathlessness){
-      symptoms.push("Breathlessness")
+    if (isBreathlessness) {
+      symptoms.push("Breathlessness");
     }
-    if(isChestPain){
-      symptoms.push("Chest pain")
+    if (isChestPain) {
+      symptoms.push("Chest pain");
     }
-    if(isUnconsciousness){
-      symptoms.push("Unconscious")
+    if (isUnconsciousness) {
+      symptoms.push("Unconscious");
     }
-    if(isWeakness){
-      symptoms.push("Physical weaknesses")
+    if (isWeakness) {
+      symptoms.push("Physical weaknesses");
     }
-  }
+  };
 
   const sendEmergencyCase = async () => {
     try {
       checkSymptoms();
-      console.log(image)
+      console.log(image);
+      const formData = new FormData();
+      console.log("here")
+      // const localUri = await AssetToLocalUri(image)
+      // formData.append("attachedImages", localUri);
+      formData.append("contactNumber", phoneNumber);
+      formData.append("symptoms", symptoms);
+      formData.append("otherInformation", otherInformation);
+      formData.append("acceptanceStatus", "waiting");
+      formData.append("deliveringStatus", "waiting");
+      formData.append("latitude", latitude);
+      formData.append("longitude", longitude);
+      console.log(formData);
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
-          body: {
-            contactNumber: phoneNumber,
-            symptoms: symptoms,
-            otherInformation: otherInformation,
-            acceptanceStatus: "waiting",
-            deliveringStatus: "waiting",
-            latitude:latitude,
-            longitude:longitude,
-
-          },
+          body: formData,
           token: token,
         });
       };
@@ -170,24 +188,30 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <InputContainer>
         <BlueText>Attached image (optional)</BlueText>
-
-        {image && (
-          <SelectedImageContainer>
-            <RemoveButton onPress={removeImage}>
-              <Icon
-                name="close-outline"
-                type="ionicon"
-                color={Colors.red}
-                size={21}
-              />
-            </RemoveButton>
-            <SelectedImage source={{ uri: image }} />
-          </SelectedImageContainer>
-        )}
-        {!image && (
+        {image.length === 0 && (
           <GreyButton onPress={pickImage}>
             <GreyButtonText>Choose photo</GreyButtonText>
           </GreyButton>
+        )}
+        {image && (
+          <SelectedImagesContainer horizontal={true}>
+            {image.map((val, index) => {
+              return (
+                <SelectedImageContainer key={index}>
+                  <SelectedImage source={{ uri: val }}>
+                    <RemoveButton onPress={() => removeImage(index)}>
+                      <Icon
+                        name="close-outline"
+                        type="ionicon"
+                        color={Colors.red}
+                        size={21}
+                      />
+                    </RemoveButton>
+                  </SelectedImage>
+                </SelectedImageContainer>
+              );
+            })}
+          </SelectedImagesContainer>
         )}
       </InputContainer>
 
@@ -196,7 +220,7 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <SymptomList>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/fender-bender.png")} />
+        <SymptomIcon source={require("../../../assets/fender-bender.png")} />
           {isAccident && <BlueText2>Accident</BlueText2>}
           {!isAccident && <GreyText>Accident</GreyText>}
           <CheckBoxContainer>
@@ -271,7 +295,6 @@ function RequestScreen({ navigation }) {
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
         <BlueButton onPress={sendEmergencyCase}>
-
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>

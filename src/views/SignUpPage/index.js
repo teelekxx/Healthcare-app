@@ -220,8 +220,8 @@ function SignUpPage({ navigation }) {
                 component={Text}
                 style={{ color: "red" }}
               />
-              {/* <BlueButton onPress={handleSubmit}> */}
-                <BlueButton onPress={() => navigation.navigate("Role", { email: email, password: password })}>
+              <BlueButton onPress={handleSubmit}>
+                {/* <BlueButton onPress={() => navigation.navigate("Role", { email: values.email, password: values.password })}> */}
                 <BlueButtonText>Next</BlueButtonText>
               </BlueButton>
             </NonScrollForm>
