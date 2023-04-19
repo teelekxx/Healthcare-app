@@ -25,11 +25,11 @@ export const MedRow = styled.View`
 `;
 
 export const MedColumn = styled.View`
-  margin-right: 50px;
+  margin-right: 10px;
 `;
 
 export const MedFirstColumn = styled.View`
-  margin-right: 50px;
+  margin-right: 10px;
   margin-left: 10px;
 `;
 
@@ -45,7 +45,7 @@ export const MedTextInput = styled.TextInput`
   font-size: 15px;
   background-color: ${Colors.white};
   border-radius: 10px;
-  width: ${width * 0.33}px;
+  width: ${width * 0.25}px;
   padding: 5px;
 `;
 

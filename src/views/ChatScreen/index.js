@@ -64,6 +64,7 @@ function ChatScreen({ navigation, route }) {
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [medications, setMedications] = useState([]);
+  const [total, setTotal] = useState(null);
 
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },

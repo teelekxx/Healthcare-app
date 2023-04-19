@@ -45,7 +45,8 @@ export default function Prescription({
 }) {
   const [medications, setMedication] = useState([]);
   const [medicine, setMedicine] = useState("");
-  const [quality, setQuality] = useState("");
+  const [dosage, setDosage] = useState("");
+  const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
 
   const closeModal = () => {
@@ -53,7 +54,7 @@ export default function Prescription({
   };
 
   const saveAndClose = () => {
-    handleSaveMedications(medications);
+    handleSaveMedications(medications, calculateTotal());
     handleModalVisible();
   };
 
@@ -66,12 +67,14 @@ export default function Prescription({
         ...medications,
         {
           Medicines: medicine,
-          Qty: quality,
+          Doasge: dosage,
+          Duration: duration,
           Price: price,
         },
       ]);
       setMedicine("");
-      setQuality("");
+      setDosage("");
+      setDuration("");
       setPrice("");
     }
   };
@@ -79,8 +82,8 @@ export default function Prescription({
   const calculateTotal = () => {
     let totalPrice = 0;
     medications.forEach((medicine) => {
-      const { Qty, Price } = medicine;
-      totalPrice += Qty * Price;
+      const { Price } = medicine;
+      totalPrice += Price;
     });
     return totalPrice;
   };
@@ -104,23 +107,39 @@ export default function Prescription({
             ></MedTextInput>
           </MedFirstColumn>
           <MedColumn>
-            <MedText>Qty.</MedText>
+            <MedText>Dosage</MedText>
             {medications.length > 0 && (
               <View>
                 {medications.map((val, index) => {
-                  return <MedText>{val.Qty}</MedText>;
+                  return <MedText>{val.Doasge}</MedText>;
                 })}
               </View>
             )}
             <QtyInput
               keyboardType="numeric"
               maxLength={3}
-              value={quality}
-              onChangeText={(text) => setQuality(text)}
+              value={dosage}
+              onChangeText={(text) => setDosage(text)}
             ></QtyInput>
           </MedColumn>
           <MedColumn>
-            <MedText>Price per</MedText>
+            <MedText>Duration</MedText>
+            {medications.length > 0 && (
+              <View>
+                {medications.map((val, index) => {
+                  return <MedText>{val.Duration}</MedText>;
+                })}
+              </View>
+            )}
+            <QtyInput
+              keyboardType="numeric"
+              maxLength={3}
+              value={duration}
+              onChangeText={(text) => setDuration(text)}
+            ></QtyInput>
+          </MedColumn>
+          <MedColumn>
+            <MedText>Price</MedText>
             {medications.length > 0 && (
               <View>
                 {medications.map((val, index) => {
