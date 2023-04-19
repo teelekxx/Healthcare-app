@@ -80,7 +80,6 @@ export const Form = styled.ScrollView`
 `;
 
 export const NonScrollForm = styled.View`
-
   height: 100%;
   flex-direction: column;
   border-top-left-radius: 20px;

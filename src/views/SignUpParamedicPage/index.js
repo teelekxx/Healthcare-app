@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Text, Platform } from "react-native";
+import { Text, Platform, View, SafeAreaView } from "react-native";
+
 import {
   FormInput,
   SmallFormInput,
@@ -21,6 +22,9 @@ import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
+import Modal from "react-native-modal";
+
+import MapPicker from "../../components/MapPicker/index";
 
 function SignUpParamedicPage({ navigation, route }) {
   const { email, password, role } = route.params;
@@ -43,7 +47,10 @@ function SignUpParamedicPage({ navigation, route }) {
   const [text, setText] = useState("select date");
   const [licenseText, setLicenseText] = useState("select date");
   const [showLicense, setShowLicense] = useState(false);
-  const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -88,7 +95,6 @@ function SignUpParamedicPage({ navigation, route }) {
       licenseDate: licenseText,
     });
   };
-
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -109,7 +115,6 @@ function SignUpParamedicPage({ navigation, route }) {
           citizenId: "",
           phoneNumber: "",
           licenseNum: "",
-
         }}
         onSubmit={handleSubmit}
         validate={(values) => {

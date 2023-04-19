@@ -85,7 +85,7 @@ export const GreyInput = styled.TextInput`
   font-size: 15px;
   background-color: ${Colors.white};
   border-radius: 10px;
-  width: ${width * 0.7}px;
+  width: ${width * 0.67}px;
   padding: 10px;
   margin-right: ${width * 0.046153}px;
 `;
