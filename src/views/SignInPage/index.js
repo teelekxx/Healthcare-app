@@ -32,7 +32,6 @@ import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
 import Auth from "../../api/auth";
 import { Formik, ErrorMessage } from "formik";
-
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
@@ -70,7 +69,14 @@ function SignInPage({ navigation }) {
     const token = tokenData.data;
     console.log(token);
   }
-  
+  function createAlert(message) {
+    Alert.alert("Try Again", message, [
+      {
+        text: "Ok",
+        style: "cancel",
+      },
+    ]);
+  }
 
   const handleSubmit = async (values) => {
     try {

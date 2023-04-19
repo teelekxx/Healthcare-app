@@ -25,6 +25,7 @@ function HistoryScreen({ navigation }) {
     try {
       // get role from user
       const getUserRole = async () => {
+
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.getUserProfile({
           token: token,
@@ -47,20 +48,23 @@ function HistoryScreen({ navigation }) {
 
       //when the user is pharmacist (selling history)
       const getPharmaData = async () =>{
-        const token = await AsyncStorage.getItem("token");
-        const res = await Auth.pharmaGetOrders({
-          token:token,
-        });
-
-        setPharmaOrders(res.data.orders)
+        if(isPharma){
+          const token = await AsyncStorage.getItem("token");
+          const res = await Auth.pharmaGetOrders({
+            token:token,
+          });
+  
+          setPharmaOrders(res.data.orders)
+        }
         
       };
       getUserRole();
-      if(isPharma){
+      console.log("ispharma", isPharma)
+
         getPharmaData();
-      }else{
+
         getOrderData();
-      }
+
       
       
 
