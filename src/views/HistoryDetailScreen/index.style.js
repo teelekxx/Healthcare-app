@@ -26,6 +26,7 @@ export const Cell = styled.Text`
   border-bottom-width: 1px;
   border-bottom-color: #ccc;
   text-align: left;
+  font-size: 13px;
 `;
 export const BigCell = styled(Cell)`
   flex: 2;
@@ -41,12 +42,12 @@ export const BigCellHeader = styled(CellHeader)`
 export const PharName = styled.Text`
   color: ${Colors.blue};
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 5px;
 `;
 export const Text20 = styled.Text`
   color: ${Colors.blue};
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15  px;
   margin-bottom: 20px;
 `;

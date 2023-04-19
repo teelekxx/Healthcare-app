@@ -55,12 +55,13 @@ function SignUpRegularPage({ navigation, route }) {
     setText(fDate);
   };
   const handleSubmit = (values) => {
+    console.log("email:",email)
     navigation.navigate("MedInfo", {
       email: email,
       password: password,
       role: role,
       name: values.name,
-      dateOfBirth: values.dateOfBirth,
+      dateOfBirth: values.text,
       gender: gender,
       citizenId: values.citizenId,
       phoneNumber: values.phone,
