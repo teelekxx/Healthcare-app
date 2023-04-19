@@ -64,23 +64,22 @@ function RequestScreen({ navigation }) {
   const [otherInformation, setOtherInformation] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [emergencyToken, setToken] = useState("");
   const symptoms = [];
 
   useEffect(() => {
     try {
       (async () => {
-      
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          console.log('Permission to access location was denied');
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
           return;
         }
-        
-  
+
         let location = await Location.getCurrentPositionAsync({});
-        console.log(latitude)
-        setLatitude(location.coords.latitude)
-        setLongitude(location.coords.longitude)
+        console.log(latitude);
+        setLatitude(location.coords.latitude);
+        setLongitude(location.coords.longitude);
       })();
       const getUserData = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -112,28 +111,28 @@ function RequestScreen({ navigation }) {
   const removeImage = () => {
     setImage(null);
   };
-  const checkSymptoms =()=>{
-    if(isAccident){
-      symptoms.push("Accident")
+  const checkSymptoms = () => {
+    if (isAccident) {
+      symptoms.push("Accident");
     }
-    if(isBreathlessness){
-      symptoms.push("Breathlessness")
+    if (isBreathlessness) {
+      symptoms.push("Breathlessness");
     }
-    if(isChestPain){
-      symptoms.push("Chest pain")
+    if (isChestPain) {
+      symptoms.push("Chest pain");
     }
-    if(isUnconsciousness){
-      symptoms.push("Unconscious")
+    if (isUnconsciousness) {
+      symptoms.push("Unconscious");
     }
-    if(isWeakness){
-      symptoms.push("Physical weaknesses")
+    if (isWeakness) {
+      symptoms.push("Physical weaknesses");
     }
-  }
+  };
 
   const sendEmergencyCase = async () => {
     try {
       checkSymptoms();
-      console.log(image)
+      console.log(image);
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
@@ -143,17 +142,18 @@ function RequestScreen({ navigation }) {
             otherInformation: otherInformation,
             acceptanceStatus: "waiting",
             deliveringStatus: "waiting",
-            latitude:latitude,
-            longitude:longitude,
-
+            latitude: latitude,
+            longitude: longitude,
           },
           token: token,
         });
+        setToken(token);
       };
       postEmergency();
     } catch (err) {
       console.log(err);
     }
+    navigation.navigate("Map", { myToken: emergencyToken });
   };
 
   return (
@@ -271,7 +271,6 @@ function RequestScreen({ navigation }) {
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
         <BlueButton onPress={sendEmergencyCase}>
-
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>

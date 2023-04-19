@@ -27,14 +27,14 @@ export const MapContainer = styled.View`
 `;
 export const Title = styled.Text`
   color: ${Colors.blue};
-  
+
   font-weight: bold;
   font-size: 40px;
   align-self: center;
 `;
 export const Text = styled.Text`
   color: ${Colors.blue};
-  
+
   font-weight: light;
   font-style: italic;
   font-size: 15px;
@@ -60,7 +60,7 @@ export const ThemeButton = styled.Pressable`
 export const ThemeButtonText = styled.Text`
   font-size: 20px;
   align-self: center;
-  
+
   font-weight: bold;
   color: ${Colors.blue};
 `;
@@ -79,7 +79,17 @@ export const ThemeButtonText2 = styled.Text`
   font-size: 20px;
   padding: 0;
   align-self: center;
-  
+
   font-weight: bold;
   color: ${Colors.white};
+`;
+
+export const FindingPrompt = styled.Text`
+  color: ${Colors.blue};
+
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: ${height * 0.09004}px;
+  margin-left: ${width * 0.02889}px;
+  text-align: center;
 `;

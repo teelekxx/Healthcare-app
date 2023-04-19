@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebase";
 import * as Location from "expo-location";
 import { Google } from "expo";
 import {
@@ -21,10 +23,11 @@ import {
   ThemeButton2,
   ThemeButtonText2,
   RoundButton,
+  FindingPrompt,
 } from "./index.style";
 import { ScrollView } from "react-navigation";
 
-function MapPage({ navigation }) {
+function MapPage({ navigation, route }) {
   const origin = "Bangkok";
   // const destination = "Nakhon Si Thammarat";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
@@ -36,6 +39,7 @@ function MapPage({ navigation }) {
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
   ];
+  const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState(null);
@@ -82,6 +86,11 @@ function MapPage({ navigation }) {
   };
 
   useEffect(() => {
+    console.log("My token=", myToken);
+    // const unsub = onSnapshot(doc(db, "jobs", token.params), (doc) => {
+    //   const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    //   console.log(source, " data: ", doc.data());
+    // });
     // axios
     //   .get(placesUrl)
     //   .then((response) => {
@@ -104,16 +113,15 @@ function MapPage({ navigation }) {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      getHospital(location.coords.latitude, location.coords.longitude);
-    })();
+    // (async () => {
+    //   let { status } = await Location.requestForegroundPermissionsAsync();
+    //   if (status !== "granted") {
+    //     setErrorMsg("Permission to access location was denied");
+    //     return;
+    //   }
+    //   let location = await Location.getCurrentPositionAsync({});
+    //   getHospital(location.coords.latitude, location.coords.longitude);
+    // })();
   }, []);
 
   let text = "Waiting..";
@@ -127,63 +135,65 @@ function MapPage({ navigation }) {
       {loading ? (
         <MapContainer>
           <ActivityIndicator size="large" />
+          <FindingPrompt>waiting for available Ambulance ...</FindingPrompt>
         </MapContainer>
       ) : (
-        <MapContainer>
-          <MapView
-            style={{ flex: 1 }}
-            initialRegion={region.region}
-            provider={"google"}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            showsCompass={true}
-            zoomEnabled={true}
-            zoomControlEnabled={true}
-            rotateEnabled={false}
-            mapType="standard"
-            onMapReady={() => console.log("Map is ready!")}
-            onMapError={(error) => console.log(error)}
-            // onPress={(e) => console.log(e.nativeEvent)}
-            onLongPress={(e) =>
-              getHospital(
-                region.region.latitude,
-                region.region.longitude,
-                10000
-              )
-            }
-            onMarkerPress={(e) => console.log(e.nativeEvent.coordinate)}
-            // onRegionChange={(e) => console.log(e.nativeEvent)}
-            // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
-          >
-            {nearbyPlaces.map((val, index) => {
-              return (
-                <View key={index}>
-                  <Marker
-                    coordinate={{
-                      latitude: val.geometry.location.lat,
-                      longitude: val.geometry.location.lng,
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    }}
-                  ></Marker>
-                  {/* <MapViewDirections
-                  origin={{
-                    latitude: region.region.latitude,
-                    longitude: region.region.longitude,
-                  }}
-                  destination={{
-                    latitude: val.geometry.location.lat,
-                    longitude: val.geometry.location.lng,
-                  }}
-                  apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
-                  strokeWidth={3}
-                  strokeColor="red"
-                ></MapViewDirections> */}
-                </View>
-              );
-            })}
-          </MapView>
-        </MapContainer>
+        <MapContainer></MapContainer>
+        // <MapContainer>
+        //   <MapView
+        //     style={{ flex: 1 }}
+        //     initialRegion={region.region}
+        //     provider={"google"}
+        //     showsUserLocation={true}
+        //     showsMyLocationButton={true}
+        //     showsCompass={true}
+        //     zoomEnabled={true}
+        //     zoomControlEnabled={true}
+        //     rotateEnabled={false}
+        //     mapType="standard"
+        //     onMapReady={() => console.log("Map is ready!")}
+        //     onMapError={(error) => console.log(error)}
+        //     // onPress={(e) => console.log(e.nativeEvent)}
+        //     onLongPress={(e) =>
+        //       getHospital(
+        //         region.region.latitude,
+        //         region.region.longitude,
+        //         10000
+        //       )
+        //     }
+        //     onMarkerPress={(e) => console.log(e.nativeEvent.coordinate)}
+        //     // onRegionChange={(e) => console.log(e.nativeEvent)}
+        //     // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
+        //   >
+        //     {nearbyPlaces.map((val, index) => {
+        //       return (
+        //         <View key={index}>
+        //           <Marker
+        //             coordinate={{
+        //               latitude: val.geometry.location.lat,
+        //               longitude: val.geometry.location.lng,
+        //               latitudeDelta: 0.01,
+        //               longitudeDelta: 0.01,
+        //             }}
+        //           ></Marker>
+        //           {/* <MapViewDirections
+        //           origin={{
+        //             latitude: region.region.latitude,
+        //             longitude: region.region.longitude,
+        //           }}
+        //           destination={{
+        //             latitude: val.geometry.location.lat,
+        //             longitude: val.geometry.location.lng,
+        //           }}
+        //           apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
+        //           strokeWidth={3}
+        //           strokeColor="red"
+        //         ></MapViewDirections> */}
+        //         </View>
+        //       );
+        //     })}
+        //   </MapView>
+        // </MapContainer>
       )}
       <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
         <ThemeButtonText2>Firstaid Knowledge</ThemeButtonText2>
