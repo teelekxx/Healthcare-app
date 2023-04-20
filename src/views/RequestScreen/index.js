@@ -68,6 +68,7 @@ function RequestScreen({ navigation }) {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [emergencyToken, setToken] = useState("");
+  const [response, setResponse] = useState("");
   const symptoms = [];
   function createAlert(message) {
     Alert.alert("Try Again", message, [
@@ -161,20 +162,23 @@ function RequestScreen({ navigation }) {
       formData.append("deliveringStatus", "waiting");
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
-      console.log(formData);
+      // console.log(formData);
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
           body: formData,
           token: token,
         });
-        setToken(token);
+        console.log("User =", { user });
+        if (user.isOk) {
+          console.log("response = ", user);
+          navigation.navigate("Map", { myToken: user });
+        }
       };
-      postEmergency();
+      await postEmergency();
     } catch (err) {
       console.log(err);
     }
-    navigation.navigate("Map", { myToken: emergencyToken });
   };
 
   return (

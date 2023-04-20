@@ -86,7 +86,7 @@ function MapPage({ navigation, route }) {
   };
 
   useEffect(() => {
-    console.log("My token=", myToken);
+    console.log("My token=", myToken.data.jobId);
     // const unsub = onSnapshot(doc(db, "jobs", token.params), (doc) => {
     //   const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
     //   console.log(source, " data: ", doc.data());
