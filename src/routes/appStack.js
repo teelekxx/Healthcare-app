@@ -95,6 +95,7 @@ import ForgetPasswordPage from "../views/ForgetPasswordPage";
 import ChatScreen from "../views/ChatScreen";
 import MedInfoSummaryScreen from "../views/MedInfoSummaryScreen";
 import HistoryDetailScreen from "../views/HistoryDetailScreen";
+import AmbulanceHistoryScreen from "../views/AmbulanceHistoryScreen";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -121,6 +122,7 @@ const MyStack = () => {
         <Stack.Screen name="MedInfo" component={MedInfoPage} />
         <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} />
         <Stack.Screen name="HistoryDetail" component={HistoryDetailScreen} />
+        <Stack.Screen name="AmbulanceHistory" component={AmbulanceHistoryScreen} />
         <Stack.Screen name="Chatting" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
