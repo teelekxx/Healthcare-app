@@ -21,7 +21,7 @@ function LandingPage({ navigation }) {
       {/* <Title text = {"SAGE"}/> */}
       <Title>SAGE</Title>
       <ItalicText>Your health, our care</ItalicText>
-      <ThemeButton onPress={() => navigation.navigate("HomePage")}>
+      <ThemeButton onPress={() => navigation.navigate("SignIn")}>
         <ThemeButtonText>Sign in</ThemeButtonText>
       </ThemeButton>
       <ThemeButton2 onPress={() => navigation.navigate("SignUp")}>

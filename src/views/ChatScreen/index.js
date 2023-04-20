@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import {
   Title,
@@ -49,10 +50,13 @@ import {
   BubbleContainer,
   Footer,
   BlueContainer,
+  ChatView,
 } from "./index.style";
 
 import ChatBubble from "../../components/ChatBubble/index";
 import { async } from "@firebase/util";
+
+const { width, height } = Dimensions.get("window");
 
 function ChatScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
@@ -123,7 +127,7 @@ function ChatScreen({ navigation, route }) {
           <PhoneNumber>0814637245</PhoneNumber>
         </CallButton> */}
       </PageTitleContainer>
-      <ChatField>
+      <ChatField contentContainerStyle={{ minHeight: "2%" }}>
         {chatMessages.map((val, index) => {
           return (
             <BubbleContainer key={index}>
@@ -137,6 +141,7 @@ function ChatScreen({ navigation, route }) {
           );
         })}
       </ChatField>
+
       <BlueKeyboard
         behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 0 }}

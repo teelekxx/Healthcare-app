@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, Button, ActivityIndicator } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
 import {
   Title,
@@ -30,24 +32,35 @@ import {
 function PatientPharmacyScreen({ navigation }) {
   const [isWaiting, setWaiting] = useState(false);
   const [isFound, setFound] = useState(false);
+  const [status, setStatus] = useState("none");
   const pharmacist = "Tee Doc";
+
+  useEffect(() => {
+    const unsub = onSnapshot(
+      doc(db, "jobs", "643fff34344376d3aec2452e"),
+      (doc) => {
+        console.log("Current data: ", doc.data().status);
+        setStatus(doc.data().status);
+      }
+    );
+  }, []);
 
   return (
     <FindContainer>
-        <HomeTitleContainer>
-          <FindTitle>Pharmacy</FindTitle>
-          <NotificationTouchable
-            onPress={() => navigation.navigate("Notification")}
-          >
-            <Icon
-              name="notifications-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={30}
-            />
-          </NotificationTouchable>
-        </HomeTitleContainer>
-      {!isWaiting && !isFound ? (
+      <HomeTitleContainer>
+        <FindTitle>Pharmacy</FindTitle>
+        <NotificationTouchable
+          onPress={() => navigation.navigate("Notification")}
+        >
+          <Icon
+            name="notifications-outline"
+            type="ionicon"
+            color={Colors.blue}
+            size={30}
+          />
+        </NotificationTouchable>
+      </HomeTitleContainer>
+      {status === "none" ? (
         <ButtonContainer>
           <PharmacyIcon
             source={require("../../../assets/prescription-1.png")}
@@ -60,7 +73,7 @@ function PatientPharmacyScreen({ navigation }) {
             <FindButtonText>Find my Pharmacist</FindButtonText>
           </FindButton>
         </ButtonContainer>
-      ) : isWaiting && !isFound ? (
+      ) : status === "finding" ? (
         <ButtonContainer>
           <PharmacyIcon
             source={require("../../../assets/prescription-1.png")}
@@ -75,7 +88,7 @@ function PatientPharmacyScreen({ navigation }) {
           </WaitingButton>
           <FindingPrompt>waiting for available Pharmacist ...</FindingPrompt>
         </ButtonContainer>
-      ) : (
+      ) : status === "doing" ? (
         <ButtonContainer>
           <ProfileIcon
             source={require("../../../assets/profile-picture-empty.png")}
@@ -102,6 +115,8 @@ function PatientPharmacyScreen({ navigation }) {
             <WhiteButtonText>Start chatting</WhiteButtonText>
           </ChattingButton>
         </ButtonContainer>
+      ) : (
+        <ButtonContainer></ButtonContainer>
       )}
     </FindContainer>
   );

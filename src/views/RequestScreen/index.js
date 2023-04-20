@@ -56,6 +56,7 @@ import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
+
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -169,12 +170,12 @@ function RequestScreen({ navigation }) {
           token: token,
         });
         setToken(token);
+        navigation.navigate("Map", { myToken: token });
       };
       postEmergency();
     } catch (err) {
       console.log(err);
     }
-    navigation.navigate("Map", { myToken: emergencyToken });
   };
 
   return (
@@ -296,8 +297,8 @@ function RequestScreen({ navigation }) {
         <BlueBorderButton onPress={() => navigation.goBack()}>
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
-        {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
-        <BlueButton onPress={sendEmergencyCase}>
+        <BlueButton onPress={() => navigation.navigate("Map")}>
+          {/* <BlueButton onPress={sendEmergencyCase}> */}
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>
