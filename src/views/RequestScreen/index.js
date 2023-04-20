@@ -170,7 +170,6 @@ function RequestScreen({ navigation }) {
           body: formData,
           token: token,
         });
-        console.log("User =", { user });
         if (user.isOk) {
           console.log("response = ", user);
           navigation.navigate("Map", { myToken: user });
@@ -301,8 +300,8 @@ function RequestScreen({ navigation }) {
         <BlueBorderButton onPress={() => navigation.goBack()}>
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
-        <BlueButton onPress={() => navigation.navigate("Map")}>
-          {/* <BlueButton onPress={sendEmergencyCase}> */}
+        {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
+        <BlueButton onPress={sendEmergencyCase}>
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>

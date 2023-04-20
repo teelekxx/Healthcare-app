@@ -43,7 +43,7 @@ function MapPage({ navigation, route }) {
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
   ];
-  // const myToken = route.params.myToken;
+  const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState(null);
@@ -82,6 +82,18 @@ function MapPage({ navigation, route }) {
     const response = await axios.get(distanceUrl);
     if (response != null) {
       setDuration(response.data.rows[0].elements[0].duration.text);
+    }
+  };
+
+  const postEmergency = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postEmergencyCase({
+      body: formData,
+      token: token,
+    });
+    if (user.isOk) {
+      console.log("response = ", user);
+      navigation.navigate("Map", { myToken: user });
     }
   };
 
@@ -131,13 +143,10 @@ function MapPage({ navigation, route }) {
     //   console.log("ERROR!!!", error);
     // }
 
-    const unsub = onSnapshot(
-      doc(db, "jobs", "643fec76dfd449f543f81463"),
-      (doc) => {
-        console.log("Current data: ", doc.data().status);
-        setStatus(doc.data().status);
-      }
-    );
+    const unsub = onSnapshot(doc(db, "jobs", myToken.data.jobId), (doc) => {
+      console.log("Current data: ", doc.data().status);
+      setStatus(doc.data().status);
+    });
     axios
       .get(placesUrl)
       .then((response) => {

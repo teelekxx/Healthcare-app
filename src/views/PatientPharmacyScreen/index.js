@@ -28,21 +28,48 @@ import {
   DetailText,
   TimeText,
 } from "./index.style";
+import Auth from "../../api/auth";
+import * as ImagePicker from "expo-image-picker";
+import { AsyncStorage, Alert } from "react-native";
 
 function PatientPharmacyScreen({ navigation }) {
   const [isWaiting, setWaiting] = useState(false);
   const [isFound, setFound] = useState(false);
   const [status, setStatus] = useState("none");
+  const [jobId, setJobId] = useState(null);
   const pharmacist = "Tee Doc";
 
+  const sendEmergencyCase = async () => {
+    try {
+      console.log("here");
+      const postEmergency = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.postEmergencyCase({
+          body: {},
+          token: token,
+        });
+        if (!user.isOk) {
+          console.log("NOT OK ", user);
+        }
+        if (user.isOk) {
+          console.log("response = ", user);
+          setJobId(user.data.jobId);
+          console.log(user.data.jobId);
+        }
+      };
+      await postEmergency();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const unsub = onSnapshot(
-      doc(db, "jobs", "643fff34344376d3aec2452e"),
-      (doc) => {
+    if (jobId != null) {
+      const unsub = onSnapshot(doc(db, "jobs", jobId), (doc) => {
         console.log("Current data: ", doc.data().status);
         setStatus(doc.data().status);
-      }
-    );
+      });
+    }
   }, []);
 
   return (
@@ -65,11 +92,7 @@ function PatientPharmacyScreen({ navigation }) {
           <PharmacyIcon
             source={require("../../../assets/prescription-1.png")}
           />
-          <FindButton
-            onPress={() => {
-              setWaiting(true);
-            }}
-          >
+          <FindButton onPress={sendEmergencyCase}>
             <FindButtonText>Find my Pharmacist</FindButtonText>
           </FindButton>
         </ButtonContainer>
