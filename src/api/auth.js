@@ -131,6 +131,16 @@ class Auth {
     console.log(config)
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async getAmbulanceCase(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
   static async getUserById(option){
     const config = {
       method: HTTP_METHODS.get,
@@ -141,6 +151,17 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async getEmergencyCaseById(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
 
 
 }
