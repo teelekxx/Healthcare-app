@@ -55,6 +55,7 @@
     "react-native-web": "~0.18.9",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
+    "react-query": "^3.39.3",
     "react-redux": "^8.0.5",
     "styled-components": "^5.3.6"
   },

@@ -12,13 +12,16 @@ import {
   BlockContainer,
 } from "./index.style";
 import { Colors } from "../../constants";
-import { Text } from "react-native-elements";
-import { View } from "react-native";
-import { useEffect, useState } from "react";
+import { View,RefreshControl } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import { AsyncStorage } from "react-native";
 import Auth from "../../api/auth";
 import { Icon, Avatar, Accessory } from "react-native-elements";
+import { useGetOrders} from "../../hooks/order";
 function HistoryScreen({ navigation }) {
+  const { isLoading, data, isError, error, isFetching, refetch } = useGetOrders({
+  });
+  console.log("data",data);
   const [orders, setOrders] = useState([]);
   const [pharmaOrders, setPharmaOrders] = useState([]);
   const [isPharma, setIsPharma] = useState(false);
@@ -79,17 +82,6 @@ function HistoryScreen({ navigation }) {
       console.error(error);
     }
   }, [isPharma]);
-  // const getBuyerName = async (id) => {
-  //     const res = await Auth.getUserById({
-  //       params: { id : id},
-  //     });
-  //     if(res.isOk){
-  //       console.log("isok:", res.data.medicalInformation.name)
-  //       return res.data.medicalInformation.name
-  //     }
-  //     // return
-
-  // };
 
   const dateFormat = (date) => {
     const mongodbDate = new Date(date);
@@ -104,9 +96,20 @@ function HistoryScreen({ navigation }) {
     }-${year}`;
     return dateString;
   };
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
-    <Background>
+    <Background refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <Title>History</Title>
       {pharmaOrders &&
         pharmaOrders.map((order, index) => {
