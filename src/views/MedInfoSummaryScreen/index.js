@@ -10,6 +10,7 @@ import {
   InfoInput,
   BigInfoInput,
   CenterFormText,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import {
   CircleButton,
@@ -24,7 +25,7 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import Auth from "../../api/auth";
 
 function MedInfoSummaryScreen({ navigation }) {
@@ -62,6 +63,7 @@ function MedInfoSummaryScreen({ navigation }) {
   const [show, setShow] = useState(false);
   const [text, setText] = useState("");
   const [insuranceNumber, setInsuranceNumber] = useState("");
+  const [isLoading, setIsloading] = useState(true);
   const editMode = () => {
     console.log(mode);
     if (mode === "Edit") {
@@ -97,6 +99,7 @@ function MedInfoSummaryScreen({ navigation }) {
   useEffect(() => {
     try {
       const getUserData = async () => {
+        setIsloading(true)
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.getUserProfile({
           token: token,
@@ -117,6 +120,7 @@ function MedInfoSummaryScreen({ navigation }) {
         setInsuranceNumber(user.data.insurance.insuranceNumber)
         setInsuranceProvider(user.data.insurance.provider)
         console.log(user.data)
+        setIsloading(false)
       };
       getUserData();
     } catch (error) {
@@ -137,7 +141,13 @@ function MedInfoSummaryScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <ActivityIndicator size="large" color="#00a5cb" />
+      </LoadingContainer>
+    );
+  }
   return (
     <BlueContainer>
       <PageTitleContainer>
