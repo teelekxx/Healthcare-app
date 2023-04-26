@@ -20,14 +20,24 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { useGetOrders} from "../../hooks/order";
 import { LoadingContainer } from "../../components/components/index.style";
 function HistoryScreen({ navigation }) {
-  // const { isLoading, data, isError, error, isFetching, refetch } = useGetOrders({
-  // });
-  // console.log("data",data);
+ 
   const [orders, setOrders] = useState([]);
   const [pharmaOrders, setPharmaOrders] = useState([]);
   const [isPharma, setIsPharma] = useState(false);
   const [ambulanceCases, setAmbulanceCases] = useState([]);
   const [isLoading, setIsloading] = useState(true);
+  const getHistory = async () => {
+    setIsloading(true)
+    const token = await AsyncStorage.getItem("token");
+    const res = await Auth.getCaseAndOrder({
+      token: token,
+    });
+
+    setAmbulanceCases(res.data.emergencyCases.emergencyCases);
+    setOrders(res.data.orders.orders)
+    setIsloading(false);
+    // console.log(res.data.orders.orders)
+  };
   useEffect(() => {
     try {
      
@@ -41,20 +51,6 @@ function HistoryScreen({ navigation }) {
           setIsPharma(true);
         }
       };
-      const getHistory = async () => {
-        setIsloading(true)
-        const token = await AsyncStorage.getItem("token");
-        const res = await Auth.getCaseAndOrder({
-          token: token,
-        });
-
-        setAmbulanceCases(res.data.emergencyCases.emergencyCases);
-        setOrders(res.data.orders.orders)
-        setIsloading(false);
-        // console.log(res.data.orders.orders)
-      };
-
-
       getUserRole();
       getHistory();
     } catch (error) {
@@ -79,10 +75,10 @@ function HistoryScreen({ navigation }) {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    refetch();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    getHistory().then(() => setRefreshing(false));
+    // setTimeout(() => {
+    //   setRefreshing(false);
+    // }, 2000);
   }, []);
 
 
