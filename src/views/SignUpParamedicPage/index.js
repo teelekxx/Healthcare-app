@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Text, Platform } from "react-native";
 import {
   FormInput,
@@ -21,7 +21,7 @@ import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
-
+import Auth from "../../api/auth";
 function SignUpParamedicPage({ navigation, route }) {
   const { email, password, role } = route.params;
   const [name, onChangeName] = useState("");
@@ -39,11 +39,37 @@ function SignUpParamedicPage({ navigation, route }) {
     { label: "Female", value: "female" },
   ]);
   const [date, setDate] = useState(new Date());
+  const [openHospital, setOpenHospital] = useState(false);
   const [show, setShow] = useState(false);
   const [text, setText] = useState("select date");
   const [licenseText, setLicenseText] = useState("select date");
   const [showLicense, setShowLicense] = useState(false);
   const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
+  //hospital options
+  let extractedHospitals = [];
+  const [hospitals, setHospitals] = useState([]);
+  useEffect(() => {
+    try {
+      const getAllHospitals = async () => {
+        const res = await Auth.getHospitals({});
+        console.log("data", res.data);
+        if(extractedHospitals.length == 0){
+          for (let i = 0; i < res.data.length; i++) {
+            const hospital = { label: res.data[i].name, value: res.data[i]._id };
+            extractedHospitals.push(hospital);
+          }
+          console.log(extractedHospitals);
+        }
+       
+        //  setHospitals(res)
+      };
+      getAllHospitals();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const [hospitalOptions, setHospitalOptions] = useState(extractedHospitals);
+  const [selectedHospital, setSelectedHospital] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -86,8 +112,10 @@ function SignUpParamedicPage({ navigation, route }) {
       zipCode: zipCode,
       licenseNum: values.licenseNum,
       licenseDate: licenseText,
+      hospitalId: selectedHospital,
     });
   };
+  DropDownPicker.setListMode("SCROLLVIEW");
 
   return (
     <BlueContainer>
@@ -109,7 +137,6 @@ function SignUpParamedicPage({ navigation, route }) {
           citizenId: "",
           phoneNumber: "",
           licenseNum: "",
-
         }}
         onSubmit={handleSubmit}
         validate={(values) => {
@@ -145,7 +172,7 @@ function SignUpParamedicPage({ navigation, route }) {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}
           >
-            <SignUpForm>
+            <SignUpForm nestedScrollEnabled horizontal={false}>
               <AvatarContainer />
               <FormText>Name</FormText>
               <FormInput
@@ -226,6 +253,25 @@ function SignUpParamedicPage({ navigation, route }) {
                 name="phoneNumber"
                 component={Text}
                 style={{ color: "red" }}
+              />
+              <FormText>Hospital</FormText>
+              <DropDownPicker
+                open={openHospital}
+                value={selectedHospital}
+                items={hospitalOptions}
+                setOpen={setOpenHospital}
+                setValue={setSelectedHospital}
+                setItems={setHospitalOptions}
+                placeholder="select your hospital"
+                searchable={true}
+                searchPlaceholder="Search..."
+                placeholderStyle={{
+                  fontSize: 15,
+                }}
+                dropDownContainerStyle={{
+                  borderColor: "#dfdfdf",
+                }}
+                style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
               />
               <FormText>Medical license No.</FormText>
               <FormInput

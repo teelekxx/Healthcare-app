@@ -203,7 +203,7 @@ function MedInfoPage({ navigation, route }) {
           }
         })
       }else if(role==="Paramedic"){
-        const {licenseDate, licenseNum} = route.params;
+        const {licenseDate, licenseNum, hospitalId} = route.params;
         const res = await Auth.registerUser({
           body: {
             role: "paramedics",
@@ -236,6 +236,7 @@ function MedInfoPage({ navigation, route }) {
             pharmacistVerificationStatus: false,
             licenseId: licenseNum,
             licenseExpireDate: licenseDate,
+            hospitalId:hospitalId,
           },
           token: user._tokenResponse.idToken,
         });
