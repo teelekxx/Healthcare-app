@@ -170,7 +170,16 @@ class Auth {
     console.log(config)  
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-
+  
+  static async getHospitals(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/hospitals`,
+      token: option.token,
+    };
+    console.log(config)  
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
 
 
 

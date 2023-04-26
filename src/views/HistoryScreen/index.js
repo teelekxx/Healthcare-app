@@ -85,6 +85,7 @@ function HistoryScreen({ navigation }) {
     }, 2000);
   }, []);
 
+
   if (isLoading) { 
     return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
   }
