@@ -80,6 +80,7 @@ function MedInfoPage({ navigation, route }) {
   const [show, setShow] = useState(false);
   const [text, setText] = useState("select expiration date");
   const [uid, setUid] = useState("");
+  const [insuranceNumber, setInsuranceNumber] = useState("")
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -180,6 +181,7 @@ function MedInfoPage({ navigation, route }) {
             // "latitude" : "7.9519",
             // "longitude" : "98.3381",
             // "type" : "pharmacist",
+            insuranceNumber:insuranceNumber,
             provider: insuranceProvider,
             plan: insurancePlan,
             expirationDate: text,
@@ -345,6 +347,11 @@ function MedInfoPage({ navigation, route }) {
         <FormInput
           onChangeText={setInsuranceProvider}
           value={insuranceProvider}
+        />
+        <FormText>Insurance Number</FormText>
+        <FormInput
+          onChangeText={setInsuranceNumber}
+          value={insuranceNumber}
         />
         <FormText>Insurance Plan</FormText>
         <FormInput onChangeText={setInsurancePlan} value={insurancePlan} />
