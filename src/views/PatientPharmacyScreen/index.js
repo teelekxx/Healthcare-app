@@ -43,7 +43,10 @@ function PatientPharmacyScreen({ navigation }) {
   const [isFound, setFound] = useState(false);
   const [status, setStatus] = useState("none");
   const [jobId, setJobId] = useState(null);
+  const [myPharmaId, setPharmaId] = useState(null);
   const [isPharma, setIsPharma] = useState(false);
+  const [allJobs, setAllJobs] = useState([]);
+  const [foundPharma, setFoundPharma] = useState(null);
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
     { Name: "Bill Doe", location: "456 Kiki rd. Bangkok." },
@@ -60,9 +63,6 @@ function PatientPharmacyScreen({ navigation }) {
           body: { type: "pharmacy" },
           token: token,
         });
-        if (!user.isOk) {
-          console.log("NOT OK ", user);
-        }
         if (user.isOk) {
           console.log("response = ", user);
           setJobId(user.job._id);
@@ -76,8 +76,25 @@ function PatientPharmacyScreen({ navigation }) {
     }
   };
 
+  const getReciever = async (jobId) => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getRecieverByJobId({
+      params: { id: jobId },
+      token: token,
+    });
+    if (user.isOk) {
+      return user;
+    }
+  };
+
+  const fetchData = async (jobId) => {
+    const data = await getReciever(jobId);
+    console.log("DATA =", data);
+    setFoundPharma(data);
+  };
+
   useEffect(() => {
-    if (jobId !== null) {
+    if (jobId != null) {
       console.log("jobId = ", jobId);
       const unsub = onSnapshot(doc(db, "jobs", jobId), (doc) => {
         if (doc.data()) {
@@ -87,19 +104,72 @@ function PatientPharmacyScreen({ navigation }) {
       });
     }
 
-    // const getUserRole = async () => {
-    //   const token = await AsyncStorage.getItem("token");
-    //   const user = await Auth.getUserProfile({
-    //     token: token,
-    //   });
-    //   if (user.data.user.role === "pharmacist") {
-    //     setIsPharma(true);
-    //   }
-    // };
-    // getUserRole();
+    const getUserDetail = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getUserByToken({
+        token: token,
+      });
+      if (user.isOk) {
+        console.log("USER = ", user.data.pharmacy._id);
+        setPharmaId(user.data.pharmacy._id);
+      }
+    };
 
-    setIsPharma(true);
-  }, []);
+    const getRequester = async (jobId) => {
+      console.log("JOBID =", jobId);
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getRequesterByJobId({
+        params: { id: jobId },
+      });
+      if (user.isOk) {
+        console.log("here:", user.job);
+        return user.job;
+      }
+    };
+
+    const getUserRole = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getUserProfile({
+        token: token,
+      });
+      if (user.data.user.role === "pharmacist") {
+        setIsPharma(true);
+      }
+    };
+    getUserRole();
+    getUserDetail();
+
+    if (status == "doing") {
+      console.log("FETT");
+      fetchData(jobId);
+    }
+
+    if (isPharma && myPharmaId != null) {
+      // const unsub = onSnapshot(collection(db, "jobs"), (querySnapshot) => {
+      //   let jobIds = [];
+      //   querySnapshot.forEach((doc) => {
+      //     const data = doc.data();
+      //     if (data.users.includes(myPharmaId.toString())) {
+      //       jobIds.push(getRequester(doc.id));
+      //     }
+      //   });
+      //   setAllJobs(jobIds);
+      // });
+
+      const q = query(
+        collection(db, "jobs"),
+        where("users", "array-contains", myPharmaId),
+        where("status", "==", "finding")
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const jobs = [];
+        querySnapshot.forEach((doc) => {
+          jobs.push(doc.data());
+        });
+        setAllJobs(jobs);
+      });
+    }
+  }, [jobId, isPharma, myPharmaId, status]);
 
   return (
     <FindContainer>
@@ -116,28 +186,17 @@ function PatientPharmacyScreen({ navigation }) {
           />
         </NotificationTouchable>
       </HomeTitleContainer>
-      {status === "none" ? (
+      {console.log(allJobs)}
+
+      {isPharma ? (
         <ButtonContainer>
-          <PharmacyIcon
-            source={require("../../../assets/prescription-1.png")}
-          />
-          <FindButton onPress={sendPharmacy}>
-            <FindButtonText>Find my Pharmacist</FindButtonText>
-          </FindButton>
-        </ButtonContainer>
-      ) : status === "finding" ? (
-        <ButtonContainer>
-          <ScrollView>
-            {pendingReq.map((val, index) => {
-              return (
-                <PharmaRequest
-                  name={val.Name}
-                  location={val.location}
-                  key={index}
-                ></PharmaRequest>
-              );
-            })}
-          </ScrollView>
+          {allJobs.length > 0 && (
+            <ScrollView>
+              {allJobs.map((item) => {
+                return <PharmaRequest data={item}></PharmaRequest>;
+              })}
+            </ScrollView>
+          )}
         </ButtonContainer>
       ) : (
         <ButtonContainer>
@@ -146,7 +205,7 @@ function PatientPharmacyScreen({ navigation }) {
               <PharmacyIcon
                 source={require("../../../assets/prescription-1.png")}
               />
-              <FindButton onPress={sendEmergencyCase}>
+              <FindButton onPress={sendPharmacy}>
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
             </ButtonContainer>
@@ -172,11 +231,19 @@ function PatientPharmacyScreen({ navigation }) {
               <ProfileIcon
                 source={require("../../../assets/profile-picture-empty.png")}
               />
-              <DetailContainer>
-                <DetailText>Tee Doc</DetailText>
-                <DetailText>ABC Health Pharmacy</DetailText>
-                <TimeText>{new Date().toLocaleString()}</TimeText>
-              </DetailContainer>
+              {foundPharma && (
+                <DetailContainer>
+                  <DetailText>
+                    {foundPharma.job.pharmacistProfile.medicalInformation.name}
+                  </DetailText>
+
+                  <DetailText>
+                    {foundPharma.job.pharmacistProfile.pharmacy.name}
+                  </DetailText>
+                  <TimeText>{new Date().toLocaleString()}</TimeText>
+                </DetailContainer>
+              )}
+
               <FindingPrompt>
                 Pharmacist found. Click the button below to start chatting{" "}
                 <InlineIcon

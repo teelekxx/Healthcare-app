@@ -58,7 +58,7 @@ export const ChatButton = styled.Pressable`
   background-color: ${Colors.white};
   border-radius: 100px;
 `;
-export const ThemeButton = styled.Pressable`
+export const ThemeButton = styled.TouchableOpacity`
   margin-top: auto;
   padding: 15px;
   width: 300px;

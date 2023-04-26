@@ -104,6 +104,17 @@ class Auth {
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
 
+  static async getAvaliableJobs(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/job/pharmacist/tok`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
   static async getOrders(option) {
     const config = {
       method: HTTP_METHODS.get,
@@ -119,6 +130,58 @@ class Auth {
     const config = {
       method: HTTP_METHODS.get,
       url: `/order/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getUserByToken(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/user`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getRequesterByJobId(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/job/requester/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getRecieverByJobId(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/job/pharmacist/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async postAcceptJob(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/job/accept`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async postCancelJob(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/job/cancel`,
+      body: option.body,
       token: option.token,
     };
     console.log(config);

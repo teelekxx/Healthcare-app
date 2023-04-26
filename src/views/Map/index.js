@@ -32,6 +32,8 @@ import {
   ChatIcon,
 } from "./index.style";
 import { ScrollView } from "react-navigation";
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
 
 function MapPage({ navigation, route }) {
   const origin = "Bangkok";
@@ -57,6 +59,38 @@ function MapPage({ navigation, route }) {
     ParamedicName: "Tee Hid",
     latitude: 13.7226408802915,
     longitude: 100.7752069802915,
+  };
+
+  const cancelAmublance = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postCancelJob({
+      body: { jobId: myToken.data.jobId, round: "1" },
+      token: token,
+    });
+    if (user.isOk) {
+      console.log(user);
+    }
+    // try {
+    //   console.log("here");
+    //   const postEmergency = async () => {
+    //     const token = await AsyncStorage.getItem("token");
+    //     const user = await Auth.postEmergencyCase({
+    //       body: {},
+    //       token: token,
+    //     });
+    //     if (!user.isOk) {
+    //       console.log("NOT OK ", user);
+    //     }
+    //     if (user.isOk) {
+    //       console.log("response = ", user);
+    //       setJobId(user.data.jobId);
+    //       console.log(user.data.jobId);
+    //     }
+    //   };
+    //   await postEmergency();
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const getHospital = async (lat, lng, radius = 1000) => {
@@ -144,8 +178,10 @@ function MapPage({ navigation, route }) {
     // }
 
     const unsub = onSnapshot(doc(db, "jobs", myToken.data.jobId), (doc) => {
-      console.log("Current data: ", doc.data().status);
-      setStatus(doc.data().status);
+      if (doc.data()) {
+        console.log("Current data: ", doc.data().status);
+        setStatus(doc.data().status);
+      }
     });
     axios
       .get(placesUrl)
@@ -180,7 +216,7 @@ function MapPage({ navigation, route }) {
         <MapContainer>
           <ActivityIndicator size="large" />
           <FindingPrompt>Waiting for available Ambulance ...</FindingPrompt>
-          <ThemeButton>
+          <ThemeButton onPress={cancelAmublance}>
             <ThemeButtonText>Cancelled</ThemeButtonText>
           </ThemeButton>
         </MapContainer>

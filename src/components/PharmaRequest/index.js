@@ -13,11 +13,49 @@ import {
   TimeStamp,
   LocationText,
 } from "./index.style";
+import Auth from "../../api/auth";
+import * as ImagePicker from "expo-image-picker";
+import { AsyncStorage, Alert } from "react-native";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
-export default function PharmaRequest({ name, location, distance }) {
+import React, { useState, useEffect } from "react";
+
+export default function PharmaRequest({ data }) {
+  const [patientName, setPatientName] = useState("");
+  const [location, setLocation] = useState(null);
+
+  const getRequester = async (jobId) => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getRequesterByJobId({
+      params: { id: jobId },
+    });
+    if (user.isOk) {
+      return user.job;
+    }
+  };
+  const fetchData = async (jobId) => {
+    const data = await getRequester(jobId);
+    setPatientName(data.requesterUser.medicalInformation.name);
+    setLocation(data.requesterUser.address.address);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    console.log(data);
+    const jobId = data.jobId;
+    fetchData(jobId);
+    // console.log("REQUEST = ", getRequester(jobId));
+  }, []);
   const acceptRequest = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postAcceptJob({
+      body: { jobId: data.jobId, round: data.round },
+      token: token,
+    });
+    if (user.isOk) {
+      console.log(user);
+    }
     // try {
     //   console.log("here");
     //   const postEmergency = async () => {
@@ -69,7 +107,7 @@ export default function PharmaRequest({ name, location, distance }) {
     <RequestContainer>
       <DetailContainer>
         <PatientNameContainer>
-          <PatientName>{name}</PatientName>
+          <PatientName>{patientName}</PatientName>
           <TimeStamp>12:30</TimeStamp>
         </PatientNameContainer>
         <LocationText>{location}</LocationText>
@@ -77,7 +115,7 @@ export default function PharmaRequest({ name, location, distance }) {
           <BlueBorderButton>
             <BlueButtonText>Decline</BlueButtonText>
           </BlueBorderButton>
-          <BlueButton>
+          <BlueButton onPress={acceptRequest}>
             <WhiteButtonText>Accept</WhiteButtonText>
           </BlueButton>
         </HorizonInput3>
