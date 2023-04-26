@@ -12,19 +12,23 @@ import {
   BlockContainer,
 } from "./index.style";
 import { Colors } from "../../constants";
-import { Text } from "react-native-elements";
-import { View } from "react-native";
-import { useEffect, useState } from "react";
+import { View,RefreshControl } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import { AsyncStorage } from "react-native";
 import Auth from "../../api/auth";
 import { Icon, Avatar, Accessory } from "react-native-elements";
+import { useGetOrders} from "../../hooks/order";
 function HistoryScreen({ navigation }) {
+  // const { isLoading, data, isError, error, isFetching, refetch } = useGetOrders({
+  // });
+  // console.log("data",data);
   const [orders, setOrders] = useState([]);
   const [pharmaOrders, setPharmaOrders] = useState([]);
   const [isPharma, setIsPharma] = useState(false);
   const [ambulanceCases, setAmbulanceCases] = useState([]);
   useEffect(() => {
     try {
+     
       // get role from user
       const getUserRole = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -35,15 +39,16 @@ function HistoryScreen({ navigation }) {
           setIsPharma(true);
         }
       };
-
-      //when the user is regular user
-      const getOrderData = async () => {
+      const getHistory = async () => {
         const token = await AsyncStorage.getItem("token");
-        const res = await Auth.getOrders({
+        const res = await Auth.getCaseAndOrder({
           token: token,
         });
-        setOrders(res.data.orders);
-        console.log("user order: ", res.data.orders);
+
+        setAmbulanceCases(res.data.emergencyCases.emergencyCases);
+        console.log("emergency: ", res.data.emergencyCases.emergencyCases);
+        setOrders(res.data.orders.orders)
+        // console.log(res.data.orders.orders)
       };
 
       //when the user is pharmacist (selling history)
@@ -58,38 +63,12 @@ function HistoryScreen({ navigation }) {
         }
       };
 
-      //get ambulance case
-      const getAmbulanceCase = async () => {
-        const token = await AsyncStorage.getItem("token");
-        const res = await Auth.getAmbulanceCase({
-          token: token,
-        });
-
-        setAmbulanceCases(res.data);
-        console.log("emergency: ", res.data);
-      };
       getUserRole();
-
-      getPharmaData();
-
-      getOrderData();
-
-      getAmbulanceCase();
+      getHistory();
     } catch (error) {
       console.error(error);
     }
   }, [isPharma]);
-  // const getBuyerName = async (id) => {
-  //     const res = await Auth.getUserById({
-  //       params: { id : id},
-  //     });
-  //     if(res.isOk){
-  //       console.log("isok:", res.data.medicalInformation.name)
-  //       return res.data.medicalInformation.name
-  //     }
-  //     // return
-
-  // };
 
   const dateFormat = (date) => {
     const mongodbDate = new Date(date);
@@ -104,12 +83,23 @@ function HistoryScreen({ navigation }) {
     }-${year}`;
     return dateString;
   };
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
-    <Background>
+    <Background refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <Title>History</Title>
-      {pharmaOrders &&
-        pharmaOrders.map((order, index) => {
+      {orders && isPharma &&
+        orders.map((order, index) => {
           return (
             <BlockContainer
               key={index}
@@ -124,8 +114,9 @@ function HistoryScreen({ navigation }) {
             >
             <Block>
             <Name>{order.buyerInfo.name}</Name>
+            <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
               <DateFormat>Date: {dateFormat(order.order.created_at)}</DateFormat>
-              <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
+              
               <Space></Space>
             </Block>
             <Icon
@@ -137,7 +128,7 @@ function HistoryScreen({ navigation }) {
             </BlockContainer>
           );
         })}
-      {orders &&
+      {orders && !isPharma &&
         orders.map((order, index) => {
           return (
             <BlockContainer
@@ -153,8 +144,8 @@ function HistoryScreen({ navigation }) {
             >
               <Block>
                 <Name>{order.pharmacistInfo.name}</Name>
-                <DateFormat>Date: {dateFormat(order.order.created_at)}</DateFormat>
                 <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
+                <DateFormat>Date: {dateFormat(order.order.created_at)}</DateFormat>
                 <Space></Space>
               </Block>
               <Icon
@@ -174,15 +165,15 @@ function HistoryScreen({ navigation }) {
               onPress={() =>
                 navigation.navigate("AmbulanceHistory", {
                   orderId: order._id,
-                  assigneeName: "jojo sung",
+                  assigneeName: order.job.receiverName,
                   orderDate: order.created_at,
-                  hospital: "Bangkok Hospital",
+                  hospital: order.hospitalName,
                 })
               }
             >
             <Block>
-            <Name>Jojo sung</Name>
-              <DateFormat>Hospital: Bangkok Hospital</DateFormat>
+            <Name>{order.job.receiverName}</Name>
+              <DateFormat>{order.hospitalName}</DateFormat>
               <DateFormat>Date: {dateFormat(order.created_at)}</DateFormat>
               <Space></Space>
             </Block>

@@ -84,6 +84,9 @@ const HistoryDetailScreen = ({navigation, route}) => {
               <Cell>{med.price}</Cell>
             </Row>
           ))}
+          <Row>
+            <Cell>Delivery fee: 50</Cell>
+          </Row>
         </Container>
         <Text20>Total Price: {totalPrice}</Text20>
       </SignUpForm>

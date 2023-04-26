@@ -93,7 +93,7 @@ const AmbulanceHistoryScreen = ({ navigation, route }) => {
         <PageTitle>Order details</PageTitle>
       </PageTitleContainer>
       <SignUpForm vertical={true} keyboardDismissMode="on-drag">
-        <PharName>Bangkok Hospital: Jojo Sung</PharName>
+        <PharName>{hospital}: {assigneeName}</PharName>
         <Text20>Date: {dateFormat(orderDate)}</Text20>
           <Row>
             <CellHeader>Symptoms</CellHeader>
