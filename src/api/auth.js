@@ -161,6 +161,16 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async getCaseAndOrder(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case/order/tok`,
+      token: option.token,
+    };
+    console.log(config)  
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
 
 
 
