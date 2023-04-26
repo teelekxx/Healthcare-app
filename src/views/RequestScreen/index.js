@@ -173,6 +173,8 @@ function RequestScreen({ navigation }) {
         if (user.isOk) {
           console.log("response = ", user);
           navigation.navigate("Map", { myToken: user });
+        } else if (!user.isOk) {
+          console.log("response = ", user);
         }
       };
       await postEmergency();

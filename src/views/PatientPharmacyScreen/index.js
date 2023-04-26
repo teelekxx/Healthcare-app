@@ -51,13 +51,13 @@ function PatientPharmacyScreen({ navigation }) {
   ]);
   const pharmacist = "Tee Doc";
 
-  const sendEmergencyCase = async () => {
+  const sendPharmacy = async () => {
     try {
       console.log("here");
-      const postEmergency = async () => {
+      const postPharmacy = async () => {
         const token = await AsyncStorage.getItem("token");
-        const user = await Auth.postEmergencyCase({
-          body: {},
+        const user = await Auth.postPharmacyJob({
+          body: { type: "pharmacy" },
           token: token,
         });
         if (!user.isOk) {
@@ -65,21 +65,25 @@ function PatientPharmacyScreen({ navigation }) {
         }
         if (user.isOk) {
           console.log("response = ", user);
-          setJobId(user.data.jobId);
-          console.log(user.data.jobId);
+          setJobId(user.job._id);
+          console.log(user.job._id);
+          setStatus("finding");
         }
       };
-      await postEmergency();
+      await postPharmacy();
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (jobId != null) {
+    if (jobId !== null) {
+      console.log("jobId = ", jobId);
       const unsub = onSnapshot(doc(db, "jobs", jobId), (doc) => {
-        console.log("Current data: ", doc.data().status);
-        setStatus(doc.data().status);
+        if (doc.data()) {
+          console.log("Current data: ", doc.data().status);
+          setStatus(doc.data().status);
+        }
       });
     }
 
@@ -112,7 +116,16 @@ function PatientPharmacyScreen({ navigation }) {
           />
         </NotificationTouchable>
       </HomeTitleContainer>
-      {isPharma ? (
+      {status === "none" ? (
+        <ButtonContainer>
+          <PharmacyIcon
+            source={require("../../../assets/prescription-1.png")}
+          />
+          <FindButton onPress={sendPharmacy}>
+            <FindButtonText>Find my Pharmacist</FindButtonText>
+          </FindButton>
+        </ButtonContainer>
+      ) : status === "finding" ? (
         <ButtonContainer>
           <ScrollView>
             {pendingReq.map((val, index) => {

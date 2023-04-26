@@ -8,8 +8,6 @@ import { auth } from "../lib/firebase";
 import { HTTP_METHODS } from "./constant";
 import { request } from "./index";
 
-
-
 class Auth {
   static async login(email, password) {
     const emailTrimed = email.trim();
@@ -27,102 +25,106 @@ class Auth {
     await signOut(auth);
   }
 
-
   static async registerUser(option) {
-
-
     const config = {
       method: HTTP_METHODS.post,
       url: `/user`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
-    return request(config).catch((err) => ({ ...err, isOk: false }));
+    console.log(config);
 
+    return request(config).catch((err) => ({ ...err, isOk: false }));
   }
   static async registerPharmacy(option) {
-
-
     const config = {
       method: HTTP_METHODS.post,
       url: `/pharmacy`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
-    return request(config).catch((err) => ({ ...err, isOk: false }));
+    console.log(config);
 
+    return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async getUserProfile(option){
+  static async getUserProfile(option) {
     const config = {
       method: HTTP_METHODS.get,
       url: `/user`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async checkUserEmail(option){
+  static async checkUserEmail(option) {
     const config = {
       method: HTTP_METHODS.post,
       url: `/register/email`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async updateUserProfile(option){
+  static async updateUserProfile(option) {
     const config = {
       method: HTTP_METHODS.put,
       url: `/user`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async postEmergencyCase(option){
+  static async postEmergencyCase(option) {
     const config = {
       method: HTTP_METHODS.post,
       url: `/emergency/case`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async getOrders(option){
+
+  static async postPharmacyJob(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/job`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
+  static async getOrders(option) {
     const config = {
       method: HTTP_METHODS.get,
       url: `/orders`,
       body: option.body,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-  static async getOrderDetail(option){
+  static async getOrderDetail(option) {
     const config = {
       method: HTTP_METHODS.get,
       url: `/order/${option.params.id}`,
       token: option.token,
     };
-    console.log(config)
-    
+    console.log(config);
+
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
-
-
 }
 
 export default Auth;
