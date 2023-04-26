@@ -61,6 +61,7 @@ function MedInfoSummaryScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [text, setText] = useState("");
+  const [insuranceNumber, setInsuranceNumber] = useState("");
   const editMode = () => {
     console.log(mode);
     if (mode === "Edit") {
@@ -84,7 +85,8 @@ function MedInfoSummaryScreen({ navigation }) {
             powerOfAttorneyRelationship: relationship,
             provider: insuranceProvider,
             plan: insurancePlan,
-            expirationDate: text
+            expirationDate: text,
+            insuranceNumber: insuranceNumber,
           },token:token
         })
       }
@@ -112,6 +114,7 @@ function MedInfoSummaryScreen({ navigation }) {
         //insurance
         setText(user.data.insurance.expirationDate)
         setInsurancePlan(user.data.insurance.plan)
+        setInsuranceNumber(user.data.insurance.insuranceNumber)
         setInsuranceProvider(user.data.insurance.provider)
         console.log(user.data)
       };
@@ -247,6 +250,12 @@ function MedInfoSummaryScreen({ navigation }) {
         <InfoInput
           onChangeText={setInsuranceProvider}
           value={insuranceProvider}
+          editable={edit}
+        />
+        <GreyText>Insurance Number</GreyText>
+        <InfoInput
+          onChangeText={setInsuranceNumber}
+          value={insuranceNumber}
           editable={edit}
         />
         <GreyText>Insurance Plan</GreyText>
