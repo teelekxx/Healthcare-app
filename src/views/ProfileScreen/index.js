@@ -9,6 +9,7 @@ import {
   BlueButton,
   BlueButtonText,
   RedButton,
+  LoadingContainer
 } from "../../components/components/index.style";
 import {
   Background,
@@ -18,7 +19,7 @@ import {
 } from "./index.style";
 
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -97,10 +98,11 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-
+  const [isLoading, setIsloading] = useState(true);
   useEffect(() => {
     try {
       const getUserData = async () => {
+        setIsloading(true);
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.getUserProfile({
           token: token,
@@ -113,15 +115,18 @@ function ProfileScreen({ navigation }) {
         setAddress(user.data.address.address)
         setCity(user.data.address.city)
         setZipCode(user.data.address.zipCode)
+        setIsloading(false);
       };
       getUserData();
     } catch (error) {
       console.error(error);
     }
   }, []);
-
-
-
+  if (isLoading) { 
+    return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
+  }
+    
+    
 
   return (
     <Background>

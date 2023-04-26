@@ -12,12 +12,13 @@ import {
   BlockContainer,
 } from "./index.style";
 import { Colors } from "../../constants";
-import { View,RefreshControl } from "react-native";
+import { View,RefreshControl, ActivityIndicator } from "react-native";
 import { useEffect, useState, useCallback } from "react";
 import { AsyncStorage } from "react-native";
 import Auth from "../../api/auth";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { useGetOrders} from "../../hooks/order";
+import { LoadingContainer } from "../../components/components/index.style";
 function HistoryScreen({ navigation }) {
   // const { isLoading, data, isError, error, isFetching, refetch } = useGetOrders({
   // });
@@ -26,6 +27,7 @@ function HistoryScreen({ navigation }) {
   const [pharmaOrders, setPharmaOrders] = useState([]);
   const [isPharma, setIsPharma] = useState(false);
   const [ambulanceCases, setAmbulanceCases] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
   useEffect(() => {
     try {
      
@@ -40,28 +42,18 @@ function HistoryScreen({ navigation }) {
         }
       };
       const getHistory = async () => {
+        setIsloading(true)
         const token = await AsyncStorage.getItem("token");
         const res = await Auth.getCaseAndOrder({
           token: token,
         });
 
         setAmbulanceCases(res.data.emergencyCases.emergencyCases);
-        console.log("emergency: ", res.data.emergencyCases.emergencyCases);
         setOrders(res.data.orders.orders)
+        setIsloading(false);
         // console.log(res.data.orders.orders)
       };
 
-      //when the user is pharmacist (selling history)
-      const getPharmaData = async () => {
-        if (isPharma) {
-          const token = await AsyncStorage.getItem("token");
-          const res = await Auth.pharmaGetOrders({
-            token: token,
-          });
-          console.log("pharma order: ", res.data.orders)
-          setPharmaOrders(res.data.orders);
-        }
-      };
 
       getUserRole();
       getHistory();
@@ -92,6 +84,11 @@ function HistoryScreen({ navigation }) {
       setRefreshing(false);
     }, 2000);
   }, []);
+
+  if (isLoading) { 
+    return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
+  }
+    
 
   return (
     <Background refreshControl={

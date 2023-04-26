@@ -123,22 +123,12 @@ function SignInPage({ navigation }) {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <WhiteKeyboard
-            behavior="position"
+            behavior={Platform.OS === "ios" ? "position" : undefined}
             style={{ flex: 1 }}
           >
             <NonScrollForm>
               <SubTitle>Welcome back!</SubTitle>
               <ItalicText2>Hello there, sign in to continue</ItalicText2>
-              <ThemeButton>
-                <Icon
-                  name="logo-google"
-                  type="ionicon"
-                  color={Colors.grey}
-                  size={20}
-                />
-                <ThemeButtonText>Sign in with Google</ThemeButtonText>
-              </ThemeButton>
-              <Or>or</Or>
               <InputGroup>
                 <Icon
                   name="mail-outline"
