@@ -28,8 +28,10 @@ import { compose } from "@reduxjs/toolkit";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Formik, ErrorMessage} from "formik";
-
+import { useHeaderHeight } from '@react-navigation/elements'
 function SignUpPage({ navigation }) {
+  const height = useHeaderHeight()
+  console.log(height)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -138,22 +140,13 @@ function SignUpPage({ navigation }) {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <WhiteKeyboard
-            behavior={Platform.OS === "ios" ? "position" : "position"}
+            behavior={Platform.OS === "ios" ? "position" : undefined}
             style={{ flex: 1 }}
+            
           >
             <NonScrollForm>
               <SubTitle>Hello!</SubTitle>
               <ItalicText2>Create an account to continue</ItalicText2>
-              <ThemeButton>
-                <Icon
-                  name="logo-google"
-                  type="ionicon"
-                  color={Colors.grey}
-                  size={20}
-                />
-                <ThemeButtonText>Sign up with Google</ThemeButtonText>
-              </ThemeButton>
-              <Or>or</Or>
               <InputGroup>
                 <Icon
                   name="mail-outline"
