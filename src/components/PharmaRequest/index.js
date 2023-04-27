@@ -32,13 +32,17 @@ export default function PharmaRequest({ data }) {
     });
     if (user.isOk) {
       return user.job;
+    } else {
+      console.log("NOT OKAY");
     }
   };
   const fetchData = async (jobId) => {
+    console.log("FETCHED");
     const data = await getRequester(jobId);
     setPatientName(data.requesterUser.medicalInformation.name);
     setLocation(data.requesterUser.address.address);
-    console.log(data);
+    console.log("NAME =", patientName);
+    console.log("LOCATION =", location);
   };
 
   useEffect(() => {

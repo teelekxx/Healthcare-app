@@ -1,17 +1,16 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 import { Dimensions } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import MapView, { Marker } from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
+const titleMargin = Platform.OS === "ios" ? 0 : 50;
 
 export const MedContainer = styled.SafeAreaView`
   display: flex;
   height: 100%;
+  // margin-top: ${height * 0.25}px;
   background-color: ${Colors.blue};
   border-radius: 20px;
-  box-shadow: 0px 0px 70px grey;
 `;
 
 export const MedScollable = styled.ScrollView`
@@ -122,4 +121,21 @@ export const TotalText = styled.Text`
   font-weight: bold;
   margin-left: 20px;
   color: ${Colors.white};
+`;
+
+export const WhiteContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${Colors.white};
+  width: 100%;
+`;
+
+export const PageTitle = styled.Text`
+  align-self: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: ${Colors.white};
+  margin-left: ${width * 0.035897}px;
+  margin-right: ${width * 0.035897}px;
+  margin-top: ${titleMargin}px;
 `;

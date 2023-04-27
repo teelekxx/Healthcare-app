@@ -89,9 +89,9 @@ function RequestScreen({ navigation }) {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        console.log(latitude);
         setLatitude(location.coords.latitude);
         setLongitude(location.coords.longitude);
+        console.log("LAT =", latitude);
       })();
       const getUserData = async () => {
         const token = await AsyncStorage.getItem("token");

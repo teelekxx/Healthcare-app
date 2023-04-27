@@ -5,7 +5,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Dimensions,
-  Platform, 
+  Platform,
 } from "react-native";
 import {
   ThemeButton,
@@ -32,8 +32,8 @@ import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
 import Auth from "../../api/auth";
 import { Formik, ErrorMessage } from "formik";
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -47,7 +47,7 @@ function SignInPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { width, height } = Dimensions.get("window");
-  const [expoPushToken, setExpoPushToken] = useState('');
+  const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -56,10 +56,10 @@ function SignInPage({ navigation }) {
     console.log("Started");
     const { status } = await Notifications.getPermissionsAsync();
     console.log("One");
-    if (status !== 'granted') {
+    if (status !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== 'granted') {
-        alert('You need to enable permissions to receive notifications.');
+      if (status !== "granted") {
+        alert("You need to enable permissions to receive notifications.");
         return;
       }
     }
@@ -68,7 +68,7 @@ function SignInPage({ navigation }) {
     console.log("Three");
     const token = tokenData.data;
     console.log(token);
-  }
+  };
   function createAlert(message) {
     Alert.alert("Try Again", message, [
       {

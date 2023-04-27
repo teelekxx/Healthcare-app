@@ -294,6 +294,6 @@ export const WhiteKeyboard = styled.KeyboardAvoidingView`
 `;
 
 export const LoadingContainer = styled.View`
-flex:1;
-justify-content:center;
-`
+  flex: 1;
+  justify-content: center;
+`;

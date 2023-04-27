@@ -17,6 +17,7 @@ import NotificationsScreen from "../NotificationsScreen/index";
 import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import HistoryScreen from "../HistoryScreen";
 import PatientPharmacyScreen from "../PatientPharmacyScreen/index";
+import Prescription from "../PrescriptionScreen/index";
 import FirstaidScreen from "../FirstaidScreen/index";
 
 import CPRScreen from "../FirstaidInfoScreens/CPRScreen/index";
