@@ -15,7 +15,7 @@ const authenticationSlice = createSlice({
     setLoginMode(state, value) {
       state.loginMode = value.payload.loginMode;
     },
-    login(state, value) {
+    login(state,value) {
       state.isAuthenticated = true;
       state.user = value.payload.user;
       state.token = value.payload.token;
@@ -53,3 +53,4 @@ const store = configureStore({
 });
 
 export const AuthenticationActions = authenticationSlice.actions;
+export default store;

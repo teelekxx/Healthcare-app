@@ -3,12 +3,14 @@ import {
   SafeAreaView,
   Button,
   ActivityIndicator,
-  ScrollView,
+  Pressable,
 } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
+import { AsyncStorage } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Title,
   ItalicText,
@@ -33,10 +35,7 @@ import {
   DetailText,
   TimeText,
 } from "./index.style";
-import Auth from "../../api/auth";
-import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage, Alert } from "react-native";
-import PharmaRequest from "../../components/PharmaRequest";
+import NotificationController from "../../firestore/notification";
 
 function PatientPharmacyScreen({ navigation }) {
   const [isWaiting, setWaiting] = useState(false);
@@ -54,122 +53,7 @@ function PatientPharmacyScreen({ navigation }) {
   ]);
   const pharmacist = "Tee Doc";
 
-  const sendPharmacy = async () => {
-    try {
-      console.log("here");
-      const postPharmacy = async () => {
-        const token = await AsyncStorage.getItem("token");
-        const user = await Auth.postPharmacyJob({
-          body: { type: "pharmacy" },
-          token: token,
-        });
-        if (user.isOk) {
-          console.log("response = ", user);
-          setJobId(user.job._id);
-          console.log(user.job._id);
-          setStatus("finding");
-        }
-      };
-      await postPharmacy();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getReciever = async (jobId) => {
-    const token = await AsyncStorage.getItem("token");
-    const user = await Auth.getRecieverByJobId({
-      params: { id: jobId },
-      token: token,
-    });
-    if (user.isOk) {
-      return user;
-    }
-  };
-
-  const fetchData = async (jobId) => {
-    const data = await getReciever(jobId);
-    console.log("DATA =", data);
-    setFoundPharma(data);
-  };
-
-  useEffect(() => {
-    if (jobId != null) {
-      console.log("jobId = ", jobId);
-      const unsub = onSnapshot(doc(db, "jobs", jobId), (doc) => {
-        if (doc.data()) {
-          console.log("Current data: ", doc.data().status);
-          setStatus(doc.data().status);
-        }
-      });
-    }
-
-    const getUserDetail = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const user = await Auth.getUserByToken({
-        token: token,
-      });
-      if (user.isOk) {
-        console.log("USER = ", user.data.pharmacy._id);
-        setPharmaId(user.data.pharmacy._id);
-      }
-    };
-
-    const getRequester = async (jobId) => {
-      console.log("JOBID =", jobId);
-      const token = await AsyncStorage.getItem("token");
-      const user = await Auth.getRequesterByJobId({
-        params: { id: jobId },
-      });
-      if (user.isOk) {
-        console.log("here:", user.job);
-        return user.job;
-      }
-    };
-
-    const getUserRole = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const user = await Auth.getUserProfile({
-        token: token,
-      });
-      if (user.data.user.role === "pharmacist") {
-        setIsPharma(true);
-      }
-    };
-    getUserRole();
-    getUserDetail();
-
-    if (status == "doing") {
-      console.log("FETT");
-      fetchData(jobId);
-    }
-
-    if (isPharma && myPharmaId != null) {
-      // const unsub = onSnapshot(collection(db, "jobs"), (querySnapshot) => {
-      //   let jobIds = [];
-      //   querySnapshot.forEach((doc) => {
-      //     const data = doc.data();
-      //     if (data.users.includes(myPharmaId.toString())) {
-      //       jobIds.push(getRequester(doc.id));
-      //     }
-      //   });
-      //   setAllJobs(jobIds);
-      // });
-
-      const q = query(
-        collection(db, "jobs"),
-        where("users", "array-contains", myPharmaId),
-        where("status", "==", "finding")
-      );
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const jobs = [];
-        querySnapshot.forEach((doc) => {
-          jobs.push(doc.data());
-        });
-        setAllJobs(jobs);
-      });
-    }
-  }, [jobId, isPharma, myPharmaId, status]);
+  const auth = useSelector((state) => state.Authentication);
 
   return (
     <FindContainer>
@@ -183,6 +67,13 @@ function PatientPharmacyScreen({ navigation }) {
             type="ionicon"
             color={Colors.blue}
             size={30}
+          />
+        </NotificationTouchable>
+      </HomeTitleContainer>
+      {!isWaiting && !isFound ? (
+        <ButtonContainer>
+          <PharmacyIcon
+            source={require("../../../assets/prescription-1.png")}
           />
         </NotificationTouchable>
       </HomeTitleContainer>
@@ -266,6 +157,19 @@ function PatientPharmacyScreen({ navigation }) {
           )}
         </ButtonContainer>
       )}
+
+      <Button
+        onPress={async () => {
+          const token = await AsyncStorage.getItem("token");
+          const uid = auth.user.uid;
+
+          await NotificationController.pushToken({
+            uid: uid,
+            token: token,
+          });
+        }}
+        title="click"
+      ></Button>
     </FindContainer>
   );
 }
