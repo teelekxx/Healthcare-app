@@ -53,9 +53,7 @@ function SignInPage({ navigation }) {
   const responseListener = useRef();
 
   const getToken = async () => {
-    console.log("Started");
     const { status } = await Notifications.getPermissionsAsync();
-    console.log("One");
     if (status !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') {

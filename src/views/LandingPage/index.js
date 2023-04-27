@@ -15,6 +15,12 @@ import {
   Bt,
 } from "./index.style";
 function LandingPage({ navigation }) {
+
+
+
+
+
+
   return (
     <Container>
       <Image source={require("../../../assets/appLogo.png")} />
