@@ -56,7 +56,14 @@ import {
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
-import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  doc,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
 import ChatBubble from "../../components/ChatBubble/index";
@@ -72,12 +79,29 @@ function ChatScreen({ navigation, route }) {
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [medications, setMedications] = useState([]);
-
+  const [chatName, setChatName] = useState("");
   const [total, setTotal] = useState(null);
 
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
   ]);
+
+  const getChatter = async (myUID) => {
+    const otherUID = route.params.chat.member.filter(
+      (jobID) => jobID !== myUID
+    );
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getUserByUID({
+      params: { uid: otherUID },
+    });
+    if (user.isOk) {
+      return user;
+    }
+  };
+  const fetchData = async (myUID) => {
+    const data = await getChatter(myUID);
+    setChatName(data.data.medicalInformation.name);
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -112,43 +136,44 @@ function ChatScreen({ navigation, route }) {
     ]);
   };
 
-  const sendMessage = () => {
-    console.log("images =", image);
-    if (currMessage.trim() === "" && image === null) {
-      return;
-    } else {
-      setChatMessages([
-        ...chatMessages,
-        {
-          Message: currMessage,
-          TimeStamp: new Date().toTimeString().slice(0, 5),
-          Sender: "Me",
-          Image: image,
+  const sendInitialMessage = async () => {
+    const sendInitMessage = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.postChatMessage({
+        body: {
+          groupId: route.params.groupID,
+          message: "Hellonearh",
+          sendBy: route.params.myUID,
+          seen: false,
+          type: "message",
         },
-      ]);
-      setCurrMessage("");
-      setImage(null);
-    }
+        token: token,
+      });
+      if (user.isOk) {
+        console.log("response = ", user);
+      }
+    };
+    await sendInitMessage();
   };
 
-  // const sendInitialMessage = async () => {
-  //   const sendMessage = async () => {
-  //     const token = await AsyncStorage.getItem("token");
-  //     const user = await Auth.postChatMessage({
-  //       body: {
-  //         groupId: route.params.groupID,
-  //         message: "TESTTEE2",
-  //         sendBy: route.params.myUID,
-  //         seen: false,
-  //       },
-  //       token: token,
-  //     });
-  //     if (user.isOk) {
-  //       console.log("response = ", user);
-  //     }
-  //   };
-  //   await sendMessage();
-  // };
+  const sendMessage = async () => {
+    console.log("SEND!");
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postChatMessage({
+      body: {
+        groupId: route.params.groupID,
+        message: currMessage,
+        sendBy: route.params.myUID,
+        seen: false,
+        type: "message",
+      },
+      token: token,
+    });
+    if (user.isOk) {
+      console.log("response = ", user);
+    }
+    setCurrMessage("");
+  };
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -160,15 +185,7 @@ function ChatScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-    const getMyUID = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const user = await Auth.getUserByToken({
-        token: token,
-      });
-      if (user.isOk) {
-        console.log(user);
-      }
-    };
+    fetchData(route.params.myUID);
     // sendInitialMessage();
     // getMyUID();
     // if (myUID != null) {
@@ -187,24 +204,25 @@ function ChatScreen({ navigation, route }) {
     //   });
     // }
 
-    console.log("GROUP =");
-    const unsub = onSnapshot(
+    const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
-      (querySnapshot) => {
-        let temp = [];
-        querySnapshot.docs.forEach((change) => {
-          console.log("New message: ", change.data());
-          temp.push({
-            Message: change.data().message,
-            TimeStamp: new Date().toTimeString().slice(0, 5),
-            Sender: "Me",
-            Image: image,
-          });
-        });
-        console.log("TEMP=", temp);
-        setChatMessages(temp);
-      }
+      orderBy("sendAt")
     );
+
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      console.log("Messages");
+      let temp = [];
+      querySnapshot.docs.forEach((change) => {
+        console.log("New message: ", change.data());
+        temp.push({
+          Message: change.data().message,
+          TimeStamp: new Date().toTimeString().slice(0, 5),
+          Sender: change.data().sendBy,
+          Image: image,
+        });
+      });
+      setChatMessages(temp);
+    });
   }, []);
 
   return (

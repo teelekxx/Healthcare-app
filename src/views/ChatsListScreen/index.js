@@ -117,6 +117,7 @@ function ChatsListScreen({ navigation }) {
                     navigation.navigate("Chatting", {
                       groupID: val.jobId,
                       myUID: myUID,
+                      chat: val,
                     })
                   }
                   key={index}
