@@ -1,10 +1,8 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 import { Dimensions } from "react-native";
-
 const { width, height } = Dimensions.get("window");
 const marginMultiplier = Platform.OS === 'ios' ? 0.1532 : 0.0832;
-
 export const ThemeButton = styled.TouchableOpacity`
   flex-direction: row;
   margin-top: 50px;

@@ -10,6 +10,7 @@ import {
   InfoInput,
   BigInfoInput,
   CenterFormText,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import {
   CircleButton,
@@ -24,7 +25,7 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import Auth from "../../api/auth";
 
 function MedInfoSummaryScreen({ navigation }) {
@@ -61,6 +62,8 @@ function MedInfoSummaryScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [text, setText] = useState("");
+  const [insuranceNumber, setInsuranceNumber] = useState("");
+  const [isLoading, setIsloading] = useState(true);
   const editMode = () => {
     console.log(mode);
     if (mode === "Edit") {
@@ -84,7 +87,8 @@ function MedInfoSummaryScreen({ navigation }) {
             powerOfAttorneyRelationship: relationship,
             provider: insuranceProvider,
             plan: insurancePlan,
-            expirationDate: text
+            expirationDate: text,
+            insuranceNumber: insuranceNumber,
           },token:token
         })
       }
@@ -95,6 +99,7 @@ function MedInfoSummaryScreen({ navigation }) {
   useEffect(() => {
     try {
       const getUserData = async () => {
+        setIsloading(true)
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.getUserProfile({
           token: token,
@@ -112,8 +117,10 @@ function MedInfoSummaryScreen({ navigation }) {
         //insurance
         setText(user.data.insurance.expirationDate)
         setInsurancePlan(user.data.insurance.plan)
+        setInsuranceNumber(user.data.insurance.insuranceNumber)
         setInsuranceProvider(user.data.insurance.provider)
         console.log(user.data)
+        setIsloading(false)
       };
       getUserData();
     } catch (error) {
@@ -134,7 +141,13 @@ function MedInfoSummaryScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <ActivityIndicator size="large" color="#00a5cb" />
+      </LoadingContainer>
+    );
+  }
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -247,6 +260,12 @@ function MedInfoSummaryScreen({ navigation }) {
         <InfoInput
           onChangeText={setInsuranceProvider}
           value={insuranceProvider}
+          editable={edit}
+        />
+        <GreyText>Insurance Number</GreyText>
+        <InfoInput
+          onChangeText={setInsuranceNumber}
+          value={insuranceNumber}
           editable={edit}
         />
         <GreyText>Insurance Plan</GreyText>

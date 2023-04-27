@@ -100,6 +100,88 @@ class Auth {
     
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async getOrders(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/order/tok/user`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getOrderDetail(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/order/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async pharmaGetOrders(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/order/tok/pharmacist`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getAmbulanceCase(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config)
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getUserById(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/user/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getEmergencyCaseById(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case/${option.params.id}`,
+      token: option.token,
+    };
+    console.log(config)
+    
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getCaseAndOrder(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/emergency/case/order/tok`,
+      token: option.token,
+    };
+    console.log(config)  
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  
+  static async getHospitals(option){
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/hospitals`,
+      token: option.token,
+    };
+    console.log(config)  
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
+
 
 
 }

@@ -32,7 +32,6 @@ import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
 import Auth from "../../api/auth";
 import { Formik, ErrorMessage } from "formik";
-
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
@@ -70,7 +69,14 @@ function SignInPage({ navigation }) {
     const token = tokenData.data;
     console.log(token);
   }
-  
+  function createAlert(message) {
+    Alert.alert("Try Again", message, [
+      {
+        text: "Ok",
+        style: "cancel",
+      },
+    ]);
+  }
 
   const handleSubmit = async (values) => {
     try {
@@ -117,22 +123,12 @@ function SignInPage({ navigation }) {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <WhiteKeyboard
-            behavior="position"
+            behavior={Platform.OS === "ios" ? "position" : undefined}
             style={{ flex: 1 }}
           >
             <NonScrollForm>
               <SubTitle>Welcome back!</SubTitle>
               <ItalicText2>Hello there, sign in to continue</ItalicText2>
-              <ThemeButton>
-                <Icon
-                  name="logo-google"
-                  type="ionicon"
-                  color={Colors.grey}
-                  size={20}
-                />
-                <ThemeButtonText>Sign in with Google</ThemeButtonText>
-              </ThemeButton>
-              <Or>or</Or>
               <InputGroup>
                 <Icon
                   name="mail-outline"

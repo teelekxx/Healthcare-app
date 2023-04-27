@@ -14,14 +14,20 @@ export const Title = styled.Text`
   margin-top:45px;
   margin-bottom:50px;
 `;
-export const Block = styled.ScrollView`
+export const Block = styled.View`
+
+
+`
+export const BlockContainer = styled.TouchableOpacity`
+flex:1
+flex-direction:row;
 border: 1px solid ${Colors.blue};
 width:340px;
 height:120px;
 padding:20px;
 border-radius:20px;
 margin-bottom:20px;
-
+justify-content:space-between;
 `
 export const Id = styled.Text`
   color: ${Colors.blue};
@@ -40,13 +46,17 @@ color: ${Colors.grey};
 `
 export const Name = styled.Text`
   color: ${Colors.blue};
-  
+  margin-bottom: 10px;
   font-weight: bold;
-  font-size: 17px;
+  font-size: 18px;
+`
+export const DateFormat = styled.Text`
+  color: ${Colors.blue};
+  font-size: 15px;
+  ${'' /* font-weight: bold; */}
 `
 export const Medication = styled.Text`
 color: ${Colors.blue};
-  
   font-size: 14px;
 `
 export const Space = styled.View`

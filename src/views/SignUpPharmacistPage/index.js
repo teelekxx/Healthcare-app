@@ -96,7 +96,7 @@ function SignUpPharmacistPage({ navigation, route }) {
       password: password,
       role: role,
       name: values.name,
-      dateOfBirth: values.dateOfBirth,
+      dateOfBirth: values.text,
       gender: gender,
       citizenId: values.citizenId,
       phoneNumber: values.phone,

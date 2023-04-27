@@ -130,6 +130,18 @@ function ProfileStack() {
     </Stack.Navigator>
   );
 }
+function HistoryStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+      <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+      {/* <Stack.Screen name="MedInfoSummary" component={MedInfoSummaryScreen} /> */}
+    </Stack.Navigator>
+  );
+}
 
 function HomePage({ navigation }) {
   return (

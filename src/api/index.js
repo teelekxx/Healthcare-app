@@ -1,7 +1,9 @@
 import axios from "axios";
 
 // const uri = `https://aec32548a02114e0294b4d9c2e6e048f-1482926241.ap-southeast-1.elb.amazonaws.com/development`;
-const uri = "http://192.168.1.179:3000"
+// const uri = "aec32548a02114e0294b4d9c2e6e048f-1482926241.ap-southeast-1.elb.amazonaws.com"
+// const uri = "http://10.66.15.66:3000"
+const uri = "http://10.66.12.25:3000"
 export async function request({
   baseURL = uri,
   body = null,
