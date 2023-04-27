@@ -39,7 +39,7 @@ function MapPage({ navigation, route }) {
   const origin = "Bangkok";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
-  const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
+  // const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
 
   const markers = [
