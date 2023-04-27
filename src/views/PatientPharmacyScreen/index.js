@@ -9,6 +9,8 @@ import { Icon, Avatar } from "react-native-elements";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   Title,
   ItalicText,
@@ -37,8 +39,13 @@ import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
+import NotificationController from "../../firestore/notification";
+import { async } from "@firebase/util";
 
 function PatientPharmacyScreen({ navigation }) {
+  const auth = useSelector((state) => state.Authentication);
+
+
   const [isWaiting, setWaiting] = useState(false);
   const [isFound, setFound] = useState(false);
   const [status, setStatus] = useState("none");
@@ -266,6 +273,7 @@ function PatientPharmacyScreen({ navigation }) {
           )}
         </ButtonContainer>
       )}
+   
     </FindContainer>
   );
 }

@@ -18,7 +18,7 @@ import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import HistoryScreen from "../HistoryScreen";
 import PatientPharmacyScreen from "../PatientPharmacyScreen/index";
 import FirstaidScreen from "../FirstaidScreen/index";
-
+import MapFinder from "../../views/MapFinder";
 import CPRScreen from "../FirstaidInfoScreens/CPRScreen/index";
 import HeimlichScreen from "../FirstaidInfoScreens/HeimlichScreen/index";
 import SplintScreen from "../FirstaidInfoScreens/SplintScreen/index";
@@ -145,7 +145,6 @@ function HistoryStack() {
 
 function HomePage({ navigation }) {
   return (
-    // <NavigationContainer>
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
@@ -229,6 +228,16 @@ function HomePage({ navigation }) {
       <Tab.Screen
         name="Profile"
         component={ProfileStack}
+        options={({ route }) => ({
+          tabBarStyle: ((route) => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            return;
+          })(route),
+        })}
+      />
+        <Tab.Screen
+        name="MapFinder"
+        component={MapFinder}
         options={({ route }) => ({
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";

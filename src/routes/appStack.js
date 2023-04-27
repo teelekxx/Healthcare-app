@@ -18,12 +18,14 @@ import ChatScreen from "../views/ChatScreen";
 import MedInfoSummaryScreen from "../views/MedInfoSummaryScreen";
 import HistoryDetailScreen from "../views/HistoryDetailScreen";
 import AmbulanceHistoryScreen from "../views/AmbulanceHistoryScreen";
+
 import NotificationController from "../firestore/notification";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthenticationActions } from "../../src/redux/store.js";
 import Auth from "../../src/api/auth";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { InputGroup } from "../components/components/index.style";
 
 const Stack = createNativeStackNavigator();
 
@@ -153,13 +155,13 @@ const MyStack = () => {
   const auth = useSelector((state) => state.Authentication);
 
   const appendToFireStore = async ({ uid, token }) => {
-    console.log("uid", uid);
-    console.log("token", token);
-
-    await NotificationController.pushToken({
-      uid,
-      token,
-    });
+ if(uid.length > 0 && token.length > 0){
+  await NotificationController.pushToken({
+    uid,
+    token,
+  });
+ }
+ 
   };
 
   useEffect(() => {
@@ -197,11 +199,12 @@ const MyStack = () => {
           headerShown: false,
         })}
       >
+         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInPage} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordPage} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
-        <Stack.Screen name="HomePage" component={HomePage} />
+
         <Stack.Screen name="Map" component={MapPage} />
         <Stack.Screen name="Role" component={RolePage} />
         <Stack.Screen name="SignUpParamedic" component={SignUpParamedicPage} />
