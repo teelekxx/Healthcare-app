@@ -168,6 +168,7 @@ function RequestScreen({ navigation }) {
       //     token: token,
       //   });
       // };
+
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({

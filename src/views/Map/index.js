@@ -22,13 +22,12 @@ import {
   ThemeButtonText2,
   RoundButton,
 } from "./index.style";
-import { ScrollView } from "react-navigation";
 
 function MapPage({ navigation }) {
   const origin = "Bangkok";
-  // const destination = "Nakhon Si Thammarat";
+  const destination = "Nakhon Si Thammarat";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
-  // const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
+  const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
   const markers = [
     { latitude: 13.773508065440815, longitude: 100.5730804572769 },
@@ -92,18 +91,18 @@ function MapPage({ navigation }) {
     //   .catch((error) => {
     //     console.log("Error!!!!!!!!!!!!!!!!!!!!!!", error);
     //   });
-    // axios
-    //   .get(distanceUrl)
-    //   .then((response) => {
-    //     // Do something with the response data
-    //     console.log(
-    //       response.data.rows[0].elements[0].distance.text,
-    //       response.data.rows[0].elements[0].duration.text
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .get(distanceUrl)
+      .then((response) => {
+        // Do something with the response data
+        console.log(
+          response.data.rows[0].elements[0].distance.text,
+          response.data.rows[0].elements[0].duration.text
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -166,19 +165,19 @@ function MapPage({ navigation }) {
                       longitudeDelta: 0.01,
                     }}
                   ></Marker>
-                  {/* <MapViewDirections
-                  origin={{
-                    latitude: region.region.latitude,
-                    longitude: region.region.longitude,
-                  }}
-                  destination={{
-                    latitude: val.geometry.location.lat,
-                    longitude: val.geometry.location.lng,
-                  }}
-                  apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
-                  strokeWidth={3}
-                  strokeColor="red"
-                ></MapViewDirections> */}
+                  <MapViewDirections
+                    origin={{
+                      latitude: region.region.latitude,
+                      longitude: region.region.longitude,
+                    }}
+                    destination={{
+                      latitude: val.geometry.location.lat,
+                      longitude: val.geometry.location.lng,
+                    }}
+                    apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
+                    strokeWidth={3}
+                    strokeColor="red"
+                  ></MapViewDirections>
                 </View>
               );
             })}

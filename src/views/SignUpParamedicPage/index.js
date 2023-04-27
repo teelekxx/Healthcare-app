@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Text, Platform } from "react-native";
 import {
@@ -21,7 +22,10 @@ import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
+import Modal from "react-native-modal";
+import MapPicker from "../../components/MapPicker/index";
 import Auth from "../../api/auth";
+
 function SignUpParamedicPage({ navigation, route }) {
   const { email, password, role } = route.params;
   const [name, onChangeName] = useState("");
@@ -44,6 +48,10 @@ function SignUpParamedicPage({ navigation, route }) {
   const [text, setText] = useState("select date");
   const [licenseText, setLicenseText] = useState("select date");
   const [showLicense, setShowLicense] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
   //hospital options
   let extractedHospitals = [];
@@ -115,6 +123,7 @@ function SignUpParamedicPage({ navigation, route }) {
       hospitalId: selectedHospital,
     });
   };
+
   DropDownPicker.setListMode("SCROLLVIEW");
 
   return (

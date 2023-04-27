@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Platform } from "react-native";
+import { Text, Platform, SafeAreaView } from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -14,16 +14,20 @@ import {
   DateCalendar,
   WhiteKeyboard,
 } from "../../components/components/index.style";
-import { CircleButton } from "./index.style";
+import { CircleButton, MapPickerButton, MapPickerText } from "./index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
+import Modal from "react-native-modal";
+
+import MapPicker from "../../components/MapPicker/index";
 
 function SignUpPharmacistPage({ navigation, route }) {
   const { email, password, role } = route.params;
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [name, onChangeName] = useState("");
   const [id, onChangeID] = useState("");
   const [phone, onChangePhone] = useState("");
@@ -50,6 +54,16 @@ function SignUpPharmacistPage({ navigation, route }) {
   const [pharZipCode, setPharZipcode] = useState("");
   const [pharLatitude, setPharLatitude] = useState("");
   const [pharLongitude, setPharLongitude] = useState("");
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const saveGeo = (region) => {
+    setPharLatitude(region.latirude);
+    setPharLongitude(region.longitude);
+  };
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -291,6 +305,9 @@ function SignUpPharmacistPage({ navigation, route }) {
                 onChangeText={setPharDescription}
                 value={pharDescription}
               />
+              <MapPickerButton onPress={toggleModal}>
+                <MapPickerText>Pick an address</MapPickerText>
+              </MapPickerButton>
               <FormText>Pharmacy's address</FormText>
               <BigFormInput
                 multiline
@@ -301,18 +318,21 @@ function SignUpPharmacistPage({ navigation, route }) {
               <FormText>Pharmacy's city</FormText>
               <FormInput onChangeText={setPharCity} value={pharCity} />
               <FormText>Pharmacy's zip Code</FormText>
-              <FormInput onChangeText={setPharZipcode} value={pharZipCode} />
-              <FormText>Pharmacy's latitude</FormText>
-              <FormInput onChangeText={setPharLatitude} value={pharLatitude} />
-              <FormText>Pharmacy's longitude</FormText>
               <FormInput
                 onChangeText={setPharLongitude}
                 value={pharLongitude}
               />
-
               <BlueButton onPress={handleSubmit}>
                 <BlueButtonText>Next</BlueButtonText>
               </BlueButton>
+              <Modal visible={isModalVisible} backdropOpacity={0.5}>
+                <SafeAreaView>
+                  <MapPicker
+                    handleModalVisible={toggleModal}
+                    handleGeoResult={saveGeo}
+                  />
+                </SafeAreaView>
+              </Modal>
             </SignUpForm>
           </WhiteKeyboard>
         )}
