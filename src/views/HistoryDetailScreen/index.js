@@ -14,40 +14,14 @@ import { Container, Row, Cell, CellHeader, BigCell, PharName, Text20, BigCellHea
 import { AsyncStorage } from "react-native";
 import Auth from "../../api/auth";
 const HistoryDetailScreen = ({navigation, route}) => {
-  const {orderId, pharName, orderDate, totalPrice} = route.params
-  // const meds = [
-  //   {
-  //     name: "Tylenol",
-  //     dosage: "1 Morning, 1 Night (before food)",
-  //     duration: "10 days",
-  //     price: 500
-  //   },
-  //   {
-  //     name: "Differin",
-  //     dosage: "1 Morning(after food)",
-  //     duration: "5 days",
-  //     price: 50
-  //   },
-  //   {
-  //     name: "Tylenol",
-  //     dosage: "1 Morning, 1 Night (before food)",
-  //     duration: "10 days",
-  //     price: 500
-  //   },
-  //   {
-  //     name: "Tylenol",
-  //     dosage: "1 Morning, 1 Night (before food)",
-  //     duration: "10 days",
-  //     price: 500
-  //   },
-  // ];
+  const {orderId, userName, orderDate, totalPrice} = route.params
   const [orders, setOrders] = useState([]);
-  console.log("order id:",orderId)
+
   useEffect(() => {
     try {
       const getOrderData = async () => {
         // const token = await AsyncStorage.getItem("token");
-        
+        console.log("orderid:",orderId)
         const res = await Auth.getOrderDetail({
           params: { id : orderId},
         });
@@ -66,7 +40,8 @@ const HistoryDetailScreen = ({navigation, route}) => {
   //   return sum + med.price;
   // }, 0);
   const dateFormat = (date) => {
-    const mongodbDate = new Date("2022-03-15T08:30:45.123Z");
+    console.log("order date: ",orderDate)
+    const mongodbDate = new Date(orderDate);
     // Extract year, month, and day from the MongoDB date
     const year = mongodbDate.getFullYear();
     const month = mongodbDate.getMonth() + 1; // Add 1 to get 1-based month index
@@ -92,7 +67,7 @@ const HistoryDetailScreen = ({navigation, route}) => {
         <PageTitle>Order details</PageTitle>
       </PageTitleContainer>
       <SignUpForm vertical={true} keyboardDismissMode="on-drag">
-      <PharName>Prescribed by: {pharName}</PharName>
+      <PharName>{userName}</PharName>
       <Text20>Date: {dateFormat(orderDate)}</Text20>
         <Container>
           <Row>
@@ -109,6 +84,9 @@ const HistoryDetailScreen = ({navigation, route}) => {
               <Cell>{med.price}</Cell>
             </Row>
           ))}
+          <Row>
+            <Cell>Delivery fee: 50</Cell>
+          </Row>
         </Container>
         <Text20>Total Price: {totalPrice}</Text20>
       </SignUpForm>

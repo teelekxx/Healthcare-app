@@ -14,14 +14,20 @@ export const Title = styled.Text`
   margin-top:45px;
   margin-bottom:50px;
 `;
-export const Block = styled.TouchableOpacity`
+export const Block = styled.View`
+
+
+`
+export const BlockContainer = styled.TouchableOpacity`
+flex:1
+flex-direction:row;
 border: 1px solid ${Colors.blue};
 width:340px;
 height:120px;
 padding:20px;
 border-radius:20px;
 margin-bottom:20px;
-
+justify-content:space-between;
 `
 export const Id = styled.Text`
   color: ${Colors.blue};

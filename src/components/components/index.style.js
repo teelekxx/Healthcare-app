@@ -80,7 +80,6 @@ export const Form = styled.ScrollView`
 `;
 
 export const NonScrollForm = styled.View`
-
   height: 100%;
   flex-direction: column;
   border-top-left-radius: 20px;
@@ -293,3 +292,8 @@ export const WhiteKeyboard = styled.KeyboardAvoidingView`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 `;
+
+export const LoadingContainer = styled.View`
+flex:1;
+justify-content:center;
+`

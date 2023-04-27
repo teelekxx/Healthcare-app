@@ -129,7 +129,7 @@ export const BlueBorderButton = styled.Pressable`
   align-items: center;
 `;
 
-export const BlueButton = styled.Pressable`
+export const BlueButton = styled.TouchableOpacity`
   font-size: 15px;
   background-color: ${Colors.blue};
   border-radius: 10px;

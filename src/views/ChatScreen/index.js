@@ -51,9 +51,14 @@ import {
   Footer,
   BlueContainer,
   ChatView,
+  AddMedicationButton,
+  ModalBackground,
 } from "./index.style";
 
 import ChatBubble from "../../components/ChatBubble/index";
+import MedicationsBubble from "../../components/MedicationsBubble/index";
+import Prescription from "../../components/Prescription/index";
+import Modal from "react-native-modal";
 import { async } from "@firebase/util";
 
 const { width, height } = Dimensions.get("window");
@@ -61,6 +66,9 @@ const { width, height } = Dimensions.get("window");
 function ChatScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
   const [currMessage, setCurrMessage] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [medications, setMedications] = useState([]);
+  const [total, setTotal] = useState(null);
 
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
@@ -105,6 +113,16 @@ function ChatScreen({ navigation, route }) {
       setImage(null);
     }
   };
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const handleMedications = (value) => {
+    setMedications(value);
+    console.log("MED =", value);
+  };
+
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -140,6 +158,11 @@ function ChatScreen({ navigation, route }) {
             </BubbleContainer>
           );
         })}
+        {medications.length > 0 && (
+          <BubbleContainer>
+            <MedicationsBubble medications={medications}></MedicationsBubble>
+          </BubbleContainer>
+        )}
       </ChatField>
 
       <BlueKeyboard
@@ -175,6 +198,14 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
+            <PictureButton onPress={toggleModal}>
+              <Icon
+                name="medkit-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={21}
+              />
+            </PictureButton>
             <GreyInput
               multiline={true}
               value={currMessage}
@@ -190,6 +221,18 @@ function ChatScreen({ navigation, route }) {
               />
             </SendButton>
           </ChatInputContainer>
+          <Modal
+            visible={isModalVisible}
+            animationType="fade"
+            backdropOpacity={0.5}
+          >
+            <SafeAreaView>
+              <Prescription
+                handleModalVisible={toggleModal}
+                handleSaveMedications={handleMedications}
+              />
+            </SafeAreaView>
+          </Modal>
         </BlueFooter>
       </BlueKeyboard>
     </BlueContainer>

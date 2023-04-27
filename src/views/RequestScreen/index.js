@@ -151,6 +151,7 @@ function RequestScreen({ navigation }) {
   const sendEmergencyCase = async () => {
     try {
       checkSymptoms();
+
       console.log(image);
       const formData = new FormData();
       console.log("here");
@@ -164,10 +165,19 @@ function RequestScreen({ navigation }) {
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
       // console.log(formData);
+
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
-          body: formData,
+          body: {
+            contactNumber: phoneNumber,
+            symptoms: symptoms,
+            otherInformation: otherInformation,
+            acceptanceStatus: "waiting",
+            deliveringStatus: "waiting",
+            latitude: latitude,
+            longitude: longitude,
+          },
           token: token,
         });
         if (user.isOk) {

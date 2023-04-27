@@ -39,6 +39,9 @@ function MapPage({ navigation, route }) {
   const origin = "Bangkok";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
+  const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
+  // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
+
   const markers = [
     { latitude: 13.773508065440815, longitude: 100.5730804572769 },
     { latitude: 8.444526370150388, longitude: 99.96210658564331 },
@@ -147,6 +150,7 @@ function MapPage({ navigation, route }) {
     //   .catch((error) => {
     //     console.log("Error!!!!!!!!!!!!!!!!!!!!!!", error);
     //   });
+
     // axios
     //   .get(distanceUrl)
     //   .then((response) => {
