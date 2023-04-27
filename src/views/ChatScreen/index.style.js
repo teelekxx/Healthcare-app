@@ -10,11 +10,15 @@ const { width, height } = Dimensions.get("window");
 const titleMargin = Platform.OS === "ios" ? 0 : 50;
 
 export const ChatField = styled.ScrollView`
-  height: ${height * 0.55128}px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  height: auto;
   background-color: ${Colors.white};
   padding: 0px 20px 20px 20px;
+`;
+
+export const ChatView = styled.SafeAreaView`
+  background-color: ${Colors.white};
 `;
 
 export const SelectedImagesContainer = styled.ScrollView`

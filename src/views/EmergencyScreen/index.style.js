@@ -38,9 +38,9 @@ export const PromptText1 = styled.Text`
 export const SosTitle = styled.Text`
   color: ${Colors.blue};
 
-font-weight: bold;
-font-size: 25px;
-margin-left: ${width * 0.0641}px;
+  font-weight: bold;
+  font-size: 25px;
+  margin-left: ${width * 0.0641}px;
 `;
 
 export const SosContainer = styled.View``;

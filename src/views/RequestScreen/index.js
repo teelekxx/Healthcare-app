@@ -56,6 +56,7 @@ import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
+
 function RequestScreen({ navigation }) {
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -67,6 +68,8 @@ function RequestScreen({ navigation }) {
   const [otherInformation, setOtherInformation] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [emergencyToken, setToken] = useState("");
+  const [response, setResponse] = useState("");
   const symptoms = [];
   function createAlert(message) {
     Alert.alert("Try Again", message, [
@@ -148,26 +151,20 @@ function RequestScreen({ navigation }) {
   const sendEmergencyCase = async () => {
     try {
       checkSymptoms();
-      // console.log(image);
-      // const formData = new FormData();
-      // console.log("here")
-      // // const localUri = await AssetToLocalUri(image)
-      // // formData.append("attachedImages", localUri);
-      // formData.append("contactNumber", phoneNumber);
-      // formData.append("symptoms", symptoms);
-      // formData.append("otherInformation", otherInformation);
-      // formData.append("acceptanceStatus", "waiting");
-      // formData.append("deliveringStatus", "waiting");
-      // formData.append("latitude", latitude);
-      // formData.append("longitude", longitude);
+
+      console.log(image);
+      const formData = new FormData();
+      console.log("here");
+      // const localUri = await AssetToLocalUri(image)
+      // formData.append("attachedImages", localUri);
+      formData.append("contactNumber", phoneNumber);
+      formData.append("symptoms", symptoms);
+      formData.append("otherInformation", otherInformation);
+      formData.append("acceptanceStatus", "waiting");
+      formData.append("deliveringStatus", "waiting");
+      formData.append("latitude", latitude);
+      formData.append("longitude", longitude);
       // console.log(formData);
-      // const postEmergency = async () => {
-      //   const token = await AsyncStorage.getItem("token");
-      //   const user = await Auth.postEmergencyCase({
-      //     body: formData,
-      //     token: token,
-      //   });
-      // };
 
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -183,8 +180,14 @@ function RequestScreen({ navigation }) {
           },
           token: token,
         });
+        if (user.isOk) {
+          console.log("response = ", user);
+          navigation.navigate("Map", { myToken: user });
+        } else if (!user.isOk) {
+          console.log("response = ", user);
+        }
       };
-      postEmergency();
+      await postEmergency();
     } catch (err) {
       console.log(err);
     }

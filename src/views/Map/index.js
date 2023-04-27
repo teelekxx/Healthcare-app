@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
+import { Colors } from "../../constants";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebase";
 import * as Location from "expo-location";
 import { Google } from "expo";
 import {
@@ -21,32 +24,81 @@ import {
   ThemeButton2,
   ThemeButtonText2,
   RoundButton,
+  FindingPrompt,
+  InlineIcon,
+  HospitalName,
+  DistanceText,
+  ChatButton,
+  ChatIcon,
 } from "./index.style";
+import { ScrollView } from "react-navigation";
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
 
-function MapPage({ navigation }) {
+function MapPage({ navigation, route }) {
   const origin = "Bangkok";
-  const destination = "Nakhon Si Thammarat";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
+  const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
   const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
+
   const markers = [
     { latitude: 13.773508065440815, longitude: 100.5730804572769 },
     { latitude: 8.444526370150388, longitude: 99.96210658564331 },
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
   ];
+  const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState(null);
   const [nearbyPlaces, setNearby] = useState(null);
   const [destinationMap, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("finding");
+  const [duration, setDuration] = useState("");
+  const matchedHospital = {
+    Name: "EiEi Hospital",
+    ParamedicName: "Tee Hid",
+    latitude: 13.7226408802915,
+    longitude: 100.7752069802915,
+  };
+
+  const cancelAmublance = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postCancelJob({
+      body: { jobId: myToken.data.jobId, round: "1" },
+      token: token,
+    });
+    if (user.isOk) {
+      console.log(user);
+    }
+    // try {
+    //   console.log("here");
+    //   const postEmergency = async () => {
+    //     const token = await AsyncStorage.getItem("token");
+    //     const user = await Auth.postEmergencyCase({
+    //       body: {},
+    //       token: token,
+    //     });
+    //     if (!user.isOk) {
+    //       console.log("NOT OK ", user);
+    //     }
+    //     if (user.isOk) {
+    //       console.log("response = ", user);
+    //       setJobId(user.data.jobId);
+    //       console.log(user.data.jobId);
+    //     }
+    //   };
+    //   await postEmergency();
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  };
 
   const getHospital = async (lat, lng, radius = 1000) => {
     setLoading(true);
     let curLocation = lat + "%2c" + lng;
-    const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${curLocation}&radius=${radius}&type=hospital&key=${apiKey}`;
-    const response = await axios.get(placesUrl);
     setRegion({
       region: {
         latitude: lat,
@@ -55,32 +107,39 @@ function MapPage({ navigation }) {
         longitudeDelta: 5,
       },
     });
-    if (response != null) {
-      setNearby(response.data.results);
-      //   if (nearbyPlaces != null) {
-      //     nearbyPlaces.map((val) => {
-      //       let destination =
-      //         val.geometry.location.lat + "%2c" + val.geometry.location.lng;
-      //       getDistance(curLocation, destination, val.name);
-      //     });
-      //   }
-      setLoading(false);
-    }
+    let destination =
+      matchedHospital.latitude + "%2c" + matchedHospital.longitude;
+    getDistance(curLocation, destination);
+
+    setLoading(false);
   };
 
-  const getDistance = async (curLocation, destination, name) => {
+  const getDistance = async (curLocation, destination) => {
     const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${curLocation}&destinations=${destination}&key=${apiKey}`;
     const response = await axios.get(distanceUrl);
     if (response != null) {
-      console.log(
-        name,
-        response.data.rows[0].elements[0].distance.text,
-        response.data.rows[0].elements[0].duration.text
-      );
+      setDuration(response.data.rows[0].elements[0].duration.text);
+    }
+  };
+
+  const postEmergency = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postEmergencyCase({
+      body: formData,
+      token: token,
+    });
+    if (user.isOk) {
+      console.log("response = ", user);
+      navigation.navigate("Map", { myToken: user });
     }
   };
 
   useEffect(() => {
+    console.log("My token=", myToken.data.jobId);
+    // const unsub = onSnapshot(doc(db, "jobs", token.params), (doc) => {
+    //   const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    //   console.log(source, " data: ", doc.data());
+    // });
     // axios
     //   .get(placesUrl)
     //   .then((response) => {
@@ -91,25 +150,59 @@ function MapPage({ navigation }) {
     //   .catch((error) => {
     //     console.log("Error!!!!!!!!!!!!!!!!!!!!!!", error);
     //   });
+
+    // axios
+    //   .get(distanceUrl)
+    //   .then((response) => {
+    //     // Do something with the response data
+    //     console.log(
+    //       response.data.rows[0].elements[0].distance.text,
+    //       response.data.rows[0].elements[0].duration.text
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    //   console.log("USERRR!!", user);
+    // };
+    // getUserID();
+
+    // try {
+    //   const getUserID = async () => {
+    //     console.log("GET USER ID");
+    //     const token = await AsyncStorage.getItem("token");
+    //     const user = await Auth.getUserProfile({
+    //       token: token,
+    //     });
+    //     console.log("User ID= ", user.data.user._id);
+    //   };
+    //   getUserID();
+    // } catch (error) {
+    //   console.log("ERROR!!!", error);
+    // }
+
+    const unsub = onSnapshot(doc(db, "jobs", myToken.data.jobId), (doc) => {
+      if (doc.data()) {
+        console.log("Current data: ", doc.data().status);
+        setStatus(doc.data().status);
+      }
+    });
     axios
-      .get(distanceUrl)
+      .get(placesUrl)
       .then((response) => {
-        // Do something with the response data
-        console.log(
-          response.data.rows[0].elements[0].distance.text,
-          response.data.rows[0].elements[0].duration.text
-        );
+        setNearby(response.data.results);
+        console.log(nearbyPlaces);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error!!!!!!!!!!!!!!!!!!!!!!", error);
       });
+
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-
       let location = await Location.getCurrentPositionAsync({});
       getHospital(location.coords.latitude, location.coords.longitude);
     })();
@@ -123,14 +216,19 @@ function MapPage({ navigation }) {
   }
   return (
     <Container>
-      {loading ? (
+      {status === "finding" || loading ? (
         <MapContainer>
           <ActivityIndicator size="large" />
+          <FindingPrompt>Waiting for available Ambulance ...</FindingPrompt>
+          <ThemeButton onPress={cancelAmublance}>
+            <ThemeButtonText>Cancelled</ThemeButtonText>
+          </ThemeButton>
         </MapContainer>
-      ) : (
+      ) : status === "doing" ? (
         <MapContainer>
+          <HospitalName>{matchedHospital.Name}</HospitalName>
           <MapView
-            style={{ flex: 1 }}
+            style={{ flex: 1, borderRadius: 20 }}
             initialRegion={region.region}
             provider={"google"}
             showsUserLocation={true}
@@ -154,34 +252,62 @@ function MapPage({ navigation }) {
             // onRegionChange={(e) => console.log(e.nativeEvent)}
             // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
           >
-            {nearbyPlaces.map((val, index) => {
-              return (
-                <View key={index}>
-                  <Marker
-                    coordinate={{
-                      latitude: val.geometry.location.lat,
-                      longitude: val.geometry.location.lng,
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    }}
-                  ></Marker>
-                  <MapViewDirections
-                    origin={{
-                      latitude: region.region.latitude,
-                      longitude: region.region.longitude,
-                    }}
-                    destination={{
-                      latitude: val.geometry.location.lat,
-                      longitude: val.geometry.location.lng,
-                    }}
-                    apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
-                    strokeWidth={3}
-                    strokeColor="red"
-                  ></MapViewDirections>
-                </View>
-              );
-            })}
+            <Marker
+              coordinate={{
+                latitude: matchedHospital.latitude,
+                longitude: matchedHospital.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            ></Marker>
+            <MapViewDirections
+              origin={{
+                latitude: region.region.latitude,
+                longitude: region.region.longitude,
+              }}
+              destination={{
+                latitude: matchedHospital.latitude,
+                longitude: matchedHospital.longitude,
+              }}
+              apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
+              strokeWidth={7}
+              strokeColor="teal"
+            ></MapViewDirections>
           </MapView>
+          <DistanceText>Estimated arrival time: {duration}</DistanceText>
+          <FindingPrompt>
+            Ambulance found
+            <InlineIcon
+              name="checkmark-circle"
+              type="ionicon"
+              color={Colors.teal}
+              size={20}
+            />
+          </FindingPrompt>
+          <ChatButton
+            onPress={() =>
+              navigation.navigate("Chatting", { paramKey: "Tee hid" })
+            }
+          >
+            <ChatIcon
+              name="chatbubble-ellipses-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={30}
+            />
+          </ChatButton>
+        </MapContainer>
+      ) : (
+        <MapContainer>
+          <FindingPrompt>
+            Request Cancellled
+            <InlineIcon
+              name="alert-circle"
+              type="ionicon"
+              color={Colors.red}
+              size={20}
+            />
+          </FindingPrompt>
         </MapContainer>
       )}
       <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
