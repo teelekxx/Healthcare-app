@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Button,
@@ -54,6 +54,10 @@ import {
   AddMedicationButton,
   ModalBackground,
 } from "./index.style";
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebase";
 
 import ChatBubble from "../../components/ChatBubble/index";
 import MedicationsBubble from "../../components/MedicationsBubble/index";
@@ -68,6 +72,7 @@ function ChatScreen({ navigation, route }) {
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [medications, setMedications] = useState([]);
+
   const [total, setTotal] = useState(null);
 
   const [chatMessages, setChatMessages] = useState([
@@ -95,6 +100,18 @@ function ChatScreen({ navigation, route }) {
     setImage(newImages); // Update the state with the new array
   };
 
+  const addMessage = (message, image) => {
+    setChatMessages([
+      ...chatMessages,
+      {
+        Message: message,
+        TimeStamp: new Date().toTimeString().slice(0, 5),
+        Sender: "Me",
+        Image: image,
+      },
+    ]);
+  };
+
   const sendMessage = () => {
     console.log("images =", image);
     if (currMessage.trim() === "" && image === null) {
@@ -114,6 +131,25 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
+  // const sendInitialMessage = async () => {
+  //   const sendMessage = async () => {
+  //     const token = await AsyncStorage.getItem("token");
+  //     const user = await Auth.postChatMessage({
+  //       body: {
+  //         groupId: route.params.groupID,
+  //         message: "TESTTEE2",
+  //         sendBy: route.params.myUID,
+  //         seen: false,
+  //       },
+  //       token: token,
+  //     });
+  //     if (user.isOk) {
+  //       console.log("response = ", user);
+  //     }
+  //   };
+  //   await sendMessage();
+  // };
+
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -122,6 +158,54 @@ function ChatScreen({ navigation, route }) {
     setMedications(value);
     console.log("MED =", value);
   };
+
+  useEffect(() => {
+    const getMyUID = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getUserByToken({
+        token: token,
+      });
+      if (user.isOk) {
+        console.log(user);
+      }
+    };
+    // sendInitialMessage();
+    // getMyUID();
+    // if (myUID != null) {
+    //   const q = query(
+    //     collection(db, "groups"),
+    //     where("member", "array-contains", myUID)
+    //   );
+    //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //     const jobs = [];
+    //     querySnapshot.forEach((doc) => {
+    //       console.log("DATA =", doc.data());
+    //       jobs.push(doc.data());
+    //     });
+    //     console.log("CHATS =", jobs);
+    //     setMyChats(jobs);
+    //   });
+    // }
+
+    console.log("GROUP =");
+    const unsub = onSnapshot(
+      collection(db, "messages", route.params.groupID, "messages"),
+      (querySnapshot) => {
+        let temp = [];
+        querySnapshot.docs.forEach((change) => {
+          console.log("New message: ", change.data());
+          temp.push({
+            Message: change.data().message,
+            TimeStamp: new Date().toTimeString().slice(0, 5),
+            Sender: "Me",
+            Image: image,
+          });
+        });
+        console.log("TEMP=", temp);
+        setChatMessages(temp);
+      }
+    );
+  }, []);
 
   return (
     <BlueContainer>
@@ -134,7 +218,7 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-        <PageTitle>{route.params.paramKey}</PageTitle>
+        <PageTitle>{route.params.groupID}</PageTitle>
         {/* <CallButton>
           <Icon
             name="call-outline"
