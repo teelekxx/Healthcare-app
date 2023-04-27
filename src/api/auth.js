@@ -152,7 +152,11 @@ class Auth {
       url: `/job/requester/${option.params.id}`,
       token: option.token,
     };
-    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+
+  }
+   
   static async pharmaGetOrders(option){
     const config = {
       method: HTTP_METHODS.get,
@@ -217,9 +221,6 @@ class Auth {
   }
 
 
-
-    return request(config).catch((err) => ({ ...err, isOk: false }));
-  }
   static async getRecieverByJobId(option) {
     const config = {
       method: HTTP_METHODS.get,
@@ -252,6 +253,8 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+
 }
+
 
 export default Auth;
