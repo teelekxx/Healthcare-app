@@ -57,7 +57,7 @@ import {
 
 import ChatBubble from "../../components/ChatBubble/index";
 import MedicationsBubble from "../../components/MedicationsBubble/index";
-import Prescription from "../../components/Prescription/index";
+// import Prescription from "../../components/Prescription/index";
 import Modal from "react-native-modal";
 import { async } from "@firebase/util";
 
@@ -120,7 +120,6 @@ function ChatScreen({ navigation, route }) {
 
   const handleMedications = (value) => {
     setMedications(value);
-    console.log("MED =", value);
   };
 
   return (
@@ -198,7 +197,7 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
-            <PictureButton onPress={toggleModal}>
+            <PictureButton onPress={() => navigation.navigate("Prescription" , { medication: medications, updateData: handleMedications})  }>
               <Icon
                 name="medkit-outline"
                 type="ionicon"
@@ -221,18 +220,6 @@ function ChatScreen({ navigation, route }) {
               />
             </SendButton>
           </ChatInputContainer>
-          <Modal
-            visible={isModalVisible}
-            animationType="fade"
-            backdropOpacity={0.5}
-          >
-            <SafeAreaView>
-              <Prescription
-                handleModalVisible={toggleModal}
-                handleSaveMedications={handleMedications}
-              />
-            </SafeAreaView>
-          </Modal>
         </BlueFooter>
       </BlueKeyboard>
     </BlueContainer>

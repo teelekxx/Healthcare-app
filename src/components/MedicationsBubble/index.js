@@ -17,6 +17,7 @@ import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 export default function MedicationsBubble({ medications, total }) {
+  console.log("BUBBLE: ", medications)
   return (
     <MessageContainer>
       <MyBubble>
@@ -27,8 +28,8 @@ export default function MedicationsBubble({ medications, total }) {
           return (
             <MedRow>
               <MedColumn>
-                <MedText>{val.Medicines}</MedText>
-                <MedText>x{val.Qty}</MedText>
+                <MedText>{val[0].Medicines}</MedText>
+                <MedText>{val[0].Dosage}</MedText>
               </MedColumn>
             </MedRow>
           );

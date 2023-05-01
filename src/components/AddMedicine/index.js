@@ -27,7 +27,7 @@ import {
   BlueButtonText,
   WhiteKeyboard,
   DateCalendar,
-} from "../../components/components/index.style";
+} from "../components/index.style";
 import React, { useState, useRef, useEffect } from "react";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
@@ -39,7 +39,7 @@ import {
   ScrollView,
 } from "react-native";
 
-export default function Prescription({
+export default function AddMedicine({
   handleModalVisible,
   handleSaveMedications,
 }) {
@@ -54,7 +54,15 @@ export default function Prescription({
   };
 
   const saveAndClose = () => {
-    handleSaveMedications(medications, calculateTotal());
+
+    handleSaveMedications([
+      {
+        Medicines: medicine,
+        Dosage: dosage,
+        Duration: duration,
+        Price: price,
+      },
+    ]);
     handleModalVisible();
   };
 
@@ -67,7 +75,7 @@ export default function Prescription({
         ...medications,
         {
           Medicines: medicine,
-          Doasge: dosage,
+          Dosage: dosage,
           Duration: duration,
           Price: price,
         },
@@ -91,78 +99,40 @@ export default function Prescription({
   return (
     <MedContainer>
       <MedScollable>
-        <MedRow>
-          <MedFirstColumn>
+          <MedColumn>
             <MedText>Medicine</MedText>
-            {medications.length > 0 && (
-              <View>
-                {medications.map((val, index) => {
-                  return <MedText>{val.Medicines}</MedText>;
-                })}
-              </View>
-            )}
             <MedTextInput
               value={medicine}
               onChangeText={(text) => setMedicine(text)}
             ></MedTextInput>
-          </MedFirstColumn>
+          </MedColumn>
           <MedColumn>
             <MedText>Dosage</MedText>
-            {medications.length > 0 && (
-              <View>
-                {medications.map((val, index) => {
-                  return <MedText>{val.Doasge}</MedText>;
-                })}
-              </View>
-            )}
-            <QtyInput
+            <MedTextInput
               keyboardType="numeric"
               maxLength={3}
               value={dosage}
               onChangeText={(text) => setDosage(text)}
-            ></QtyInput>
+            ></MedTextInput>
           </MedColumn>
           <MedColumn>
             <MedText>Duration</MedText>
-            {medications.length > 0 && (
-              <View>
-                {medications.map((val, index) => {
-                  return <MedText>{val.Duration}</MedText>;
-                })}
-              </View>
-            )}
-            <QtyInput
+            <MedTextInput
               keyboardType="numeric"
               maxLength={3}
               value={duration}
               onChangeText={(text) => setDuration(text)}
-            ></QtyInput>
+            ></MedTextInput>
           </MedColumn>
           <MedColumn>
             <MedText>Price</MedText>
-            {medications.length > 0 && (
-              <View>
-                {medications.map((val, index) => {
-                  return <MedText>{val.Price}</MedText>;
-                })}
-              </View>
-            )}
-            <PriceInput
+            <MedTextInput
               keyboardType="numeric"
               maxLength={5}
               value={price}
               onChangeText={(text) => setPrice(text)}
-            ></PriceInput>
+            ></MedTextInput>
           </MedColumn>
-        </MedRow>
-        <CircleButton onPress={addMedicines}>
-          <Icon
-            name="medkit-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={15}
-          />
-        </CircleButton>
       </MedScollable>
       <TotalText>Total: {calculateTotal()}</TotalText>
       <HorizonInput>

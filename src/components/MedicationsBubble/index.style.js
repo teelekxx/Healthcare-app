@@ -83,8 +83,7 @@ export const MedRow = styled.View`
 `;
 
 export const MedColumn = styled.View`
-  padding-right: 40px;
-  padding-left: 10px;
+
 `;
 
 export const MedText = styled.Text`

@@ -1,17 +1,21 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 import { Dimensions } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import MapView, { Marker } from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
+const titleMargin = Platform.OS === "ios" ? 0 : 50;
 
 export const MedContainer = styled.SafeAreaView`
   display: flex;
   height: 100%;
+  // margin-top: ${height * 0.25}px;
   background-color: ${Colors.blue};
   border-radius: 20px;
-  box-shadow: 0px 0px 70px grey;
+`;
+
+export const PreContainer = styled.SafeAreaView`
+  height: 100% ;
+  background-color: ${Colors.blue};
 `;
 
 export const MedScollable = styled.ScrollView`
@@ -77,6 +81,24 @@ export const CircleButton = styled.TouchableOpacity`
   padding: 8px;
 `;
 
+export const AddMedicineButton = styled.TouchableOpacity`
+  margin-top: 50px;
+  margin-bottom:auto ;
+  width: 35px;
+  height: 35px;
+  elevation: 10;
+  background-color: ${Colors.white};
+  border-radius: 100px;
+  align-self: center;
+  justify-content: center;
+  padding: 8px;
+`;
+
+export const Wrapper = styled.SafeAreaView`
+max-height: ${height * 0.66}px;
+`;
+
+
 export const HorizonInput = styled.View`
   display: flex;
   flex-direction: row;
@@ -122,4 +144,25 @@ export const TotalText = styled.Text`
   font-weight: bold;
   margin-left: 20px;
   color: ${Colors.white};
+`;
+
+export const WhiteContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${Colors.white};
+  width: 100%;
+`;
+
+export const MedicineScrollable = styled.ScrollView`
+
+  `;
+
+export const PageTitle = styled.Text`
+  align-self: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: ${Colors.white};
+  margin-left: ${width * 0.035897}px;
+  margin-right: ${width * 0.035897}px;
+  margin-top: ${titleMargin}px;
 `;
