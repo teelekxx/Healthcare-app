@@ -122,10 +122,11 @@ function MapFinder({ navigation, route }) {
   );
 }
 
-const CustomMarker = ({ coordinate }) => {
+const CustomMarker = ({ coordinate,picked }) => {
   const [opacity, setOpacity] = useState(new Animated.Value(1));
 
   useEffect(() => {
+    
     const intervalId = setInterval(() => {
       Animated.sequence([
         Animated.timing(opacity, {
@@ -152,7 +153,7 @@ const CustomMarker = ({ coordinate }) => {
             width: 35,
             height: 35,
             borderRadius: 100,
-            backgroundColor: "orange",
+            backgroundColor: !picked ? "yellow" : "green",
             alignItems: "center",
             justifyContent: "center",
             opacity: opacity,
