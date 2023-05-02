@@ -9,6 +9,8 @@ import { Icon, Avatar } from "react-native-elements";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   Title,
   ItalicText,
@@ -37,6 +39,7 @@ import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
+import NotificationController from "../../firestore/notification";
 
 function PatientPharmacyScreen({ navigation }) {
   const [isWaiting, setWaiting] = useState(false);
@@ -47,6 +50,7 @@ function PatientPharmacyScreen({ navigation }) {
   const [isPharma, setIsPharma] = useState(false);
   const [allJobs, setAllJobs] = useState([]);
   const [foundPharma, setFoundPharma] = useState(null);
+  const auth = useSelector((state) => state.Authentication);
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
     { Name: "Bill Doe", location: "456 Kiki rd. Bangkok." },
@@ -208,6 +212,21 @@ function PatientPharmacyScreen({ navigation }) {
               <FindButton onPress={sendPharmacy}>
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
+              <FindButton onPress={async ()=>{
+                // const expoPushToken = auth.expoPushToken;
+                console.log("expoPushToken = ", auth.expoPushToken);
+                console.log("uid = ", auth.user.uid);
+                // console.log("logout");
+                await NotificationController.removeToken({
+                  uid : auth.user.uid,
+                  token : auth.expoPushToken
+
+                });
+
+              }}>
+                <FindButtonText>logout</FindButtonText>
+              </FindButton>
+
             </ButtonContainer>
           ) : status === "finding" ? (
             <ButtonContainer>

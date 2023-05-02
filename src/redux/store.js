@@ -7,6 +7,8 @@ const authentication = {
   loading: false,
   error: null,
   loginMode: "",
+  expoPushToken: "",
+
 };
 const authenticationSlice = createSlice({
   name: "Authentication",
@@ -28,6 +30,12 @@ const authenticationSlice = createSlice({
       state.token = null;
       state.loading = false;
       state.error = null;
+                
+    },
+    setExpoPushToken(state, value) {
+      console.log("setExpoPushToken", value.payload.expoPushToken);
+      state.expoPushToken = value.payload.expoPushToken;
+
     },
     loading(state, value) {
       state.loading = true;

@@ -152,21 +152,22 @@ const MyStack = () => {
   const responseListener = useRef();
   const auth = useSelector((state) => state.Authentication);
 
-  const appendToFireStore = async ({ uid, token }) => {
-    console.log("uid", uid);
-    console.log("token", token);
+  const appendToFireStore = async ({ uid, token: expoPushToken }) => {
+    console.log("append to firestore",expoPushToken);
+
+    // if(!expoPushToken) return;
+
+    dispatch(AuthenticationActions.setExpoPushToken({ expoPushToken }));
 
     await NotificationController.pushToken({
       uid,
-      token,
+      token: expoPushToken,
     });
   };
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
- 
       if (auth.isAuthenticated)
-
         appendToFireStore({ uid: auth.user.uid, token: token });
     });
 
