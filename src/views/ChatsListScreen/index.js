@@ -38,7 +38,6 @@ function ChatsListScreen({ navigation }) {
   const [myChats, setMyChats] = useState([]);
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
-console.log(isAuthenticated);
 if(!isAuthenticated){
   navigation.navigate("Landing");
 }
