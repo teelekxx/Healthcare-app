@@ -105,7 +105,7 @@ const AmbulanceHistoryScreen = ({ navigation, route }) => {
           <Row>
             <CellHeader>Other Information</CellHeader>
           </Row>
-          <Text>This is for other information</Text>
+          <Text>{orders.otherInformation}</Text>
           <Space></Space>
           <Row>
             <CellHeader>Attached Image</CellHeader>
