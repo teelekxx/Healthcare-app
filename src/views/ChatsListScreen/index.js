@@ -28,11 +28,24 @@ import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../lib/firebase";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 function ChatsListScreen({ navigation }) {
   const [isPatient, setPatient] = useState(true);
   const [myUID, setMyUID] = useState(null);
   const [myChats, setMyChats] = useState([]);
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
+console.log(isAuthenticated);
+if(!isAuthenticated){
+  navigation.navigate("Landing");
+}
+
+
+
+
   const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
     { Name: "Bill Doe", LastMassage: "" },

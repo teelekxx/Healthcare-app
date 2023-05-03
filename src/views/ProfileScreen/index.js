@@ -11,6 +11,8 @@ import {
   RedButton,
   LoadingContainer,
 } from "../../components/components/index.style";
+import { AuthenticationActions } from "../../../src/redux/store.js";
+
 import {
   Background,
   EditButton,
@@ -25,11 +27,17 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
 import { async, jsonEval } from "@firebase/util";
+import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../api/auth";
 function ProfileScreen({ navigation }) {
+  const auth = useSelector((state) => state.Authentication);
+
+
+  
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
+  const dispatch = useDispatch();
 
   const [gender, setGender] = useState("");
   const [id, setID] = useState("");
@@ -64,7 +72,6 @@ function ProfileScreen({ navigation }) {
     return dateString;
   };
   const editMode = () => {
-    console.log(mode);
     if (mode === "Edit") {
       //editing
       setEdit(true);
@@ -94,7 +101,8 @@ function ProfileScreen({ navigation }) {
   };
   const handleLogOut = async () => {
     await Auth.logout();
-    navigation.navigate("SignIn");
+    dispatch(AuthenticationActions.logout({ }));
+    navigation.navigate("Landing");
   };
 
   const onChangeDate = (event, selectedDate) => {

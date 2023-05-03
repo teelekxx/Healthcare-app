@@ -24,10 +24,11 @@ import { AuthenticationActions } from "../../src/redux/store.js";
 import Auth from "../../src/api/auth";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import NavigationService from "../lib/NavigationService";
 
 const Stack = createNativeStackNavigator();
 
-const MyStack = () => {
+const MyStack = ({ navigation }) => {
   const dispatch = useDispatch();
 
   Notifications.setNotificationHandler({
@@ -152,21 +153,18 @@ const MyStack = () => {
   const responseListener = useRef();
   const auth = useSelector((state) => state.Authentication);
 
-  const appendToFireStore = async ({ uid, token }) => {
-    console.log("uid", uid);
-    console.log("token", token);
+  const appendToFireStore = async ({ uid, token: expoPushToken }) => {
+    dispatch(AuthenticationActions.setExpoPushToken({ expoPushToken }));
 
     await NotificationController.pushToken({
       uid,
-      token,
+      token: expoPushToken,
     });
   };
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
- 
       if (auth.isAuthenticated)
-
         appendToFireStore({ uid: auth.user.uid, token: token });
     });
 
@@ -177,7 +175,9 @@ const MyStack = () => {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        // console.log(response.notification.request.content.data.feature);
+
+        dispatch(AuthenticationActions.setNextPage({ nextPage: "History" }));
       });
 
     return () => {
@@ -188,8 +188,6 @@ const MyStack = () => {
     };
   }, []);
 
-  console.log("expoPushToken", expoPushToken);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -197,11 +195,12 @@ const MyStack = () => {
           headerShown: false,
         })}
       >
+        <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInPage} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordPage} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
-        <Stack.Screen name="HomePage" component={HomePage} />
+
         <Stack.Screen name="Map" component={MapPage} />
         <Stack.Screen name="Role" component={RolePage} />
         <Stack.Screen name="SignUpParamedic" component={SignUpParamedicPage} />

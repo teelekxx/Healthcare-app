@@ -3,6 +3,8 @@ import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
 } from "@react-navigation/native";
+import { AuthenticationActions } from "../../../src/redux/store.js";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -18,7 +20,8 @@ import MedInfoSummaryScreen from "../MedInfoSummaryScreen";
 import HistoryScreen from "../HistoryScreen";
 import PatientPharmacyScreen from "../PatientPharmacyScreen/index";
 import FirstaidScreen from "../FirstaidScreen/index";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import CPRScreen from "../FirstaidInfoScreens/CPRScreen/index";
 import HeimlichScreen from "../FirstaidInfoScreens/HeimlichScreen/index";
 import SplintScreen from "../FirstaidInfoScreens/SplintScreen/index";
@@ -144,6 +147,20 @@ function HistoryStack() {
 }
 
 function HomePage({ navigation }) {
+  const auth = useSelector((state) => state.Authentication);
+  const nextPage = auth.nextPage;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      if (nextPage) {
+        dispatch(AuthenticationActions.setNextPage({ nextPage: "" }));
+        navigation.navigate(nextPage);
+      }
+    } 
+
+  }, [nextPage]);
+
   return (
     // <NavigationContainer>
     <Tab.Navigator
