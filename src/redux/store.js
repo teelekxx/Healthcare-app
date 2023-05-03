@@ -8,6 +8,7 @@ const authentication = {
   error: null,
   loginMode: "",
   expoPushToken: "",
+  nextPage: "",
 
 };
 const authenticationSlice = createSlice({
@@ -33,8 +34,10 @@ const authenticationSlice = createSlice({
                 
     },
     setExpoPushToken(state, value) {
-      console.log("setExpoPushToken", value.payload.expoPushToken);
       state.expoPushToken = value.payload.expoPushToken;
+    },
+    setNextPage(state, value) {
+      state.nextPage = value.payload.nextPage;
 
     },
     loading(state, value) {

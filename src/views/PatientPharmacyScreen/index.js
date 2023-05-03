@@ -41,7 +41,7 @@ import { AsyncStorage, Alert } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
 import NotificationController from "../../firestore/notification";
 
-function PatientPharmacyScreen({ navigation }) {
+function PatientPharmacyScreen({  }) {
   const [isWaiting, setWaiting] = useState(false);
   const [isFound, setFound] = useState(false);
   const [status, setStatus] = useState("none");
@@ -51,6 +51,9 @@ function PatientPharmacyScreen({ navigation }) {
   const [allJobs, setAllJobs] = useState([]);
   const [foundPharma, setFoundPharma] = useState(null);
   const auth = useSelector((state) => state.Authentication);
+
+
+
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
     { Name: "Bill Doe", location: "456 Kiki rd. Bangkok." },
@@ -213,15 +216,16 @@ function PatientPharmacyScreen({ navigation }) {
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
               <FindButton onPress={async ()=>{
-                // const expoPushToken = auth.expoPushToken;
-                console.log("expoPushToken = ", auth.expoPushToken);
-                console.log("uid = ", auth.user.uid);
-                // console.log("logout");
-                await NotificationController.removeToken({
-                  uid : auth.user.uid,
-                  token : auth.expoPushToken
+                // console.log("expoPushToken = ", auth.expoPushToken);
+                // console.log("uid = ", auth.user.uid);
+                // await NotificationController.removeToken({
+                //   uid : auth.user.uid,
+                //   token : auth.expoPushToken
 
-                });
+                // });
+
+                navigation.navigate("History")
+
 
               }}>
                 <FindButtonText>logout</FindButtonText>

@@ -22,8 +22,6 @@ class Auth {
   }
 
   static async logout() {
- 
-
     await signOut(auth);
   }
 

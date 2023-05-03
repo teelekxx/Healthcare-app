@@ -16,7 +16,7 @@
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/datetimepicker": "6.5.2",
     "@react-navigation/bottom-tabs": "^6.5.5",
-    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.10",
     "@reduxjs/toolkit": "^1.9.3",
     "@rneui/base": "^4.0.0-rc.7",

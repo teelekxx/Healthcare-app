@@ -24,9 +24,22 @@ import {
   ChatScrollable,
   RoleSwitch,
 } from "./index.style";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 function ChatsListScreen({ navigation }) {
   const [isPatient, setPatient] = useState(true);
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
+console.log(isAuthenticated);
+if(!isAuthenticated){
+  navigation.navigate("Landing");
+}
+
+
+
+
   const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
     { Name: "Bill Doe", LastMassage: "" },
