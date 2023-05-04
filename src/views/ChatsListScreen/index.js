@@ -18,6 +18,8 @@ import ChatModule from "../../components/ChatModule/index";
 import { Icon } from "react-native-elements";
 import SwitchSelector from "react-native-switch-selector";
 import { Colors } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   ChatListContainer,
   ChatListTitle,
@@ -28,22 +30,17 @@ import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { useDispatch, useSelector } from "react-redux";
-
-
 
 function ChatsListScreen({ navigation }) {
   const [isPatient, setPatient] = useState(true);
-  const [myUID, setMyUID] = useState(null);
+  const [myUID, setMyUID] = useState("");
   const [myChats, setMyChats] = useState([]);
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
-if(!isAuthenticated){
-  navigation.navigate("Landing");
-}
 
-
-
+  if (!isAuthenticated) {
+    navigation.navigate("Landing");
+  }
 
   const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
@@ -65,30 +62,35 @@ if(!isAuthenticated){
   ];
 
   useEffect(() => {
-    const getMyUID = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const user = await Auth.getUserByToken({
-        token: token,
-      });
-      if (user.isOk) {
-        setMyUID(user.data.user.uid);
-      }
-    };
-    getMyUID();
-    if (myUID != null) {
-      const q = query(
-        collection(db, "groups"),
-        where("member", "array-contains", myUID)
-      );
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const jobs = [];
-        querySnapshot.forEach((doc) => {
-          console.log("DATA =", doc.data());
-          jobs.push(doc.data());
+    // const getMyUID = async () => {
+    //   const token = await AsyncStorage.getItem("token");
+    //   const user = await Auth.getUserByToken({
+    //     token: token,
+    //   });
+    //   if (user.isOk) {
+    //     setMyUID(user.data.user.uid);
+    //   }
+    // };
+    // getMyUID();
+
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+
+      if (myUID != null) {
+        const q = query(
+          collection(db, "groups"),
+          where("member", "array-contains", myUID)
+        );
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          const jobs = [];
+          querySnapshot.forEach((doc) => {
+            console.log("DATA =", doc.data());
+            jobs.push(doc.data());
+          });
+          console.log("CHATS =", jobs);
+          setMyChats(jobs);
         });
-        console.log("CHATS =", jobs);
-        setMyChats(jobs);
-      });
+      }
     }
   }, [myUID]);
 

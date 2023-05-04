@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   Button,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Dimensions,
+  FlatList,
 } from "react-native";
 import {
   Title,
@@ -53,9 +54,11 @@ import {
   ChatView,
   AddMedicationButton,
   ModalBackground,
+  Wrapper,
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
+import Chat from "../../firestore/chat";
 import {
   collection,
   query,
@@ -63,6 +66,10 @@ import {
   doc,
   onSnapshot,
   orderBy,
+  limitToLast,
+  limit,
+  getDocs,
+  startAfter,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
@@ -70,6 +77,7 @@ import ChatBubble from "../../components/ChatBubble/index";
 import MedicationsBubble from "../../components/MedicationsBubble/index";
 import Prescription from "../../components/Prescription/index";
 import Modal from "react-native-modal";
+import { useDispatch, useSelector } from "react-redux";
 import { async } from "@firebase/util";
 
 const { width, height } = Dimensions.get("window");
@@ -81,10 +89,49 @@ function ChatScreen({ navigation, route }) {
   const [medications, setMedications] = useState([]);
   const [chatName, setChatName] = useState("");
   const [total, setTotal] = useState(null);
-
+  const [myUID, setMyUID] = useState("");
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
   ]);
+  const [posts, setPosts] = useState([]);
+  const [lastKey, setLastKey] = useState("");
+  const [nextPosts_loading, setNextPostsLoading] = useState(false);
+
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
+  const scrollViewRef = useRef(null);
+
+  const getMoreMessages = async () => {
+    try {
+      const queryRef = query(
+        collection(db, "messages", route.params.groupID, "messages"),
+        orderBy("sendAt", "desc"),
+        startAfter(lastKey),
+        limit(5)
+      );
+      let tempKey = "CHANGE ME!";
+      let newMessages = chatMessages;
+      getDocs(queryRef)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            newMessages.push({
+              Message: doc.data().message,
+              TimeStamp: new Date().toTimeString().slice(0, 5),
+              Sender: doc.data().sendBy,
+              Image: image,
+            });
+            setLastKey(doc);
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+      setChatMessages(newMessages);
+      // setLastKey(tempKey);
+    } catch (e) {
+      console.log("TEE", e);
+    }
+  };
 
   const getChatter = async (myUID) => {
     const otherUID = route.params.chat.member.filter(
@@ -159,19 +206,24 @@ function ChatScreen({ navigation, route }) {
   const sendMessage = async () => {
     console.log("SEND!");
     const token = await AsyncStorage.getItem("token");
-    const user = await Auth.postChatMessage({
-      body: {
-        groupId: route.params.groupID,
-        message: currMessage,
-        sendBy: route.params.myUID,
-        seen: false,
-        type: "message",
-      },
-      token: token,
+    await Chat.sendMessage({
+      uid: route.params.myUID,
+      groupId: route.params.groupID,
+      message: currMessage,
     });
-    if (user.isOk) {
-      console.log("response = ", user);
-    }
+    // const user = await Auth.postChatMessage({
+    //   body: {
+    //     groupId: route.params.groupID,
+    //     message: currMessage,
+    //     sendBy: route.params.myUID,
+    //     seen: false,
+    //     type: "message",
+    //   },
+    //   token: token,
+    // });
+    // if (user.isOk) {
+    //   console.log("response = ", user);
+    // }
     setCurrMessage("");
   };
 
@@ -186,44 +238,36 @@ function ChatScreen({ navigation, route }) {
 
   useEffect(() => {
     fetchData(route.params.myUID);
-    // sendInitialMessage();
-    // getMyUID();
-    // if (myUID != null) {
-    //   const q = query(
-    //     collection(db, "groups"),
-    //     where("member", "array-contains", myUID)
-    //   );
-    //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    //     const jobs = [];
-    //     querySnapshot.forEach((doc) => {
-    //       console.log("DATA =", doc.data());
-    //       jobs.push(doc.data());
-    //     });
-    //     console.log("CHATS =", jobs);
-    //     setMyChats(jobs);
-    //   });
-    // }
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+    }
+
+    // postsFirstBatch();
 
     const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
-      orderBy("sendAt")
+      orderBy("sendAt", "desc"),
+      limit(10)
     );
 
+    console.log(route.params.groupID);
     const unsub = onSnapshot(q, (querySnapshot) => {
       console.log("Messages");
+      let tempKey = "";
       let temp = [];
       querySnapshot.docs.forEach((change) => {
-        console.log("New message: ", change.data());
         temp.push({
           Message: change.data().message,
           TimeStamp: new Date().toTimeString().slice(0, 5),
           Sender: change.data().sendBy,
           Image: image,
         });
+        tempKey = change;
       });
       setChatMessages(temp);
+      setLastKey(tempKey);
     });
-  }, []);
+  }, [myUID]);
 
   return (
     <BlueContainer>
@@ -236,7 +280,7 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-        <PageTitle>{route.params.groupID}</PageTitle>
+        <PageTitle>{chatName}</PageTitle>
         {/* <CallButton>
           <Icon
             name="call-outline"
@@ -247,26 +291,28 @@ function ChatScreen({ navigation, route }) {
           <PhoneNumber>0814637245</PhoneNumber>
         </CallButton> */}
       </PageTitleContainer>
-      <ChatField contentContainerStyle={{ minHeight: "2%" }}>
-        {chatMessages.map((val, index) => {
-          return (
-            <BubbleContainer key={index}>
+      <Wrapper
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ChatField
+          data={chatMessages}
+          keyExtractor={(item, index) => index.toString()}
+          inverted={true}
+          onEndReached={getMoreMessages}
+          renderItem={({ item }) => (
+            <BubbleContainer>
               <ChatBubble
-                message={val.Message}
-                timeStamp={val.TimeStamp}
-                sender={val.Sender}
-                image={val.Image}
-              ></ChatBubble>
+                message={item.Message}
+                timeStamp={item.TimeStamp}
+                sender={item.Sender}
+                image={item.Image}
+                myUID={myUID}
+              />
             </BubbleContainer>
-          );
-        })}
-        {medications.length > 0 && (
-          <BubbleContainer>
-            <MedicationsBubble medications={medications}></MedicationsBubble>
-          </BubbleContainer>
-        )}
-      </ChatField>
-
+          )}
+        />
+      </Wrapper>
       <BlueKeyboard
         behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 0 }}

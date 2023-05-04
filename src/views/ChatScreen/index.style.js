@@ -9,10 +9,7 @@ import {
 const { width, height } = Dimensions.get("window");
 const titleMargin = Platform.OS === "ios" ? 0 : 50;
 
-export const ChatField = styled.ScrollView`
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  height: auto;
+export const ChatField = styled.FlatList`
   background-color: ${Colors.white};
   padding: 0px 20px 20px 20px;
 `;
@@ -120,4 +117,11 @@ export const BlueContainer = styled.View`
   flex-direction: column;
   background-color: ${Colors.blue};
   width: 100%;
+`;
+
+export const Wrapper = styled.KeyboardAvoidingView`
+  background-color: ${Colors.red};
+  flex: 1;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;

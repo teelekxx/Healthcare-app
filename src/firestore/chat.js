@@ -1,8 +1,24 @@
-import { setDoc, getDoc, doc, updateDoc,collection, doc, addDoc  } from "@firebase/firestore";
+import {
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+  collection,
+  addDoc,
+} from "@firebase/firestore";
 import { db } from "../lib/firebase";
 
 export default class Chat {
-  static sendMessage = async ({ uid, token }) => {
+  static sendMessage = async ({ uid, groupId, message }) => {
+    const messageData = {
+      message: message,
+      sendBy: uid,
+      sendAt: new Date(),
+      seen: false,
+      type: "message",
+    };
+
+    console.log(messageData);
     const messagesCollectionRef = collection(
       db,
       "messages",
