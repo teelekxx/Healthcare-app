@@ -4,11 +4,12 @@ import Geocoder from "react-native-geocoding";
 import MapView, { Marker, Circle } from "react-native-maps";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import MapViewDirections from "react-native-maps-directions";
 
 const { width, height } = Dimensions.get("window");
 
 function MapFinder({ navigation, route }) {
-  Geocoder.init("AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM");
+  Geocoder.init("AIzaSyB1OZN6aK-ey5ZPoeezFvZ5yhtYyS-CRDs");
   const [radius, setRadius] = useState(1000);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [location, setLocation] = useState(null);
@@ -63,14 +64,14 @@ function MapFinder({ navigation, route }) {
       let location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Low,
       });
-  
+
       // setRegion({
       //   ...region,
       //   latitude: location.coords.latitude,
       //   longitude: location.coords.longitude,
       // });
 
-      if(location){
+      if (location) {
         setLocation(location);
         setRegion({
           ...region,
@@ -78,12 +79,7 @@ function MapFinder({ navigation, route }) {
           longitude: location.coords.longitude,
         });
         // mapRef.current.animateToRegion(region, 500);
-
-       
-
-
       }
-  
 
       // setRegion({
       //   ...region,
@@ -157,6 +153,22 @@ function MapFinder({ navigation, route }) {
         /> */}
 
         {location && (
+          <MapViewDirections
+            origin={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            destination={{
+              latitude: 13.7264,
+              longitude: 100.5093,
+            }}
+            apikey="AIzaSyB1OZN6aK-ey5ZPoeezFvZ5yhtYyS-CRDs"
+            strokeWidth={7}
+            strokeColor="teal"
+          ></MapViewDirections>
+        )}
+
+        {location && (
           <CustomMarker
             coordinate={{
               latitude: location.coords.latitude,
@@ -165,16 +177,15 @@ function MapFinder({ navigation, route }) {
           />
         )}
 
-{selectedLocation && (
+        {selectedLocation && (
           <CustomMarker
-          style={{backgroundColor: "red"}}
+            style={{ backgroundColor: "red" }}
             coordinate={{
               latitude: selectedLocation.latitude,
               longitude: selectedLocation.longitude,
             }}
           />
         )}
-       
 
         {/* <Marker
           coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
@@ -206,7 +217,7 @@ function MapFinder({ navigation, route }) {
   );
 }
 
-const CustomMarker = ({ coordinate, picked,style }) => {
+const CustomMarker = ({ coordinate, picked, style }) => {
   const [opacity, setOpacity] = useState(new Animated.Value(1));
 
   useEffect(() => {
@@ -230,14 +241,14 @@ const CustomMarker = ({ coordinate, picked,style }) => {
 
   return (
     <Marker coordinate={coordinate} anchor={{ x: 0.5, y: 0.5 }}>
-      <View style={{ backgroundColor: "transparent", }}>
+      <View style={{ backgroundColor: "transparent" }}>
         <Animated.View
           style={{
             width: 35,
             height: 35,
             borderRadius: 100,
             backgroundColor: !picked ? "yellow" : "green",
-           ... style,
+            ...style,
             alignItems: "center",
             justifyContent: "center",
             opacity: opacity,
