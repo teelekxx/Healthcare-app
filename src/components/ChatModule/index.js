@@ -7,10 +7,33 @@ import {
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
-export default function ChatModule({ name, lastMassage }) {
-  if (lastMassage == "") {
-    lastMassage = "No massage";
-  }
+import React, { useState, useEffect } from "react";
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
+
+export default function ChatModule({ chat, myUID }) {
+  const [chatName, setChatName] = useState("");
+  const [location, setLocation] = useState(null);
+
+  const getChatter = async (myUID) => {
+    const otherUID = chat.member.filter((jobID) => jobID !== myUID);
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getUserByUID({
+      params: { uid: otherUID },
+    });
+    if (user.isOk) {
+      return user;
+    }
+  };
+  const fetchData = async (myUID) => {
+    const data = await getChatter(myUID);
+    setChatName(data.data.medicalInformation.name);
+  };
+
+  useEffect(() => {
+    fetchData(myUID);
+  }, []);
+
   return (
     <ChatContainer>
       <Avatar
@@ -21,8 +44,8 @@ export default function ChatModule({ name, lastMassage }) {
         overlayContainerStyle={{ backgroundColor: "#efece8" }}
       ></Avatar>
       <DetailContainer>
-        <ChatName>{name}</ChatName>
-        <LastMassage>{lastMassage}</LastMassage>
+        <ChatName>{chatName}</ChatName>
+        <LastMassage>{chat.lastMsg.message}</LastMassage>
       </DetailContainer>
     </ChatContainer>
   );

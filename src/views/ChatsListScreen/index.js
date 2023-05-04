@@ -18,27 +18,29 @@ import ChatModule from "../../components/ChatModule/index";
 import { Icon } from "react-native-elements";
 import SwitchSelector from "react-native-switch-selector";
 import { Colors } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   ChatListContainer,
   ChatListTitle,
   ChatScrollable,
   RoleSwitch,
 } from "./index.style";
-import { useDispatch, useSelector } from "react-redux";
-
-
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
+import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebase";
 
 function ChatsListScreen({ navigation }) {
   const [isPatient, setPatient] = useState(true);
+  const [myUID, setMyUID] = useState("");
+  const [myChats, setMyChats] = useState([]);
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
-console.log(isAuthenticated);
-if(!isAuthenticated){
-  navigation.navigate("Landing");
-}
 
-
-
+  if (!isAuthenticated) {
+    navigation.navigate("Landing");
+  }
 
   const chatsListPatient = [
     { Name: "Andy Doe", LastMassage: "" },
@@ -58,10 +60,44 @@ if(!isAuthenticated){
     { label: "As a patient", value: true },
     { label: "As a Paramedic", value: false },
   ];
+
+  useEffect(() => {
+    // const getMyUID = async () => {
+    //   const token = await AsyncStorage.getItem("token");
+    //   const user = await Auth.getUserByToken({
+    //     token: token,
+    //   });
+    //   if (user.isOk) {
+    //     setMyUID(user.data.user.uid);
+    //   }
+    // };
+    // getMyUID();
+
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+
+      if (myUID != null) {
+        const q = query(
+          collection(db, "groups"),
+          where("member", "array-contains", myUID)
+        );
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          const jobs = [];
+          querySnapshot.forEach((doc) => {
+            console.log("DATA =", doc.data());
+            jobs.push(doc.data());
+          });
+          console.log("CHATS =", jobs);
+          setMyChats(jobs);
+        });
+      }
+    }
+  }, [myUID]);
+
   return (
     <ChatListContainer>
       <HomeTitleContainer>
-      <ChatListTitle>Chats</ChatListTitle>
+        <ChatListTitle>Chats</ChatListTitle>
         <NotificationTouchable
           onPress={() => navigation.navigate("Notification")}
         >
@@ -72,8 +108,8 @@ if(!isAuthenticated){
             size={30}
           />
         </NotificationTouchable>
-        </HomeTitleContainer>
-      
+      </HomeTitleContainer>
+
       <RoleSwitch>
         <SwitchSelector
           options={options}
@@ -88,18 +124,19 @@ if(!isAuthenticated){
       {isPatient ? (
         <SafeAreaView>
           <ChatScrollable>
-            {chatsListPatient.map((val, index) => {
+            {myChats.map((val, index) => {
               return (
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("Chatting", { paramKey: val.Name })
+                    navigation.navigate("Chatting", {
+                      groupID: val.jobId,
+                      myUID: myUID,
+                      chat: val,
+                    })
                   }
                   key={index}
                 >
-                  <ChatModule
-                    name={val.Name}
-                    lastMassage={val.LastMassage}
-                  ></ChatModule>
+                  <ChatModule chat={val} myUID={myUID}></ChatModule>
                 </TouchableOpacity>
               );
             })}
@@ -116,10 +153,7 @@ if(!isAuthenticated){
                   }
                   key={index}
                 >
-                  <ChatModule
-                    name={val.Name}
-                    lastMassage={val.LastMassage}
-                  ></ChatModule>
+                  <ChatModule chat={val}></ChatModule>
                 </TouchableOpacity>
               );
             })}

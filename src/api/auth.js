@@ -136,6 +136,16 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async getUserByUID(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/user/uid/${option.params.uid}`,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
   static async getUserByToken(option) {
     const config = {
       method: HTTP_METHODS.get,
@@ -240,6 +250,17 @@ class Auth {
     const config = {
       method: HTTP_METHODS.post,
       url: `/job/cancel`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async postChatMessage(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/chat/message`,
       body: option.body,
       token: option.token,
     };
