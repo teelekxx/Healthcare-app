@@ -9,6 +9,7 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Colors } from "../../constants";
 import { Icon } from "react-native-elements";
+import useImagePicker  from "../../hooks/useImagePicker.js"
 import {
   Title,
   ItalicText,
@@ -58,6 +59,8 @@ import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
 
 function RequestScreen({ navigation }) {
+  const [{ images }, { pickImage }] = useImagePicker();
+
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
   const [isBreathlessness, setBreathlessness] = useState(false);
@@ -106,24 +109,23 @@ function RequestScreen({ navigation }) {
     }
   }, []);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsMultipleSelection: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    if (!result.canceled) {
-      const images = result.assets.map((asset) => asset.uri);
-      if (images.length <= 3) {
-        setImage(images);
-      } else {
-        createAlert("You can only pick up to 3 photos");
-      }
-    }
-  };
+  //   if (!result.canceled) {
+  //     const images = result.assets.map((asset) => asset.uri);
+  //     if (images.length <= 3) {
+  //       setImage(images);
+  //     } else {
+  //       createAlert("You can only pick up to 3 photos");
+  //     }
+  //   }
+  // };
 
   const removeImage = (index) => {
     const newImages = [...image]; // Create a new array copy
@@ -152,10 +154,10 @@ function RequestScreen({ navigation }) {
     try {
       checkSymptoms();
 
-      console.log(image);
+      console.log({image});
       const formData = new FormData();
-      console.log("here");
-      // const localUri = await AssetToLocalUri(image)
+      // console.log("here");
+      const localUri = await AssetToLocalUri(image)
       // formData.append("attachedImages", localUri);
       formData.append("contactNumber", phoneNumber);
       formData.append("symptoms", symptoms);
@@ -169,15 +171,17 @@ function RequestScreen({ navigation }) {
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
-          body: {
-            contactNumber: phoneNumber,
-            symptoms: symptoms,
-            otherInformation: otherInformation,
-            acceptanceStatus: "waiting",
-            deliveringStatus: "waiting",
-            latitude: latitude,
-            longitude: longitude,
-          },
+          body: formData
+          // : {
+          //   contactNumber: phoneNumber,
+          //   symptoms: symptoms,
+          //   otherInformation: otherInformation,
+          //   acceptanceStatus: "waiting",
+          //   deliveringStatus: "waiting",
+          //   latitude: latitude,
+          //   longitude: longitude,
+          // },
+          ,
           token: token,
         });
         if (user.isOk) {
@@ -313,9 +317,9 @@ function RequestScreen({ navigation }) {
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
-        <BlueButton onPress={sendEmergencyCase}>
+        {/* <BlueButton onPress={sendEmergencyCase}>
           <WhiteButtonText>Request</WhiteButtonText>
-        </BlueButton>
+        </BlueButton> */}
       </HorizonInput3>
     </RequestContainer>
   );

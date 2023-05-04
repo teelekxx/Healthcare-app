@@ -216,6 +216,10 @@ function PatientPharmacyScreen({  }) {
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
               <FindButton onPress={async ()=>{
+
+
+
+
                 // console.log("expoPushToken = ", auth.expoPushToken);
                 // console.log("uid = ", auth.user.uid);
                 // await NotificationController.removeToken({
@@ -224,11 +228,11 @@ function PatientPharmacyScreen({  }) {
 
                 // });
 
-                navigation.navigate("History")
+                // navigation.navigate("History")
 
 
               }}>
-                <FindButtonText>logout</FindButtonText>
+                <FindButtonText>test</FindButtonText>
               </FindButton>
 
             </ButtonContainer>
