@@ -54,6 +54,8 @@ export default function Prescription({ navigation, route }) {
   const [dosage, setDosage] = useState("");
   const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatingIndex, setUpdatingIndex] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { medication } = route.params;
 
@@ -62,16 +64,47 @@ export default function Prescription({ navigation, route }) {
   };
 
   const handleMedications = (value) => {
-    setMedication([ ...medications, value]);
+    setMedication([...medications, value]);
+  };
+
+  const handleDeleteMedications = (value) => {
+    const newMedicines = [...medications]; // Create a new array copy
+    newMedicines.splice(value, 1); // Remove the item at the given index
+    setMedication(newMedicines); // Update the state with the new array
+  };
+
+  const handleEditMedications = (index, data) => {
+    const newMedicines = [...medications];
+    newMedicines[index] = data;
+    
+    setMedication(newMedicines);
+    console.log(medications);
+    setIsUpdate(false);
+    setUpdatingIndex(null);
+  };
+
+  const openEditMedications = (value) => {
+    setUpdatingIndex(value);
+    setIsUpdate(true);
+    setIsModalVisible(!isModalVisible);
   };
 
   const saveAndClose = () => {
-    route.params.updateData(medications)
-    navigation.goBack()
+    route.params.updateData(medications);
+    navigation.goBack();
+  };
+
+  const calculateTotal = () => {
+    let totalPrice = 0;
+    medications.forEach((medicine) => {
+      const { Price } = medicine[0];
+      totalPrice += Number(Price);
+    });
+    return totalPrice;
   };
 
   useEffect(() => {
-    if(medications.length <= 0){
+    if (medications.length <= 0) {
       setMedication(medication);
     }
   }, []);
@@ -94,33 +127,45 @@ export default function Prescription({ navigation, route }) {
       </PageTitleContainer>
       {medications.length > 0 && (
         <Wrapper>
-        <MedicineScrollable>
-          {medications.map((val, index) => {
-            return <MedicineOrder data={val}></MedicineOrder>;
-          })}
-        </MedicineScrollable>
+          <MedicineScrollable>
+            {medications.map((val, index) => {
+              return (
+                <MedicineOrder
+                  data={val}
+                  handleDeleteMedications={handleDeleteMedications}
+                  handleEditMedications={openEditMedications}
+                  myIndex={index}
+                ></MedicineOrder>
+              );
+            })}
+          </MedicineScrollable>
         </Wrapper>
       )}
+      <TotalText>Total : {calculateTotal()}</TotalText>
       <AddMedicineButton onPress={toggleModal}>
-      <Icon
-            name="add-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={20}
-          />
+        <Icon name="add-outline" type="ionicon" color={Colors.blue} size={20} />
       </AddMedicineButton>
       <Modal
-            visible={isModalVisible}
-            animationType="fade"
-            backdropOpacity={0.5}
-          >
-            <SafeAreaView>
-              <AddMedicine
-                handleModalVisible={toggleModal}
-                handleSaveMedications={handleMedications}
-              />
-            </SafeAreaView>
-          </Modal>
+        visible={isModalVisible}
+        animationType="fade"
+        backdropOpacity={0.5}
+      >
+        <SafeAreaView>
+          {isUpdate ? (
+            <AddMedicine
+              handleModalVisible={toggleModal}
+              handleSaveMedications={handleEditMedications}
+              index={updatingIndex}
+            />
+          ) : (
+            <AddMedicine
+              handleModalVisible={toggleModal}
+              handleSaveMedications={handleMedications}
+              index={updatingIndex}
+            />
+          )}
+        </SafeAreaView>
+      </Modal>
     </PreContainer>
   );
 }

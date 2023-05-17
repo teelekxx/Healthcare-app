@@ -21,7 +21,7 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 
-export default function MedicineOrder({ data }) {
+export default function MedicineOrder({ data, handleDeleteMedications, handleEditMedications, myIndex }) {
   const [medicineName, setMedicineName] = useState("MED");
   const [dosage, setDosage] = useState("DOSE");
   const [duration, setDuration] = useState("DURATION");
@@ -100,11 +100,11 @@ export default function MedicineOrder({ data }) {
         <TimeStamp>{duration}</TimeStamp>
         </PatientNameContainer>
         <HorizonInput3>
-          <BlueBorderButton>
+          <BlueBorderButton onPress={() => handleDeleteMedications(myIndex)}>
             <BlueButtonText>Delete</BlueButtonText>
           </BlueBorderButton>
-          <BlueButton>
-            <WhiteButtonText>Edit</WhiteButtonText>
+          <BlueButton onPress={() => handleEditMedications(myIndex)}>
+            <WhiteButtonText >Edit</WhiteButtonText>
           </BlueButton>
         </HorizonInput3>
       </DetailContainer>

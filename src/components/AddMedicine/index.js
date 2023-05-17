@@ -42,6 +42,7 @@ import {
 export default function AddMedicine({
   handleModalVisible,
   handleSaveMedications,
+  index
 }) {
   const [medications, setMedication] = useState([]);
   const [medicine, setMedicine] = useState("");
@@ -54,7 +55,16 @@ export default function AddMedicine({
   };
 
   const saveAndClose = () => {
-
+    if(index != null){    handleSaveMedications(index, [
+      {
+        Medicines: medicine,
+        Dosage: dosage,
+        Duration: duration,
+        Price: price,
+      },
+    ]);
+  }
+  else{
     handleSaveMedications([
       {
         Medicines: medicine,
@@ -63,28 +73,9 @@ export default function AddMedicine({
         Price: price,
       },
     ]);
-    handleModalVisible();
-  };
+  }
 
-  const addMedicines = () => {
-    console.log("ADD MED");
-    if (medicine.trim() === "") {
-      return;
-    } else {
-      setMedication([
-        ...medications,
-        {
-          Medicines: medicine,
-          Dosage: dosage,
-          Duration: duration,
-          Price: price,
-        },
-      ]);
-      setMedicine("");
-      setDosage("");
-      setDuration("");
-      setPrice("");
-    }
+    handleModalVisible();
   };
 
   const calculateTotal = () => {
@@ -134,7 +125,7 @@ export default function AddMedicine({
             ></MedTextInput>
           </MedColumn>
       </MedScollable>
-      <TotalText>Total: {calculateTotal()}</TotalText>
+      <TotalText>Total: {price}</TotalText>
       <HorizonInput>
         <CloseButton onPress={closeModal}>
           <WhiteButtonText>Close</WhiteButtonText>
