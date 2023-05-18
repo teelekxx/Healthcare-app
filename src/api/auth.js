@@ -268,6 +268,17 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async putStaffOnDuty(option) {
+    const config = {
+      method: HTTP_METHODS.put,
+      url: `/medical/staff/tok/update`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
 }
 
 export default Auth;
