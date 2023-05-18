@@ -215,7 +215,7 @@ function PatientPharmacyScreen({  }) {
               <FindButton onPress={sendPharmacy}>
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
-              <FindButton onPress={async ()=>{
+              {/* <FindButton onPress={async ()=>{
 
 
 
@@ -233,7 +233,7 @@ function PatientPharmacyScreen({  }) {
 
               }}>
                 <FindButtonText>test</FindButtonText>
-              </FindButton>
+              </FindButton> */}
 
             </ButtonContainer>
           ) : status === "finding" ? (
