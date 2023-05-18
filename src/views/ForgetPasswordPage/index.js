@@ -25,20 +25,34 @@ import { Colors } from "../../constants";
 import BackButton from "../../components/BackButton";
 import Auth from "../../api/auth";
 import { Formik, ErrorMessage } from "formik";
-
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 function ForgetPasswordPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function createAlert(message) {
-    Alert.alert("Try Again", message, [
+  function createAlert() {
+    Alert.alert("Forget password", "Password reset email sent!", [
       {
         text: "Ok",
         style: "cancel",
       },
     ]);
   }
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, values.email)
+    .then(() => {
+      // Password reset email sent!
+      // ..
+      createAlert();
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
     //Send forget password
+    console.log("values.email",values.email)
+
   };
   return (
     <BlueContainer>
@@ -51,7 +65,7 @@ function ForgetPasswordPage({ navigation }) {
         />
       </CircleButton>
       <Formik
-        initialValues={{email}}
+        initialValues={{email:email}}
         onSubmit={handleSubmit}
         validate={(values) => {
           const errors = {};
