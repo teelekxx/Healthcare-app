@@ -81,6 +81,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Prescription from "../views/PrescriptionScreen";
 import LandingPage from "../views/LandingPage/index";
 import SignInPage from "../views/SignInPage/index";
 import SignUpPage from "../views/SignUpPage/index";
@@ -96,7 +97,6 @@ import ChatScreen from "../views/ChatScreen";
 import MedInfoSummaryScreen from "../views/MedInfoSummaryScreen";
 import HistoryDetailScreen from "../views/HistoryDetailScreen";
 import AmbulanceHistoryScreen from "../views/AmbulanceHistoryScreen";
-import Prescription from "../views/PrescriptionScreen";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
