@@ -69,6 +69,7 @@ import {
   limitToLast,
   limit,
   getDocs,
+  updateDoc,
   startAfter,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -90,6 +91,8 @@ function ChatScreen({ navigation, route }) {
   const [chatName, setChatName] = useState("");
   const [total, setTotal] = useState(null);
   const [myUID, setMyUID] = useState("");
+  const [otherUID, setOtherUID] = useState("");
+  const [isPharma, setIsPharma] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
   ]);
@@ -116,9 +119,10 @@ function ChatScreen({ navigation, route }) {
           querySnapshot.forEach((doc) => {
             newMessages.push({
               Message: doc.data().message,
-              TimeStamp: new Date().toTimeString().slice(0, 5),
+              TimeStamp: doc.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
               Sender: doc.data().sendBy,
               Image: image,
+              Seen: doc.data().seen
             });
             setLastKey(doc);
           });
@@ -129,7 +133,7 @@ function ChatScreen({ navigation, route }) {
       setChatMessages(newMessages);
       // setLastKey(tempKey);
     } catch (e) {
-      console.log("TEE", e);
+      console.log(e);
     }
   };
 
@@ -242,6 +246,17 @@ function ChatScreen({ navigation, route }) {
       setMyUID(auth.user.uid);
     }
 
+    const getUserRole = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getUserProfile({
+        token: token,
+      });
+      if (user.data.user.role === "pharmacist") {
+        setIsPharma(true);
+      }
+    };
+    getUserRole();
+
     // postsFirstBatch();
 
     const q = query(
@@ -250,24 +265,44 @@ function ChatScreen({ navigation, route }) {
       limit(10)
     );
 
-    console.log(route.params.groupID);
     const unsub = onSnapshot(q, (querySnapshot) => {
-      console.log("Messages");
       let tempKey = "";
+      let tempUID = "";
       let temp = [];
       querySnapshot.docs.forEach((change) => {
         temp.push({
           Message: change.data().message,
-          TimeStamp: new Date().toTimeString().slice(0, 5),
+          TimeStamp: change.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           Sender: change.data().sendBy,
           Image: image,
+          Seen: change.data().seen
         });
         tempKey = change;
+        if(change.data().sendBy !== myUID){
+          tempUID = change.data().sendBy
+        }
       });
+      setOtherUID(tempUID);
       setChatMessages(temp);
       setLastKey(tempKey);
     });
-  }, [myUID]);
+
+    const updateDocuments = async () => {
+      try {
+        const querySnapshot = await getDocs(query(
+          collection(db, "messages", route.params.groupID, "messages"),
+           where('sendBy', '==', otherUID)
+        ));
+        querySnapshot.forEach(async (doc) => {
+          await updateDoc(doc.ref, { seen: true });
+        });
+      } catch (error) {
+        console.error('Error updating documents:', error);
+      }
+    };
+
+    updateDocuments(); //
+  }, [myUID, isPharma]);
 
   return (
     <BlueContainer>
@@ -307,6 +342,7 @@ function ChatScreen({ navigation, route }) {
                 timeStamp={item.TimeStamp}
                 sender={item.Sender}
                 image={item.Image}
+                seen={item.Seen}
                 myUID={myUID}
               />
             </BubbleContainer>
@@ -346,7 +382,8 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
-            <PictureButton onPress={toggleModal}>
+            {isPharma && (
+              <PictureButton onPress={toggleModal}>
               <Icon
                 name="medkit-outline"
                 type="ionicon"
@@ -354,6 +391,7 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
+          )}
             <GreyInput
               multiline={true}
               value={currMessage}

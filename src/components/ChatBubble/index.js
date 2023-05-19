@@ -8,7 +8,9 @@ import {
   BlueMessage,
   SelectedImage,
   ImagesContainer,
+  ReadLabel,
   MyImage,
+  UnderBubble,
 } from "./index.style";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
@@ -18,6 +20,7 @@ export default function ChatBubble({
   timeStamp,
   sender,
   image,
+  seen,
   myUID,
 }) {
   if (image === null) {
@@ -41,8 +44,13 @@ export default function ChatBubble({
               <WhiteMessage>{message}</WhiteMessage>
             </MyBubble>
           )}
+          <UnderBubble>
+          {seen &&(
+            <ReadLabel>Read</ReadLabel>
 
+          )}
           <MyTimeStamp>{timeStamp}</MyTimeStamp>
+          </UnderBubble>
         </MessageContainer>
       );
     } else {

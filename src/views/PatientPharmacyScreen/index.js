@@ -96,7 +96,6 @@ function PatientPharmacyScreen({  }) {
 
   const fetchData = async (jobId) => {
     const data = await getReciever(jobId);
-    console.log("DATA =", data);
     setFoundPharma(data);
   };
 
