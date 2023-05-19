@@ -195,8 +195,9 @@ const MyStack = ({ navigation }) => {
           headerShown: false,
         })}
       >
-        <Stack.Screen name="HomePage" component={HomePage} />
+        
         <Stack.Screen name="Landing" component={LandingPage} />
+        <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="SignIn" component={SignInPage} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordPage} />
         <Stack.Screen name="SignUp" component={SignUpPage} />

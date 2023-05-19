@@ -28,3 +28,10 @@ export const EditButtonText = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
 `;
+export const OnDutyWrapper = styled.View`
+flex-direction: row;
+justify-content: space-between;
+align-items:center;
+margin-top:15px;
+padding-right:5px;
+`
