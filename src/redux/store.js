@@ -7,6 +7,9 @@ const authentication = {
   loading: false,
   error: null,
   loginMode: "",
+  expoPushToken: "",
+  nextPage: "",
+
 };
 const authenticationSlice = createSlice({
   name: "Authentication",
@@ -28,6 +31,14 @@ const authenticationSlice = createSlice({
       state.token = null;
       state.loading = false;
       state.error = null;
+                
+    },
+    setExpoPushToken(state, value) {
+      state.expoPushToken = value.payload.expoPushToken;
+    },
+    setNextPage(state, value) {
+      state.nextPage = value.payload.nextPage;
+
     },
     loading(state, value) {
       state.loading = true;

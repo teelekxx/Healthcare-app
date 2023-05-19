@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   Button,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Dimensions,
+  FlatList,
 } from "react-native";
 import {
   Title,
@@ -53,12 +54,31 @@ import {
   ChatView,
   AddMedicationButton,
   ModalBackground,
+  Wrapper,
 } from "./index.style";
+import Auth from "../../api/auth";
+import { AsyncStorage, Alert } from "react-native";
+import Chat from "../../firestore/chat";
+import {
+  collection,
+  query,
+  where,
+  doc,
+  onSnapshot,
+  orderBy,
+  limitToLast,
+  limit,
+  getDocs,
+  updateDoc,
+  startAfter,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
 
 import ChatBubble from "../../components/ChatBubble/index";
 import MedicationsBubble from "../../components/MedicationsBubble/index";
 // import Prescription from "../../components/Prescription/index";
 import Modal from "react-native-modal";
+import { useDispatch, useSelector } from "react-redux";
 import { async } from "@firebase/util";
 
 const { width, height } = Dimensions.get("window");
@@ -68,11 +88,71 @@ function ChatScreen({ navigation, route }) {
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [medications, setMedications] = useState([]);
+  const [chatName, setChatName] = useState("");
   const [total, setTotal] = useState(null);
-
+  const [myUID, setMyUID] = useState("");
+  const [otherUID, setOtherUID] = useState("");
+  const [isPharma, setIsPharma] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
   ]);
+  const [posts, setPosts] = useState([]);
+  const [lastKey, setLastKey] = useState("");
+  const [nextPosts_loading, setNextPostsLoading] = useState(false);
+
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
+  const scrollViewRef = useRef(null);
+
+  const getMoreMessages = async () => {
+    try {
+      const queryRef = query(
+        collection(db, "messages", route.params.groupID, "messages"),
+        orderBy("sendAt", "desc"),
+        startAfter(lastKey),
+        limit(5)
+      );
+      let tempKey = "CHANGE ME!";
+      let newMessages = chatMessages;
+      getDocs(queryRef)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            newMessages.push({
+              Message: doc.data().message,
+              TimeStamp: doc.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              Sender: doc.data().sendBy,
+              Image: image,
+              Seen: doc.data().seen
+            });
+            setLastKey(doc);
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+      setChatMessages(newMessages);
+      // setLastKey(tempKey);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getChatter = async (myUID) => {
+    const otherUID = route.params.chat.member.filter(
+      (jobID) => jobID !== myUID
+    );
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getUserByUID({
+      params: { uid: otherUID },
+    });
+    if (user.isOk) {
+      return user;
+    }
+  };
+  const fetchData = async (myUID) => {
+    const data = await getChatter(myUID);
+    setChatName(data.data.medicalInformation.name);
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -95,23 +175,60 @@ function ChatScreen({ navigation, route }) {
     setImage(newImages); // Update the state with the new array
   };
 
-  const sendMessage = () => {
-    console.log("images =", image);
-    if (currMessage.trim() === "" && image === null) {
-      return;
-    } else {
-      setChatMessages([
-        ...chatMessages,
-        {
-          Message: currMessage,
-          TimeStamp: new Date().toTimeString().slice(0, 5),
-          Sender: "Me",
-          Image: image,
+  const addMessage = (message, image) => {
+    setChatMessages([
+      ...chatMessages,
+      {
+        Message: message,
+        TimeStamp: new Date().toTimeString().slice(0, 5),
+        Sender: "Me",
+        Image: image,
+      },
+    ]);
+  };
+
+  const sendInitialMessage = async () => {
+    const sendInitMessage = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.postChatMessage({
+        body: {
+          groupId: route.params.groupID,
+          message: "Hellonearh",
+          sendBy: route.params.myUID,
+          seen: false,
+          type: "message",
         },
-      ]);
-      setCurrMessage("");
-      setImage(null);
-    }
+        token: token,
+      });
+      if (user.isOk) {
+        console.log("response = ", user);
+      }
+    };
+    await sendInitMessage();
+  };
+
+  const sendMessage = async () => {
+    console.log("SEND!");
+    const token = await AsyncStorage.getItem("token");
+    await Chat.sendMessage({
+      uid: route.params.myUID,
+      groupId: route.params.groupID,
+      message: currMessage,
+    });
+    // const user = await Auth.postChatMessage({
+    //   body: {
+    //     groupId: route.params.groupID,
+    //     message: currMessage,
+    //     sendBy: route.params.myUID,
+    //     seen: false,
+    //     type: "message",
+    //   },
+    //   token: token,
+    // });
+    // if (user.isOk) {
+    //   console.log("response = ", user);
+    // }
+    setCurrMessage("");
   };
 
   const toggleModal = () => {
@@ -121,6 +238,70 @@ function ChatScreen({ navigation, route }) {
   const handleMedications = (value) => {
     setMedications(value);
   };
+
+  useEffect(() => {
+    fetchData(route.params.myUID);
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+    }
+
+    const getUserRole = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getUserProfile({
+        token: token,
+      });
+      if (user.data.user.role === "pharmacist") {
+        setIsPharma(true);
+      }
+    };
+    getUserRole();
+
+    // postsFirstBatch();
+
+    const q = query(
+      collection(db, "messages", route.params.groupID, "messages"),
+      orderBy("sendAt", "desc"),
+      limit(10)
+    );
+
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let tempKey = "";
+      let tempUID = "";
+      let temp = [];
+      querySnapshot.docs.forEach((change) => {
+        temp.push({
+          Message: change.data().message,
+          TimeStamp: change.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          Sender: change.data().sendBy,
+          Image: image,
+          Seen: change.data().seen
+        });
+        tempKey = change;
+        if(change.data().sendBy !== myUID){
+          tempUID = change.data().sendBy
+        }
+      });
+      setOtherUID(tempUID);
+      setChatMessages(temp);
+      setLastKey(tempKey);
+    });
+
+    const updateDocuments = async () => {
+      try {
+        const querySnapshot = await getDocs(query(
+          collection(db, "messages", route.params.groupID, "messages"),
+           where('sendBy', '==', otherUID)
+        ));
+        querySnapshot.forEach(async (doc) => {
+          await updateDoc(doc.ref, { seen: true });
+        });
+      } catch (error) {
+        console.error('Error updating documents:', error);
+      }
+    };
+
+    updateDocuments(); //
+  }, [myUID, isPharma]);
 
   return (
     <BlueContainer>
@@ -133,7 +314,7 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-        <PageTitle>{route.params.paramKey}</PageTitle>
+        <PageTitle>{chatName}</PageTitle>
         {/* <CallButton>
           <Icon
             name="call-outline"
@@ -144,26 +325,29 @@ function ChatScreen({ navigation, route }) {
           <PhoneNumber>0814637245</PhoneNumber>
         </CallButton> */}
       </PageTitleContainer>
-      <ChatField contentContainerStyle={{ minHeight: "2%" }}>
-        {chatMessages.map((val, index) => {
-          return (
-            <BubbleContainer key={index}>
+      <Wrapper
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ChatField
+          data={chatMessages}
+          keyExtractor={(item, index) => index.toString()}
+          inverted={true}
+          onEndReached={getMoreMessages}
+          renderItem={({ item }) => (
+            <BubbleContainer>
               <ChatBubble
-                message={val.Message}
-                timeStamp={val.TimeStamp}
-                sender={val.Sender}
-                image={val.Image}
-              ></ChatBubble>
+                message={item.Message}
+                timeStamp={item.TimeStamp}
+                sender={item.Sender}
+                image={item.Image}
+                seen={item.Seen}
+                myUID={myUID}
+              />
             </BubbleContainer>
-          );
-        })}
-        {medications.length > 0 && (
-          <BubbleContainer>
-            <MedicationsBubble medications={medications}></MedicationsBubble>
-          </BubbleContainer>
-        )}
-      </ChatField>
-
+          )}
+        />
+      </Wrapper>
       <BlueKeyboard
         behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 0 }}
@@ -197,7 +381,8 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
-            <PictureButton onPress={() => navigation.navigate("Prescription" , { medication: medications, updateData: handleMedications})  }>
+            {isPharma && (
+              <PictureButton onPress={() => navigation.navigate("Prescription" , { medication: medications, updateData: handleMedications})  }>
               <Icon
                 name="medkit-outline"
                 type="ionicon"
@@ -205,6 +390,7 @@ function ChatScreen({ navigation, route }) {
                 size={21}
               />
             </PictureButton>
+          )}
             <GreyInput
               multiline={true}
               value={currMessage}

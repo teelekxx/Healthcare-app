@@ -26,13 +26,23 @@ export const WhiteMessage = styled.Text`
   font-weight: bold;
   text-align: right;
 `;
+export const UnderBubble = styled.View`
+  flex-direction: row;
+  margin-left: auto;
+`;
 
 export const MyTimeStamp = styled.Text`
   color: ${Colors.grey};
 
   font-size: 10px;
-  text-align: right;
   padding-right: 20px;
+`;
+
+export const ReadLabel = styled.Text`
+  color: ${Colors.blue};
+
+  font-size: 10px;
+  padding-right: 10px;
 `;
 
 export const OthersBubble = styled.View`

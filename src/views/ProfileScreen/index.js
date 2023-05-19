@@ -11,11 +11,14 @@ import {
   RedButton,
   LoadingContainer,
 } from "../../components/components/index.style";
+import { AuthenticationActions } from "../../../src/redux/store.js";
+import Toggle from "react-native-toggle-input";
 import {
   Background,
   EditButton,
   EditButtonText,
   AvaContainer,
+  OnDutyWrapper
 } from "./index.style";
 
 import { useEffect, useState } from "react";
@@ -25,17 +28,22 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
 import { async, jsonEval } from "@firebase/util";
+import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../api/auth";
 function ProfileScreen({ navigation }) {
+  const auth = useSelector((state) => state.Authentication);
+
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
+  const dispatch = useDispatch();
 
   const [gender, setGender] = useState("");
   const [id, setID] = useState("");
   const [tel, setTel] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState("");
+  const [onDuty, setOnDuty] = useState(null);
 
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
@@ -44,7 +52,7 @@ function ProfileScreen({ navigation }) {
   ]);
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
-
+  const [staffId, setStaffId] = useState("")
   const [text, setText] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -64,7 +72,6 @@ function ProfileScreen({ navigation }) {
     return dateString;
   };
   const editMode = () => {
-    console.log(mode);
     if (mode === "Edit") {
       //editing
       setEdit(true);
@@ -94,8 +101,10 @@ function ProfileScreen({ navigation }) {
   };
   const handleLogOut = async () => {
     await Auth.logout();
-    navigation.navigate("SignIn");
+    dispatch(AuthenticationActions.logout({}));
+    navigation.navigate("Landing");
   };
+
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -110,10 +119,10 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
+  const [toggle, setToggle] = useState(false)
   const [isLoading, setIsloading] = useState(true);
   useEffect(() => {
     try {
-      
       const getUserData = async () => {
         setIsloading(true);
         const token = await AsyncStorage.getItem("token");
@@ -133,17 +142,37 @@ function ProfileScreen({ navigation }) {
         if (role === "paramedics") {
           setLicenseNum(user.data.paramedics.licenseId);
           setExpiryDate(user.data.paramedics.licenseExpireDate);
+          if(onDuty===null){
+            setOnDuty(user.data.paramedics.isOnDuty);
+          }
+          setStaffId(user.data.paramedics._id);
         }
-        if(role==="pharmacist"){
+        if (role === "pharmacist") {
           setLicenseNum(user.data.pharmacist.licenseId);
           setExpiryDate(user.data.pharmacist.licenseExpireDate);
-      };}
+        }
+      };
+      const putParamedics = async () =>{
+        const token = await AsyncStorage.getItem("token");
+        console.log("before:" ,onDuty)
+        await Auth.putStaffOnDuty({
+          body:{
+            isOnDuty: onDuty
+          },
+          token: token,
+        })
+        console.log("after:" ,onDuty)
+      }
       
+
       getUserData();
+      if(role==="paramedics"){
+          putParamedics()
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [role]);
+  }, [role, onDuty]);
   if (isLoading) {
     return (
       <LoadingContainer>
@@ -240,6 +269,18 @@ function ProfileScreen({ navigation }) {
           <InfoInput value={licenseNum} editable={false} />
           <GreyText>License expiry date</GreyText>
           <InfoInput value={expiryDate} editable={false} />
+          <OnDutyWrapper>
+          <GreyText>On duty status</GreyText>
+          <Toggle
+            toggle={onDuty}
+            setToggle={setOnDuty}
+            color={"#00a5cb"}
+            size={20}
+            filled={true}
+            circleColor={"white"}
+          />
+          </OnDutyWrapper>
+          
         </View>
       )}
       {role === "pharmacist" && (
