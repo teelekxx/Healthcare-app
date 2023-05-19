@@ -201,7 +201,7 @@ const MyStack = ({ navigation }) => {
         <Stack.Screen name="SignIn" component={SignInPage} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordPage} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
-
+        <Stack.Screen name="Prescription" component={Prescription} />
         <Stack.Screen name="Map" component={MapPage} />
         <Stack.Screen name="Role" component={RolePage} />
         <Stack.Screen name="SignUpParamedic" component={SignUpParamedicPage} />
