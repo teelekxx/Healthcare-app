@@ -78,7 +78,6 @@ export default function Prescription({ navigation, route }) {
     newMedicines[index] = data;
     
     setMedication(newMedicines);
-    console.log(medications);
     setIsUpdate(false);
     setUpdatingIndex(null);
   };
