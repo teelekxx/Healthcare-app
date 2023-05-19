@@ -60,7 +60,7 @@ export const Input = styled.TextInput`
   height: 40px;
 `;
 
-export const BlueContainer = styled.View`
+export const BlueContainer = styled.SafeAreaView`
   flex: 1;
   flex-direction: column;
   background-color: ${Colors.blue};

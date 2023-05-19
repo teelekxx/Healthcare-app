@@ -14,6 +14,7 @@ import SignUpPharmacistPage from "../views/SignUpPharmacistPage";
 import SignUpRegularPage from "../views/SignUpRegularPage";
 import MedInfoPage from "../views/MedInfoPage";
 import ForgetPasswordPage from "../views/ForgetPasswordPage";
+import Prescription from "../views/PrescriptionScreen";
 import ChatScreen from "../views/ChatScreen";
 import MedInfoSummaryScreen from "../views/MedInfoSummaryScreen";
 import HistoryDetailScreen from "../views/HistoryDetailScreen";
@@ -195,7 +196,6 @@ const MyStack = ({ navigation }) => {
           headerShown: false,
         })}
       >
-        
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="SignIn" component={SignInPage} />
