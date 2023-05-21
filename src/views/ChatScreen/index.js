@@ -94,7 +94,6 @@ function ChatScreen({ navigation, route }) {
   const [otherUID, setOtherUID] = useState("");
   const [isPharma, setIsPharma] = useState(false);
   const [chatMessages, setChatMessages] = useState([
-    { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
   ]);
   const [posts, setPosts] = useState([]);
   const [lastKey, setLastKey] = useState("");
@@ -119,10 +118,14 @@ function ChatScreen({ navigation, route }) {
           querySnapshot.forEach((doc) => {
             newMessages.push({
               Message: doc.data().message,
-              TimeStamp: doc.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              TimeStamp: doc
+                .data()
+                .sendAt.toDate()
+                .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
               Sender: doc.data().sendBy,
               Image: image,
-              Seen: doc.data().seen
+              Seen: doc.data().seen,
+              Type: doc.data().type,
             });
             setLastKey(doc);
           });
@@ -141,6 +144,7 @@ function ChatScreen({ navigation, route }) {
     const otherUID = route.params.chat.member.filter(
       (jobID) => jobID !== myUID
     );
+    setOtherUID(otherUID);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getUserByUID({
       params: { uid: otherUID },
@@ -214,6 +218,7 @@ function ChatScreen({ navigation, route }) {
       uid: route.params.myUID,
       groupId: route.params.groupID,
       message: currMessage,
+      type: "message",
     });
     // const user = await Auth.postChatMessage({
     //   body: {
@@ -235,8 +240,43 @@ function ChatScreen({ navigation, route }) {
     setIsModalVisible(!isModalVisible);
   };
 
-  const handleMedications = (value) => {
-    setMedications(value);
+  const handleMedications = async (value) => {
+    let orderId = "";
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.postOrder({
+      body: {
+        userUid: otherUID,
+        jobId: route.params.chat.jobId,
+        medicines: value,
+        status: "pending",
+      },
+
+      token: token,
+    });
+    if (user.isOk) {
+      // console.log("response = ", user);
+    } else if (!user.isOk) {
+      console.log("response = ", user);
+    }
+    orderId = user.data.order._id;
+    // let tempMedMessage = "";
+    // let tempTotal = 0;
+    // value.forEach((data) =>{
+    //   tempMedMessage += (data.Medicines + '\n');
+    //   tempMedMessage += (data.Description + '\n');
+    //   tempMedMessage += ("Price: " + data.Price + '\n');
+    //   tempMedMessage += '\n';
+    //   tempTotal += Number(data.Price);
+    // }
+    // )
+    // tempMedMessage += ("Total: " + tempTotal);
+
+    await Chat.sendMessage({
+      uid: route.params.myUID,
+      groupId: route.params.groupID,
+      message: orderId,
+      type: "prescription",
+    });
   };
 
   useEffect(() => {
@@ -257,7 +297,6 @@ function ChatScreen({ navigation, route }) {
     getUserRole();
 
     // postsFirstBatch();
-
     const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
       orderBy("sendAt", "desc"),
@@ -266,37 +305,40 @@ function ChatScreen({ navigation, route }) {
 
     const unsub = onSnapshot(q, (querySnapshot) => {
       let tempKey = "";
-      let tempUID = "";
       let temp = [];
       querySnapshot.docs.forEach((change) => {
         temp.push({
           Message: change.data().message,
-          TimeStamp: change.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          TimeStamp: change
+            .data()
+            .sendAt.toDate()
+            .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           Sender: change.data().sendBy,
           Image: image,
-          Seen: change.data().seen
+          Seen: change.data().seen,
+          Type: change.data().type,
         });
         tempKey = change;
-        if(change.data().sendBy !== myUID){
-          tempUID = change.data().sendBy
-        }
       });
-      setOtherUID(tempUID);
+
       setChatMessages(temp);
       setLastKey(tempKey);
     });
 
     const updateDocuments = async () => {
       try {
-        const querySnapshot = await getDocs(query(
-          collection(db, "messages", route.params.groupID, "messages"),
-           where('sendBy', '==', otherUID)
-        ));
+        console.log("OTHER",otherUID[0]);
+        const querySnapshot = await getDocs(
+          query(
+            collection(db, "messages", route.params.groupID, "messages"),
+            where("sendBy", "==", otherUID[0])
+          )
+        );
         querySnapshot.forEach(async (doc) => {
           await updateDoc(doc.ref, { seen: true });
         });
       } catch (error) {
-        console.error('Error updating documents:', error);
+        console.error("Error updating documents:", error);
       }
     };
 
@@ -342,6 +384,7 @@ function ChatScreen({ navigation, route }) {
                 sender={item.Sender}
                 image={item.Image}
                 seen={item.Seen}
+                type={item.Type}
                 myUID={myUID}
               />
             </BubbleContainer>
@@ -382,15 +425,22 @@ function ChatScreen({ navigation, route }) {
               />
             </PictureButton>
             {isPharma && (
-              <PictureButton onPress={() => navigation.navigate("Prescription" , { medication: medications, updateData: handleMedications})  }>
-              <Icon
-                name="medkit-outline"
-                type="ionicon"
-                color={Colors.white}
-                size={21}
-              />
-            </PictureButton>
-          )}
+              <PictureButton
+                onPress={() =>
+                  navigation.navigate("Prescription", {
+                    medication: medications,
+                    updateData: handleMedications,
+                  })
+                }
+              >
+                <Icon
+                  name="medkit-outline"
+                  type="ionicon"
+                  color={Colors.white}
+                  size={21}
+                />
+              </PictureButton>
+            )}
             <GreyInput
               multiline={true}
               value={currMessage}

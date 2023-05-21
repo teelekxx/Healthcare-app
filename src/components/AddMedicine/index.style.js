@@ -45,6 +45,15 @@ export const MedTextInput = styled.TextInput`
   padding: 5px;
 `;
 
+export const MedDesInput = styled.TextInput`
+  font-size: 15px;
+  background-color: ${Colors.white};
+  border-radius: 10px;
+  min-height: 350px;
+  margin-bottom: auto;
+  padding: 5px;
+`;
+
 
 export const CircleButton = styled.TouchableOpacity`
   margin-top: 10px;

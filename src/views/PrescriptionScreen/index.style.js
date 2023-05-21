@@ -95,7 +95,7 @@ export const AddMedicineButton = styled.TouchableOpacity`
 `;
 
 export const Wrapper = styled.SafeAreaView`
-max-height: ${height * 0.66}px;
+max-height: ${height * 0.6}px;
 `;
 
 
@@ -138,7 +138,6 @@ export const WhiteButtonText = styled.Text`
 
   color: ${Colors.white};
 `;
-
 export const TotalText = styled.Text`
   font-size: 15px;
   font-weight: bold;
@@ -166,3 +165,30 @@ export const PageTitle = styled.Text`
   margin-right: ${width * 0.035897}px;
   margin-top: ${titleMargin}px;
 `;
+
+export const BlueBorderButton = styled.TouchableOpacity`
+  border: 1px solid ${Colors.blue};
+  border-radius: 20px;
+  padding: 10px 45px 10px 45px;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+export const BlueButton = styled.TouchableOpacity`
+  background-color: ${Colors.blue};
+  border-radius: 20px;
+  padding: 10px 45px 10px 45px;
+  margin-left: auto;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+`;
+
+export const BlueButtonText = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+
+  color: ${Colors.blue};
+`;
+

@@ -19,6 +19,8 @@ import {
   MedicineScrollable,
   PreContainer,
   Wrapper,
+  BlueBorderButton,
+  BlueButton,
 } from "./index.style";
 import {
   CircleButton,
@@ -50,10 +52,6 @@ import MedicineOrder from "../../components/MedicineOrder";
 
 export default function Prescription({ navigation, route }) {
   const [medications, setMedication] = useState([]);
-  const [medicine, setMedicine] = useState("");
-  const [dosage, setDosage] = useState("");
-  const [duration, setDuration] = useState("");
-  const [price, setPrice] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
   const [updatingIndex, setUpdatingIndex] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -76,7 +74,7 @@ export default function Prescription({ navigation, route }) {
   const handleEditMedications = (index, data) => {
     const newMedicines = [...medications];
     newMedicines[index] = data;
-    
+
     setMedication(newMedicines);
     setIsUpdate(false);
     setUpdatingIndex(null);
@@ -96,7 +94,7 @@ export default function Prescription({ navigation, route }) {
   const calculateTotal = () => {
     let totalPrice = 0;
     medications.forEach((medicine) => {
-      const { Price } = medicine[0];
+      const { Price } = medicine;
       totalPrice += Number(Price);
     });
     return totalPrice;
@@ -106,7 +104,7 @@ export default function Prescription({ navigation, route }) {
     if (medications.length <= 0) {
       setMedication(medication);
     }
-  }, []);
+  }, [isModalVisible]);
 
   return (
     <PreContainer>
@@ -144,6 +142,14 @@ export default function Prescription({ navigation, route }) {
       <AddMedicineButton onPress={toggleModal}>
         <Icon name="add-outline" type="ionicon" color={Colors.blue} size={20} />
       </AddMedicineButton>
+      <HorizonInput>
+        <CloseButton onPress={navigation.goBack}>
+        <WhiteButtonText >Close</WhiteButtonText>
+        </CloseButton>
+        <SaveButton onPress={saveAndClose}>
+        <WhiteButtonText>Confirm</WhiteButtonText>
+        </SaveButton>
+      </HorizonInput>
       <Modal
         visible={isModalVisible}
         animationType="fade"

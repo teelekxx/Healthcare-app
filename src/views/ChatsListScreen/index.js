@@ -84,10 +84,8 @@ function ChatsListScreen({ navigation }) {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const jobs = [];
           querySnapshot.forEach((doc) => {
-            console.log("DATA =", doc.data());
             jobs.push(doc.data());
           });
-          console.log("CHATS =", jobs);
           setMyChats(jobs);
         });
       }

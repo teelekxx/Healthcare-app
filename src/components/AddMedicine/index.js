@@ -14,6 +14,7 @@ import {
   WhiteButtonText,
   CloseButton,
   TotalText,
+  MedDesInput,
 } from "./index.style";
 import {
   FormInput,
@@ -44,10 +45,9 @@ export default function AddMedicine({
   handleSaveMedications,
   index
 }) {
-  const [medications, setMedication] = useState([]);
+  const [medications, setMedication] = useState("");
   const [medicine, setMedicine] = useState("");
-  const [dosage, setDosage] = useState("");
-  const [duration, setDuration] = useState("");
+  const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
   const closeModal = () => {
@@ -55,24 +55,22 @@ export default function AddMedicine({
   };
 
   const saveAndClose = () => {
-    if(index != null){    handleSaveMedications(index, [
+    if(index != null){    handleSaveMedications(index, 
       {
         Medicines: medicine,
-        Dosage: dosage,
-        Duration: duration,
+        Description: description,
         Price: price,
       },
-    ]);
+    );
   }
   else{
-    handleSaveMedications([
+    handleSaveMedications(
       {
         Medicines: medicine,
-        Dosage: dosage,
-        Duration: duration,
+        Description: description,
         Price: price,
       },
-    ]);
+    );
   }
 
     handleModalVisible();
@@ -98,22 +96,12 @@ export default function AddMedicine({
             ></MedTextInput>
           </MedColumn>
           <MedColumn>
-            <MedText>Dosage</MedText>
-            <MedTextInput
-              keyboardType="numeric"
-              maxLength={3}
-              value={dosage}
-              onChangeText={(text) => setDosage(text)}
-            ></MedTextInput>
-          </MedColumn>
-          <MedColumn>
-            <MedText>Duration</MedText>
-            <MedTextInput
-              keyboardType="numeric"
-              maxLength={3}
-              value={duration}
-              onChangeText={(text) => setDuration(text)}
-            ></MedTextInput>
+          <MedText>Description</MedText>
+            <MedDesInput 
+            multiline={true}
+            value={description} 
+            onChangeText={(text) => setDescription(text)}>
+            </MedDesInput>
           </MedColumn>
           <MedColumn>
             <MedText>Price</MedText>
