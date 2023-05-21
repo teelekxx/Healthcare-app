@@ -39,14 +39,16 @@ export default function ChatBubble({
 
   const medString = (value) => {
     let tempMedMessage = "";
+    let tempTotal = 0;
     value.forEach((data) => {
-      tempMedMessage += data._id + "\n";
-      // tempMedMessage += data.Medicines + "\n";
-      // tempMedMessage += data.Description + "\n";
-      // tempMedMessage += "Price: " + data.Price + "\n";
-      // tempMedMessage += "\n";
+      // tempMedMessage += data._id + "\n";
+      tempMedMessage += data.name + "\n";
+      tempMedMessage += data.dosage + "\n";
+      tempMedMessage += "Price: " + data.price + "\n";
+      tempMedMessage += "\n";
+      tempTotal += Number(data.price);
     });
-    // tempMedMessage += "Total: " + tempTotal;
+    tempMedMessage += "Total: " + tempTotal;
     return tempMedMessage;
   };
 

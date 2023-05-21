@@ -69,6 +69,7 @@ import {
   limitToLast,
   limit,
   getDocs,
+  setDoc,
   updateDoc,
   startAfter,
 } from "firebase/firestore";
@@ -93,11 +94,12 @@ function ChatScreen({ navigation, route }) {
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
   const [isPharma, setIsPharma] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [lastKey, setLastKey] = useState("");
   const [nextPosts_loading, setNextPostsLoading] = useState(false);
+  const [lastMessage, setLastMessage] = useState([]);
+  const [group, setGroup] = useState("");
 
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
@@ -140,11 +142,31 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
+  const getGroup = async (jobId) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "groups"), where("jobId", "==", jobId))
+      );
+
+      if (querySnapshot.empty) {
+        console.log("No group found with the specified jobId");
+        return null;
+      } else {
+        const docSnapshot = querySnapshot.docs[0];
+        console.log("SNAPO:", docSnapshot.data());
+        return docSnapshot;
+      }
+    } catch (error) {
+      console.error("Error getting group:", error);
+      return null;
+    }
+  };
+
   const getChatter = async (myUID) => {
-    const otherUID = route.params.chat.member.filter(
-      (jobID) => jobID !== myUID
-    );
+    const group = await getGroup(route.params.groupID);
+    const otherUID = group.data().member.filter((jobID) => jobID !== myUID);
     setOtherUID(otherUID);
+    setGroup(group);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getUserByUID({
       params: { uid: otherUID },
@@ -211,29 +233,58 @@ function ChatScreen({ navigation, route }) {
     await sendInitMessage();
   };
 
+  const updateLastMessage = async (value) => {
+    try {
+      const docRef = doc(db, "groups", group.id);
+      await updateDoc(docRef, { lastMsg: value });
+    } catch (error) {
+      console.error("Error updating documents:", error);
+    }
+  };
+
+  // postsFirstBatch();
+  const q = query(
+    collection(db, "messages", route.params.groupID, "messages"),
+    orderBy("sendAt", "desc"),
+    limit(10)
+  );
+
   const sendMessage = async () => {
-    console.log("SEND!");
-    const token = await AsyncStorage.getItem("token");
-    await Chat.sendMessage({
+    let tempMessage = "";
+    let tempLastMessage = "";
+
+    tempMessage = {
       uid: route.params.myUID,
       groupId: route.params.groupID,
       message: currMessage,
       type: "message",
-    });
-    // const user = await Auth.postChatMessage({
-    //   body: {
-    //     groupId: route.params.groupID,
-    //     message: currMessage,
-    //     sendBy: route.params.myUID,
-    //     seen: false,
-    //     type: "message",
-    //   },
-    //   token: token,
-    // });
-    // if (user.isOk) {
-    //   console.log("response = ", user);
-    // }
-    setCurrMessage("");
+    };
+    tempLastMessage = {
+      sendBy: route.params.myUID,
+      message: currMessage,
+      sendAt: new Date(),
+    };
+
+    if (currMessage != "") {
+      const token = await AsyncStorage.getItem("token");
+      await Chat.sendMessage(tempMessage);
+      updateLastMessage(tempLastMessage);
+      // const user = await Auth.postChatMessage({
+      //   body: {
+      //     groupId: route.params.groupID,
+      //     message: currMessage,
+      //     sendBy: route.params.myUID,
+      //     seen: false,
+      //     type: "message",
+      //   },
+      //   token: token,
+      // });
+      // if (user.isOk) {
+      //   console.log("response = ", user);
+      // }
+
+      setCurrMessage("");
+    }
   };
 
   const toggleModal = () => {
@@ -241,42 +292,34 @@ function ChatScreen({ navigation, route }) {
   };
 
   const handleMedications = async (value) => {
-    let orderId = "";
-    const token = await AsyncStorage.getItem("token");
-    const user = await Auth.postOrder({
-      body: {
-        userUid: otherUID,
-        jobId: route.params.chat.jobId,
-        medicines: value,
-        status: "pending",
-      },
+    if (value.length > 0) {
+      let orderId = "";
+      console.log("VALUE =", value);
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.postOrder({
+        body: {
+          userUid: otherUID[0],
+          jobId: group.data().jobId,
+          medicines: value,
+          status: "pending",
+        },
 
-      token: token,
-    });
-    if (user.isOk) {
-      // console.log("response = ", user);
-    } else if (!user.isOk) {
-      console.log("response = ", user);
+        token: token,
+      });
+      if (user.isOk) {
+        // console.log("response = ", user);
+      } else if (!user.isOk) {
+        console.log("response = ", user);
+      }
+      orderId = user.data.order._id;
+
+      await Chat.sendMessage({
+        uid: route.params.myUID,
+        groupId: route.params.groupID,
+        message: orderId,
+        type: "prescription",
+      });
     }
-    orderId = user.data.order._id;
-    // let tempMedMessage = "";
-    // let tempTotal = 0;
-    // value.forEach((data) =>{
-    //   tempMedMessage += (data.Medicines + '\n');
-    //   tempMedMessage += (data.Description + '\n');
-    //   tempMedMessage += ("Price: " + data.Price + '\n');
-    //   tempMedMessage += '\n';
-    //   tempTotal += Number(data.Price);
-    // }
-    // )
-    // tempMedMessage += ("Total: " + tempTotal);
-
-    await Chat.sendMessage({
-      uid: route.params.myUID,
-      groupId: route.params.groupID,
-      message: orderId,
-      type: "prescription",
-    });
   };
 
   useEffect(() => {
@@ -296,18 +339,12 @@ function ChatScreen({ navigation, route }) {
     };
     getUserRole();
 
-    // postsFirstBatch();
-    const q = query(
-      collection(db, "messages", route.params.groupID, "messages"),
-      orderBy("sendAt", "desc"),
-      limit(10)
-    );
-
     const unsub = onSnapshot(q, (querySnapshot) => {
       let tempKey = "";
       let temp = [];
+      let tempMessage = {};
       querySnapshot.docs.forEach((change) => {
-        temp.push({
+        tempMessage = {
           Message: change.data().message,
           TimeStamp: change
             .data()
@@ -317,21 +354,20 @@ function ChatScreen({ navigation, route }) {
           Image: image,
           Seen: change.data().seen,
           Type: change.data().type,
-        });
+        };
+        temp.push(tempMessage);
         tempKey = change;
       });
-
       setChatMessages(temp);
       setLastKey(tempKey);
     });
 
     const updateDocuments = async () => {
       try {
-        console.log("OTHER",otherUID[0]);
         const querySnapshot = await getDocs(
           query(
             collection(db, "messages", route.params.groupID, "messages"),
-            where("sendBy", "==", otherUID[0])
+            where("sendBy", "!=", myUID)
           )
         );
         querySnapshot.forEach(async (doc) => {

@@ -84,7 +84,7 @@ function ChatsListScreen({ navigation }) {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const jobs = [];
           querySnapshot.forEach((doc) => {
-            jobs.push(doc.data());
+            jobs.push(doc);
           });
           setMyChats(jobs);
         });
@@ -127,9 +127,8 @@ function ChatsListScreen({ navigation }) {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("Chatting", {
-                      groupID: val.jobId,
+                      groupID: val.data().jobId,
                       myUID: myUID,
-                      chat: val,
                     })
                   }
                   key={index}

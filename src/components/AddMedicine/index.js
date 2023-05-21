@@ -57,18 +57,18 @@ export default function AddMedicine({
   const saveAndClose = () => {
     if(index != null){    handleSaveMedications(index, 
       {
-        Medicines: medicine,
-        Description: description,
-        Price: price,
+        name: medicine,
+        dosage: description,
+        price: price,
       },
     );
   }
   else{
     handleSaveMedications(
       {
-        Medicines: medicine,
-        Description: description,
-        Price: price,
+        name: medicine,
+        dosage: description,
+        price: price,
       },
     );
   }

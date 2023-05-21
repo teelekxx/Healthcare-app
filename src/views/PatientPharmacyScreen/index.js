@@ -6,7 +6,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
-import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, doc, onSnapshot, getDocs, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,19 +40,21 @@ import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage, Alert } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
 import NotificationController from "../../firestore/notification";
+import { getPresentedNotificationsAsync } from "expo-notifications";
 
-function PatientPharmacyScreen({  }) {
+function PatientPharmacyScreen({ navigation }) {
   const [isWaiting, setWaiting] = useState(false);
   const [isFound, setFound] = useState(false);
   const [status, setStatus] = useState("none");
+  const [myUID, setMyUID] = useState("");
   const [jobId, setJobId] = useState(null);
   const [myPharmaId, setPharmaId] = useState(null);
   const [isPharma, setIsPharma] = useState(false);
   const [allJobs, setAllJobs] = useState([]);
   const [foundPharma, setFoundPharma] = useState(null);
+  const [newGroup, setNewGroup] = useState(null);
   const auth = useSelector((state) => state.Authentication);
-
-
+  const isAuthenticated = auth.isAuthenticated;
 
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
@@ -94,14 +96,41 @@ function PatientPharmacyScreen({  }) {
     }
   };
 
+  const getGroup = async (jobId) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "groups"), where("jobId", "==", jobId))
+      );
+  
+      if (querySnapshot.empty) {
+        console.log("No group found with the specified jobId");
+        return null;
+      }
+  
+      // Assuming only one group matches the jobId, retrieve the first document
+      const docSnapshot = querySnapshot;
+      console.log("DOC:",docSnapshot);
+      return docSnapshot;
+    } catch (error) {
+      console.error("Error getting group:", error);
+      return null;
+    }
+  };
+
   const fetchData = async (jobId) => {
+    console.log("JOBID:", jobId);
+    const group = await getGroup(jobId);
     const data = await getReciever(jobId);
+    setNewGroup(group);
     setFoundPharma(data);
   };
 
   useEffect(() => {
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+    }
+
     if (jobId != null) {
-      console.log("jobId = ", jobId);
       const unsub = onSnapshot(doc(db, "jobs", jobId), (doc) => {
         if (doc.data()) {
           console.log("Current data: ", doc.data().status);
@@ -233,7 +262,6 @@ function PatientPharmacyScreen({  }) {
               }}>
                 <FindButtonText>test</FindButtonText>
               </FindButton> */}
-
             </ButtonContainer>
           ) : status === "finding" ? (
             <ButtonContainer>
@@ -281,7 +309,11 @@ function PatientPharmacyScreen({  }) {
               </FindingPrompt>
               <ChattingButton
                 onPress={() =>
-                  navigation.navigate("Chatting", { paramKey: pharmacist })
+                  navigation.navigate("Chatting", {
+                    groupID: jobId,
+                    myUID: myUID,
+                    chat: newGroup,
+                  })
                 }
               >
                 <WhiteButtonText>Start chatting</WhiteButtonText>

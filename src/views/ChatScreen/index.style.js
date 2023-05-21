@@ -120,7 +120,7 @@ export const BlueContainer = styled.View`
 `;
 
 export const Wrapper = styled.KeyboardAvoidingView`
-  background-color: ${Colors.white};
+  background-color: ${Colors.red};
   flex: 1;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;

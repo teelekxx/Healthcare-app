@@ -28,9 +28,9 @@ export default function MedicineOrder({ data, handleDeleteMedications, handleEdi
   const [price, setPrice] = useState("PRICE");
 
   useEffect(() => {
-    setMedicineName(data.Medicines);
-    setDescription(data.Description);
-    setPrice(data.Price);
+    setMedicineName(data.name);
+    setDescription(data.dosage);
+    setPrice(data.price);
   }, []);
   const acceptRequest = async () => {
     const token = await AsyncStorage.getItem("token");
