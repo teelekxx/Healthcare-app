@@ -12,6 +12,7 @@ import {
   PatientNameContainer,
   TimeStamp,
   LocationText,
+  DesContainer,
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
@@ -23,15 +24,13 @@ import React, { useState, useEffect } from "react";
 
 export default function MedicineOrder({ data, handleDeleteMedications, handleEditMedications, myIndex }) {
   const [medicineName, setMedicineName] = useState("MED");
-  const [dosage, setDosage] = useState("DOSE");
-  const [duration, setDuration] = useState("DURATION");
+  const [description, setDescription] = useState("DES");
   const [price, setPrice] = useState("PRICE");
 
   useEffect(() => {
-    setMedicineName(data[0].Medicines);
-    setDosage(data[0].Dosage);
-    setDuration(data[0].Duration);
-    setPrice(data[0].Price);
+    setMedicineName(data.name);
+    setDescription(data.dosage);
+    setPrice(data.price);
   }, []);
   const acceptRequest = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -96,8 +95,9 @@ export default function MedicineOrder({ data, handleDeleteMedications, handleEdi
           <TimeStamp>{price}</TimeStamp>
         </PatientNameContainer>
         <PatientNameContainer>
-        <LocationText>{dosage}</LocationText>
-        <TimeStamp>{duration}</TimeStamp>
+        <DesContainer>
+        <LocationText>{description}</LocationText>
+        </DesContainer>
         </PatientNameContainer>
         <HorizonInput3>
           <BlueBorderButton onPress={() => handleDeleteMedications(myIndex)}>

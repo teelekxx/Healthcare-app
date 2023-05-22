@@ -16,7 +16,7 @@ export default function ChatModule({ chat, myUID }) {
   const [location, setLocation] = useState(null);
 
   const getChatter = async (myUID) => {
-    const otherUID = chat.member.filter((jobID) => jobID !== myUID);
+    const otherUID = chat.data().member.filter((jobID) => jobID !== myUID);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getUserByUID({
       params: { uid: otherUID },
@@ -45,7 +45,7 @@ export default function ChatModule({ chat, myUID }) {
       ></Avatar>
       <DetailContainer>
         <ChatName>{chatName}</ChatName>
-        <LastMassage>{chat.lastMsg.message}</LastMassage>
+        <LastMassage>{chat.data().lastMsg.message}</LastMassage>
       </DetailContainer>
     </ChatContainer>
   );

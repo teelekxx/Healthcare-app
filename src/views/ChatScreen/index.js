@@ -10,6 +10,8 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   FlatList,
+  ActivityIndicator,
+  Linking,
 } from "react-native";
 import {
   Title,
@@ -28,6 +30,7 @@ import {
   DateCalendar,
   CircleButton,
   NotificationTouchable,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
@@ -55,6 +58,7 @@ import {
   AddMedicationButton,
   ModalBackground,
   Wrapper,
+  HorizonTitle,
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
@@ -69,8 +73,10 @@ import {
   limitToLast,
   limit,
   getDocs,
+  setDoc,
   updateDoc,
   startAfter,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
@@ -87,22 +93,33 @@ function ChatScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [medications, setMedications] = useState([]);
   const [chatName, setChatName] = useState("");
+  const [chatNumber, setChatNumber] = useState("");
   const [total, setTotal] = useState(null);
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
   const [isPharma, setIsPharma] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-    { Message: "Hello", TimeStamp: "12:30", Sender: "Others", Image: null },
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [lastKey, setLastKey] = useState("");
   const [nextPosts_loading, setNextPostsLoading] = useState(false);
+  const [lastMessage, setLastMessage] = useState([]);
+  const [group, setGroup] = useState("");
 
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
   const scrollViewRef = useRef(null);
+
+  const nameFormat = (name) => {
+    let newName = name;
+    if (name.length > 15) {
+      newName = name.slice(0, 15);
+      newName += "...";
+    }
+    return newName;
+  };
 
   const getMoreMessages = async () => {
     try {
@@ -119,10 +136,14 @@ function ChatScreen({ navigation, route }) {
           querySnapshot.forEach((doc) => {
             newMessages.push({
               Message: doc.data().message,
-              TimeStamp: doc.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              TimeStamp: doc
+                .data()
+                .sendAt.toDate()
+                .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
               Sender: doc.data().sendBy,
               Image: image,
-              Seen: doc.data().seen
+              Seen: doc.data().seen,
+              Type: doc.data().type,
             });
             setLastKey(doc);
           });
@@ -137,20 +158,42 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
+  const getGroup = async (jobId) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "groups"), where("jobId", "==", jobId))
+      );
+
+      if (querySnapshot.empty) {
+        console.log("No group found with the specified jobId");
+        return null;
+      } else {
+        const docSnapshot = querySnapshot.docs[0];
+        return docSnapshot;
+      }
+    } catch (error) {
+      console.error("Error getting group:", error);
+      return null;
+    }
+  };
+
   const getChatter = async (myUID) => {
-    const otherUID = route.params.chat.member.filter(
-      (jobID) => jobID !== myUID
-    );
+    const group = await getGroup(route.params.groupID);
+    const otherUID = group.data().member.filter((jobID) => jobID !== myUID);
+    setOtherUID(otherUID);
+    setGroup(group);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getUserByUID({
       params: { uid: otherUID },
     });
     if (user.isOk) {
+      setIsLoading(false);
       return user;
     }
   };
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
+    setChatNumber(data.data.medicalInformation.phoneNumber);
     setChatName(data.data.medicalInformation.name);
   };
 
@@ -207,36 +250,105 @@ function ChatScreen({ navigation, route }) {
     await sendInitMessage();
   };
 
+  const updateLastMessage = async (value) => {
+    try {
+      const docRef = doc(db, "groups", group.id);
+      await updateDoc(docRef, { lastMsg: value });
+    } catch (error) {
+      console.error("Error updating documents:", error);
+    }
+  };
+
+  // postsFirstBatch();
   const sendMessage = async () => {
-    console.log("SEND!");
-    const token = await AsyncStorage.getItem("token");
-    await Chat.sendMessage({
+    let tempMessage = "";
+    let tempLastMessage = "";
+
+    tempMessage = {
       uid: route.params.myUID,
       groupId: route.params.groupID,
       message: currMessage,
-    });
-    // const user = await Auth.postChatMessage({
-    //   body: {
-    //     groupId: route.params.groupID,
-    //     message: currMessage,
-    //     sendBy: route.params.myUID,
-    //     seen: false,
-    //     type: "message",
-    //   },
-    //   token: token,
-    // });
-    // if (user.isOk) {
-    //   console.log("response = ", user);
-    // }
-    setCurrMessage("");
+      type: "message",
+    };
+    tempLastMessage = {
+      sendBy: route.params.myUID,
+      message: currMessage,
+      sendAt: new Date(),
+    };
+
+    if (currMessage != "") {
+      const token = await AsyncStorage.getItem("token");
+      await Chat.sendMessage(tempMessage);
+      updateLastMessage(tempLastMessage);
+      // const user = await Auth.postChatMessage({
+      //   body: {
+      //     groupId: route.params.groupID,
+      //     message: currMessage,
+      //     sendBy: route.params.myUID,
+      //     seen: false,
+      //     type: "message",
+      //   },
+      //   token: token,
+      // });
+      // if (user.isOk) {
+      //   console.log("response = ", user);
+      // }
+
+      setCurrMessage("");
+    }
   };
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  const handleMedications = (value) => {
-    setMedications(value);
+  const handleDialPress = (phoneNumber) => {
+    const telUrl = `tel:${phoneNumber}`;
+    Linking.openURL(telUrl).catch(() => {
+      console.log("Failed to dial the number");
+    });
+  };
+
+  const handleMedications = async (value) => {
+    const q = query(
+      collection(db, "messages", route.params.groupID, "messages"),
+      where("type", "==", "prescription")
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref);
+    });
+    if (value.length > 0) {
+      let orderId = "";
+      console.log("VALUE =", value);
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.postOrder({
+        body: {
+          userUid: otherUID[0],
+          jobId: group.data().jobId,
+          medicines: value,
+          status: "pending",
+        },
+
+        token: token,
+      });
+      if (user.isOk) {
+        // console.log("response = ", user);
+      } else if (!user.isOk) {
+        console.log("response = ", user);
+      }
+      orderId = user.data.order._id;
+
+      console.log("Prescriptions deleted successfully");
+
+      await Chat.sendMessage({
+        uid: route.params.myUID,
+        groupId: route.params.groupID,
+        message: orderId,
+        type: "prescription",
+      });
+    }
   };
 
   useEffect(() => {
@@ -256,8 +368,6 @@ function ChatScreen({ navigation, route }) {
     };
     getUserRole();
 
-    // postsFirstBatch();
-
     const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
       orderBy("sendAt", "desc"),
@@ -265,43 +375,53 @@ function ChatScreen({ navigation, route }) {
     );
 
     const unsub = onSnapshot(q, (querySnapshot) => {
+      updateDocuments();
       let tempKey = "";
-      let tempUID = "";
       let temp = [];
+      let tempMessage = {};
       querySnapshot.docs.forEach((change) => {
-        temp.push({
+        tempMessage = {
           Message: change.data().message,
-          TimeStamp: change.data().sendAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          TimeStamp: change
+            .data()
+            .sendAt.toDate()
+            .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           Sender: change.data().sendBy,
           Image: image,
-          Seen: change.data().seen
-        });
+          Seen: change.data().seen,
+          Type: change.data().type,
+        };
+        temp.push(tempMessage);
         tempKey = change;
-        if(change.data().sendBy !== myUID){
-          tempUID = change.data().sendBy
-        }
       });
-      setOtherUID(tempUID);
       setChatMessages(temp);
       setLastKey(tempKey);
     });
 
     const updateDocuments = async () => {
       try {
-        const querySnapshot = await getDocs(query(
-          collection(db, "messages", route.params.groupID, "messages"),
-           where('sendBy', '==', otherUID)
-        ));
-        querySnapshot.forEach(async (doc) => {
-          await updateDoc(doc.ref, { seen: true });
-        });
+        if (myUID) {
+          const querySnapshot = await getDocs(
+            query(
+              collection(db, "messages", route.params.groupID, "messages"),
+              where("sendBy", "!=", myUID)
+            )
+          );
+          querySnapshot.forEach(async (doc) => {
+            await updateDoc(doc.ref, { seen: true });
+          });
+        }
       } catch (error) {
-        console.error('Error updating documents:', error);
+        console.error("Error updating documents:", error);
       }
     };
 
     updateDocuments(); //
   }, [myUID, isPharma]);
+
+  // if (isLoading) {
+  //   return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
+  // }
 
   return (
     <BlueContainer>
@@ -314,16 +434,24 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-        <PageTitle>{chatName}</PageTitle>
-        {/* <CallButton>
-          <Icon
-            name="call-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={21}
-          />
-          <PhoneNumber>0814637245</PhoneNumber>
-        </CallButton> */}
+        {isLoading ? (
+          <LoadingContainer>
+            <ActivityIndicator size="large" color={Colors.white} />
+          </LoadingContainer>
+        ) : (
+          <HorizonTitle>
+            <PageTitle>{nameFormat(chatName)}</PageTitle>
+            <CallButton onPress={() => handleDialPress(chatNumber)}>
+              <Icon
+                name="call-outline"
+                type="ionicon"
+                color={Colors.blue}
+                size={21}
+              />
+              <PhoneNumber>{chatNumber}</PhoneNumber>
+            </CallButton>
+          </HorizonTitle>
+        )}
       </PageTitleContainer>
       <Wrapper
         behavior={Platform.OS === "ios" ? "position" : "height"}
@@ -337,11 +465,14 @@ function ChatScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <BubbleContainer>
               <ChatBubble
+              chatName={chatName}
+              navigation={navigation}
                 message={item.Message}
                 timeStamp={item.TimeStamp}
                 sender={item.Sender}
                 image={item.Image}
                 seen={item.Seen}
+                type={item.Type}
                 myUID={myUID}
               />
             </BubbleContainer>
@@ -382,15 +513,22 @@ function ChatScreen({ navigation, route }) {
               />
             </PictureButton>
             {isPharma && (
-              <PictureButton onPress={() => navigation.navigate("Prescription" , { medication: medications, updateData: handleMedications})  }>
-              <Icon
-                name="medkit-outline"
-                type="ionicon"
-                color={Colors.white}
-                size={21}
-              />
-            </PictureButton>
-          )}
+              <PictureButton
+                onPress={() =>
+                  navigation.navigate("Prescription", {
+                    medication: medications,
+                    updateData: handleMedications,
+                  })
+                }
+              >
+                <Icon
+                  name="medkit-outline"
+                  type="ionicon"
+                  color={Colors.white}
+                  size={21}
+                />
+              </PictureButton>
+            )}
             <GreyInput
               multiline={true}
               value={currMessage}

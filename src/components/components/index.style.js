@@ -16,20 +16,20 @@ export const Container = styled.View`
   align-self: center;
 `;
 export const Title = styled.Text`
-    color: ${Colors.blue}
+    color: ${Colors.blue};
     font-weight: bold;
     font-size: 40px;
     align-self: center;
 `;
 export const SubTitle = styled.Text`
-    color: ${Colors.blue}
+    color: ${Colors.blue};
     font-weight: bold;
     font-size: 30px;
     
 `;
 
 export const ItalicText = styled.Text`
-    color: ${Colors.blue}
+    color: ${Colors.blue};
     
     font-weight: light;
     font-style:italic;
@@ -37,7 +37,7 @@ export const ItalicText = styled.Text`
     align-self: center;
 `;
 export const ItalicText2 = styled.Text`
-    color: ${Colors.blue}
+    color: ${Colors.blue};
     
     font-weight: light;
     font-style:italic;
@@ -99,7 +99,7 @@ export const SignUpForm = styled.ScrollView`
 
 export const BlueButton = styled.TouchableOpacity`
   margin-top: 50px;
-  margin-bottom: 50px
+  margin-bottom: 50px;
   padding: 15px;
   width: 340px;
   height: 60px;
@@ -109,7 +109,7 @@ export const BlueButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 export const RedButton = styled.TouchableOpacity`
-  margin-bottom: 50px
+  margin-bottom: 50px;
   padding: 15px;
   width: 340px;
   height: 60px;
@@ -144,7 +144,7 @@ export const PageTitle = styled.Text`
 `;
 
 export const PageTitleContainer = styled.SafeAreaView`
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   flex-direction: row;
   align-items: center;
 `;
@@ -165,7 +165,7 @@ export const FormText = styled.Text`
   
   font-weight: bold;
   color: ${Colors.blue};
-  padding-top:10px
+  padding-top:10px;
   padding-bottom:10px;
 `;
 export const CenterFormText = styled.Text`
@@ -173,7 +173,7 @@ export const CenterFormText = styled.Text`
   
   font-weight: bold;
   color: ${Colors.blue};
-  padding-top:10px
+  padding-top:10px;
   padding-bottom:10px;
   align-self:center;
 `;
@@ -253,7 +253,7 @@ export const GreyText = styled.Text`
 export const InfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
-  color: ${Colors.blue}
+  color: ${Colors.blue};
   border-radius: 10px;
   
   font-weight: bold;
@@ -265,7 +265,7 @@ export const InfoInput = styled.TextInput`
 export const SmallInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
-  color: ${Colors.blue}
+  color: ${Colors.blue};
   border-radius: 10px;
   
   font-weight: bold;
@@ -279,7 +279,7 @@ export const BigInfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   
   font-weight: bold;
-  color: ${Colors.blue}
+  color: ${Colors.blue};
   border-radius: 10px;
   width: 340px;
   height: 80px;
@@ -294,6 +294,6 @@ export const WhiteKeyboard = styled.KeyboardAvoidingView`
 `;
 
 export const LoadingContainer = styled.View`
-flex:1;
-justify-content:center;
-`
+  flex: 1;
+  justify-content: center;
+`;

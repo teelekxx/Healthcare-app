@@ -17,6 +17,10 @@ export const RequestContainer = styled.View`
 
 export const DetailContainer = styled.View``;
 
+export const DesContainer = styled.ScrollView`
+  max-height: 100px;
+`;
+
 export const PatientName = styled.Text`
   color: ${Colors.blue};
 
