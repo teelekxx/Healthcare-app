@@ -18,7 +18,6 @@ export default class Chat {
       type: type,
     };
 
-    console.log(messageData);
     const messagesCollectionRef = collection(
       db,
       "messages",
@@ -29,6 +28,7 @@ export default class Chat {
     addDoc(messagesCollectionRef, messageData)
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
+        return docRef.id;
       })
       .catch((error) => {
         console.error("Error adding document: ", error);

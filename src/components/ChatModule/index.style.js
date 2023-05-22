@@ -12,9 +12,7 @@ export const ChatContainer = styled.View`
 
 export const DetailContainer = styled.View`
   margin-left: ${width * 0.05384}px;
-  border-bottom-width: 1px;
-  border-color: ${Colors.blue};
-  border-style: solid;
+
   width: ${width * 0.63589}px;
 `;
 
@@ -22,7 +20,7 @@ export const ChatName = styled.Text`
   color: ${Colors.blue};
   
   font-weight: bold;
-  font-size: 20px;
+  font-size: 15px;
   margin-bottom: ${height * 0.007109}px;
 `;
 

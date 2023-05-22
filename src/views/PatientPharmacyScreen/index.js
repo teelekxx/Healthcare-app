@@ -6,7 +6,15 @@ import {
   ScrollView,
 } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
-import { collection, query, where, doc, onSnapshot, getDocs, getDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  doc,
+  onSnapshot,
+  getDocs,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { Colors } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +25,7 @@ import {
   Container,
   NotificationTouchable,
   HomeTitleContainer,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import {
   FindButton,
@@ -50,6 +59,8 @@ function PatientPharmacyScreen({ navigation }) {
   const [jobId, setJobId] = useState(null);
   const [myPharmaId, setPharmaId] = useState(null);
   const [isPharma, setIsPharma] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFree, setIsFree] = useState(true);
   const [allJobs, setAllJobs] = useState([]);
   const [foundPharma, setFoundPharma] = useState(null);
   const [newGroup, setNewGroup] = useState(null);
@@ -101,15 +112,15 @@ function PatientPharmacyScreen({ navigation }) {
       const querySnapshot = await getDocs(
         query(collection(db, "groups"), where("jobId", "==", jobId))
       );
-  
+
       if (querySnapshot.empty) {
         console.log("No group found with the specified jobId");
         return null;
       }
-  
+
       // Assuming only one group matches the jobId, retrieve the first document
       const docSnapshot = querySnapshot;
-      console.log("DOC:",docSnapshot);
+      console.log("DOC:", docSnapshot);
       return docSnapshot;
     } catch (error) {
       console.error("Error getting group:", error);
@@ -170,9 +181,37 @@ function PatientPharmacyScreen({ navigation }) {
       if (user.data.user.role === "pharmacist") {
         setIsPharma(true);
       }
+      setIsLoading(false);
+    };
+
+    const checkCurrentJob = async () => {
+      const groupRef = collection(db, "groups");
+      const q = query(groupRef, where("members", "array-contains", myUID));
+      try {
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const docSnapshot = querySnapshot.docs[0];
+          const groupData = docSnapshot.data();
+
+          // Use the groupData as needed
+          console.log("Group Data:", groupData);
+          setIsFree(true);
+        }
+        else{
+          console.log("Not yet!");
+        }
+        // const docSnapshot = querySnapshot;
+        // if (docSnapshot.docs[0]) {
+        //   console.log("DOCC:", docSnapshot.docs[0].data());
+        // }
+      } catch (error) {
+        console.error("Error getting group:", error);
+      }
     };
     getUserRole();
     getUserDetail();
+    // checkCurrentJob();
 
     if (status == "doing") {
       console.log("FETT");
@@ -191,6 +230,7 @@ function PatientPharmacyScreen({ navigation }) {
       //   setAllJobs(jobIds);
       // });
 
+
       const q = query(
         collection(db, "jobs"),
         where("users", "array-contains", myPharmaId),
@@ -206,6 +246,13 @@ function PatientPharmacyScreen({ navigation }) {
     }
   }, [jobId, isPharma, myPharmaId, status]);
 
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <ActivityIndicator size="large" color="#00a5cb" />
+      </LoadingContainer>
+    );
+  }
   return (
     <FindContainer>
       <HomeTitleContainer>
@@ -312,7 +359,6 @@ function PatientPharmacyScreen({ navigation }) {
                   navigation.navigate("Chatting", {
                     groupID: jobId,
                     myUID: myUID,
-                    chat: newGroup,
                   })
                 }
               >

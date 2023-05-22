@@ -27,6 +27,7 @@ import { db } from "../../lib/firebase";
 import { useEffect, useState } from "react";
 
 export default function ChatBubble({
+  navigation,
   message,
   timeStamp,
   sender,
@@ -34,19 +35,23 @@ export default function ChatBubble({
   seen,
   type,
   myUID,
+  chatName,
 }) {
-  const [medMessage, setMedMessage] = useState(["NO"]);
+  const [medMessage, setMedMessage] = useState([]);
+  const [orderStatus, setOrderStatus] = useState("");
 
   const medString = (value) => {
     let tempMedMessage = "";
     let tempTotal = 0;
     value.forEach((data) => {
+      if(data.name){
       // tempMedMessage += data._id + "\n";
       tempMedMessage += data.name + "\n";
       tempMedMessage += data.dosage + "\n";
       tempMedMessage += "Price: " + data.price + "\n";
       tempMedMessage += "\n";
       tempTotal += Number(data.price);
+      }
     });
     tempMedMessage += "Total: " + tempTotal;
     return tempMedMessage;
@@ -59,22 +64,51 @@ export default function ChatBubble({
       token: token,
     });
     if (user.isOk) {
-      return user.data.medicines;
+      return user.data;
     } else {
       return ["ERROR"];
     }
   };
 
+  const acceptOrder = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.updateOrder({
+      params: { orderId: message },
+      body: {"status" : "accepted"},
+      token: token,
+    });
+    if(user.isOk) {
+      setOrderStatus("accepted");
+      navigation.navigate("PharmaFinal", {
+        chatName: chatName,
+        medMessage: medString(medMessage),
+      });
+    }
+  };
+
+  const cancelOrder = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.updateOrder({
+      params: { orderId: message },
+      body: {"status" : "canceled"},
+      token: token,
+    });
+    if(user.isOk) {
+      setOrderStatus("canceled");
+    }
+  };
+
   const fetchData = async () => {
     const data = await getOrderDetail();
-    setMedMessage(data);
+    setMedMessage(data.medicines);
+    setOrderStatus(data.status)
   };
 
   useEffect(() => {
     if (type === "prescription") {
       fetchData();
     }
-  }, []);
+  }, [orderStatus]);
   if (image === null) {
     image = [];
   }
@@ -122,14 +156,16 @@ export default function ChatBubble({
           <MessageContainer>
             <OthersBubble>
               <BlueMedMessage>{medString(medMessage)}</BlueMedMessage>
-              <HorizonInput>
-                <CloseButton>
+              {(orderStatus == "pending") && (
+                <HorizonInput>
+                <CloseButton onPress={cancelOrder}>
                   <WhiteButtonText>Decline</WhiteButtonText>
                 </CloseButton>
-                <SaveButton>
+                <SaveButton onPress={acceptOrder}>
                   <WhiteButtonText>Accept</WhiteButtonText>
                 </SaveButton>
               </HorizonInput>
+              )}
             </OthersBubble>
             <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
           </MessageContainer>

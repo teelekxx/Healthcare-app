@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import {
   Title,
@@ -13,6 +14,7 @@ import {
   Container,
   NotificationTouchable,
   HomeTitleContainer,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import ChatModule from "../../components/ChatModule/index";
 import { Icon } from "react-native-elements";
@@ -28,11 +30,12 @@ import {
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
-import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, doc, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
 function ChatsListScreen({ navigation }) {
   const [isPatient, setPatient] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [myUID, setMyUID] = useState("");
   const [myChats, setMyChats] = useState([]);
   const auth = useSelector((state) => state.Authentication);
@@ -62,6 +65,16 @@ function ChatsListScreen({ navigation }) {
   ];
 
   useEffect(() => {
+    const sortArrayBySendAt = (array) => {
+      array.sort((a, b) => {
+        const sendAtA = new Date(a.data().lastMsg.sendAt.seconds * 1000 + a.data().lastMsg.sendAt.nanoseconds / 1000000);
+        const sendAtB = new Date(b.data().lastMsg.sendAt.seconds * 1000 + b.data().lastMsg.sendAt.nanoseconds / 1000000);
+    
+        return sendAtA - sendAtB;
+      });
+    
+      return array;
+    }
     // const getMyUID = async () => {
     //   const token = await AsyncStorage.getItem("token");
     //   const user = await Auth.getUserByToken({
@@ -79,18 +92,27 @@ function ChatsListScreen({ navigation }) {
       if (myUID != null) {
         const q = query(
           collection(db, "groups"),
-          where("member", "array-contains", myUID)
+          where("member", "array-contains", myUID),  
         );
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const jobs = [];
           querySnapshot.forEach((doc) => {
             jobs.push(doc);
           });
-          setMyChats(jobs);
+          setMyChats(sortArrayBySendAt(jobs));
+          setIsLoading(false);
         });
       }
     }
   }, [myUID]);
+
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <ActivityIndicator size="large" color="#00a5cb" />
+      </LoadingContainer>
+    );
+  }
 
   return (
     <ChatListContainer>

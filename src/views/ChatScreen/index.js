@@ -10,6 +10,8 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   FlatList,
+  ActivityIndicator,
+  Linking,
 } from "react-native";
 import {
   Title,
@@ -28,6 +30,7 @@ import {
   DateCalendar,
   CircleButton,
   NotificationTouchable,
+  LoadingContainer,
 } from "../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
@@ -55,6 +58,7 @@ import {
   AddMedicationButton,
   ModalBackground,
   Wrapper,
+  HorizonTitle,
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
@@ -72,6 +76,7 @@ import {
   setDoc,
   updateDoc,
   startAfter,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
@@ -88,8 +93,10 @@ function ChatScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [medications, setMedications] = useState([]);
   const [chatName, setChatName] = useState("");
+  const [chatNumber, setChatNumber] = useState("");
   const [total, setTotal] = useState(null);
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
@@ -104,6 +111,15 @@ function ChatScreen({ navigation, route }) {
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
   const scrollViewRef = useRef(null);
+
+  const nameFormat = (name) => {
+    let newName = name;
+    if (name.length > 15) {
+      newName = name.slice(0, 15);
+      newName += "...";
+    }
+    return newName;
+  };
 
   const getMoreMessages = async () => {
     try {
@@ -153,7 +169,6 @@ function ChatScreen({ navigation, route }) {
         return null;
       } else {
         const docSnapshot = querySnapshot.docs[0];
-        console.log("SNAPO:", docSnapshot.data());
         return docSnapshot;
       }
     } catch (error) {
@@ -172,11 +187,13 @@ function ChatScreen({ navigation, route }) {
       params: { uid: otherUID },
     });
     if (user.isOk) {
+      setIsLoading(false);
       return user;
     }
   };
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
+    setChatNumber(data.data.medicalInformation.phoneNumber);
     setChatName(data.data.medicalInformation.name);
   };
 
@@ -243,12 +260,6 @@ function ChatScreen({ navigation, route }) {
   };
 
   // postsFirstBatch();
-  const q = query(
-    collection(db, "messages", route.params.groupID, "messages"),
-    orderBy("sendAt", "desc"),
-    limit(10)
-  );
-
   const sendMessage = async () => {
     let tempMessage = "";
     let tempLastMessage = "";
@@ -291,7 +302,23 @@ function ChatScreen({ navigation, route }) {
     setIsModalVisible(!isModalVisible);
   };
 
+  const handleDialPress = (phoneNumber) => {
+    const telUrl = `tel:${phoneNumber}`;
+    Linking.openURL(telUrl).catch(() => {
+      console.log("Failed to dial the number");
+    });
+  };
+
   const handleMedications = async (value) => {
+    const q = query(
+      collection(db, "messages", route.params.groupID, "messages"),
+      where("type", "==", "prescription")
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref);
+    });
     if (value.length > 0) {
       let orderId = "";
       console.log("VALUE =", value);
@@ -312,6 +339,8 @@ function ChatScreen({ navigation, route }) {
         console.log("response = ", user);
       }
       orderId = user.data.order._id;
+
+      console.log("Prescriptions deleted successfully");
 
       await Chat.sendMessage({
         uid: route.params.myUID,
@@ -339,7 +368,14 @@ function ChatScreen({ navigation, route }) {
     };
     getUserRole();
 
+    const q = query(
+      collection(db, "messages", route.params.groupID, "messages"),
+      orderBy("sendAt", "desc"),
+      limit(10)
+    );
+
     const unsub = onSnapshot(q, (querySnapshot) => {
+      updateDocuments();
       let tempKey = "";
       let temp = [];
       let tempMessage = {};
@@ -364,15 +400,17 @@ function ChatScreen({ navigation, route }) {
 
     const updateDocuments = async () => {
       try {
-        const querySnapshot = await getDocs(
-          query(
-            collection(db, "messages", route.params.groupID, "messages"),
-            where("sendBy", "!=", myUID)
-          )
-        );
-        querySnapshot.forEach(async (doc) => {
-          await updateDoc(doc.ref, { seen: true });
-        });
+        if (myUID) {
+          const querySnapshot = await getDocs(
+            query(
+              collection(db, "messages", route.params.groupID, "messages"),
+              where("sendBy", "!=", myUID)
+            )
+          );
+          querySnapshot.forEach(async (doc) => {
+            await updateDoc(doc.ref, { seen: true });
+          });
+        }
       } catch (error) {
         console.error("Error updating documents:", error);
       }
@@ -380,6 +418,10 @@ function ChatScreen({ navigation, route }) {
 
     updateDocuments(); //
   }, [myUID, isPharma]);
+
+  // if (isLoading) {
+  //   return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
+  // }
 
   return (
     <BlueContainer>
@@ -392,16 +434,24 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-        <PageTitle>{chatName}</PageTitle>
-        {/* <CallButton>
-          <Icon
-            name="call-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={21}
-          />
-          <PhoneNumber>0814637245</PhoneNumber>
-        </CallButton> */}
+        {isLoading ? (
+          <LoadingContainer>
+            <ActivityIndicator size="large" color={Colors.white} />
+          </LoadingContainer>
+        ) : (
+          <HorizonTitle>
+            <PageTitle>{nameFormat(chatName)}</PageTitle>
+            <CallButton onPress={() => handleDialPress(chatNumber)}>
+              <Icon
+                name="call-outline"
+                type="ionicon"
+                color={Colors.blue}
+                size={21}
+              />
+              <PhoneNumber>{chatNumber}</PhoneNumber>
+            </CallButton>
+          </HorizonTitle>
+        )}
       </PageTitleContainer>
       <Wrapper
         behavior={Platform.OS === "ios" ? "position" : "height"}
@@ -415,6 +465,8 @@ function ChatScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <BubbleContainer>
               <ChatBubble
+              chatName={chatName}
+              navigation={navigation}
                 message={item.Message}
                 timeStamp={item.TimeStamp}
                 sender={item.Sender}

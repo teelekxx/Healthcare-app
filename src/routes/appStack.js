@@ -16,6 +16,7 @@ import MedInfoPage from "../views/MedInfoPage";
 import ForgetPasswordPage from "../views/ForgetPasswordPage";
 import Prescription from "../views/PrescriptionScreen";
 import ChatScreen from "../views/ChatScreen";
+import PharmaFinalScreen from "../views/PharmaFinalScreen";
 import MedInfoSummaryScreen from "../views/MedInfoSummaryScreen";
 import HistoryDetailScreen from "../views/HistoryDetailScreen";
 import AmbulanceHistoryScreen from "../views/AmbulanceHistoryScreen";
@@ -218,6 +219,7 @@ const MyStack = ({ navigation }) => {
           component={AmbulanceHistoryScreen}
         />
         <Stack.Screen name="Chatting" component={ChatScreen} />
+        <Stack.Screen name="PharmaFinal" component={PharmaFinalScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

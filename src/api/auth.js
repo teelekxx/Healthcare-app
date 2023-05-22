@@ -279,6 +279,17 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async updateOrder(option) {
+    const config = {
+      method: HTTP_METHODS.put,
+      url: `/order/${option.params.orderId}`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
   static async getOrderById(option) {
     const config = {
       method: HTTP_METHODS.get,
