@@ -16,32 +16,31 @@ export const Container = styled.View`
   align-self: center;
 `;
 export const Title = styled.Text`
-    color: ${Colors.blue};
-    font-weight: bold;
-    font-size: 40px;
-    align-self: center;
+  color: ${Colors.blue};
+  font-weight: bold;
+  font-size: 40px;
+  align-self: center;
 `;
 export const SubTitle = styled.Text`
-    color: ${Colors.blue};
-    font-weight: bold;
-    font-size: 30px;
-    
+  color: ${Colors.blue};
+  font-weight: bold;
+  font-size: 30px;
 `;
 
 export const ItalicText = styled.Text`
-    color: ${Colors.blue};
-    
-    font-weight: light;
-    font-style:italic;
-    font-size: 15px;
-    align-self: center;
+  color: ${Colors.blue};
+
+  font-weight: light;
+  font-style: italic;
+  font-size: 15px;
+  align-self: center;
 `;
 export const ItalicText2 = styled.Text`
-    color: ${Colors.blue};
-    
-    font-weight: light;
-    font-style:italic;
-    font-size: 15px;
+  color: ${Colors.blue};
+
+  font-weight: light;
+  font-style: italic;
+  font-size: 15px;
 `;
 
 export const InputGroup = styled.View`
@@ -60,7 +59,7 @@ export const Input = styled.TextInput`
   height: 40px;
 `;
 
-export const BlueContainer = styled.SafeAreaView`
+export const BlueContainer = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: ${Colors.blue};
@@ -161,21 +160,21 @@ export const AvatarContainer = styled.View`
 `;
 
 export const FormText = styled.Text`
-  font-size:15px;
-  
+  font-size: 15px;
+
   font-weight: bold;
   color: ${Colors.blue};
-  padding-top:10px;
-  padding-bottom:10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 export const CenterFormText = styled.Text`
-  font-size:15px;
-  
+  font-size: 15px;
+
   font-weight: bold;
   color: ${Colors.blue};
-  padding-top:10px;
-  padding-bottom:10px;
-  align-self:center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-self: center;
 `;
 
 export const FormInput = styled.TextInput`
@@ -213,7 +212,7 @@ export const DateCalendar = styled.View`
 
 export const CircleButton = styled.TouchableOpacity`
   margin-top: ${backButtonMargin}px;
-  margin-left: 25px;
+  margin-left: 10px;
   padding: 10px;
   width: 50px;
   height: 50px;
@@ -255,36 +254,36 @@ export const InfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue};
   border-radius: 10px;
-  
+
   font-weight: bold;
   width: 340px;
   height: 40px;
-  padding-left:10px;
-  padding-right:10px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 export const SmallInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue};
   border-radius: 10px;
-  
+
   font-weight: bold;
   width: 300px;
   height: 40px;
-  padding-left:10px;
-  padding-right:10px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 export const BigInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
-  
+
   font-weight: bold;
   color: ${Colors.blue};
   border-radius: 10px;
   width: 340px;
   height: 80px;
-  padding-left:10px;
-  padding-right:10px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 export const WhiteKeyboard = styled.KeyboardAvoidingView`

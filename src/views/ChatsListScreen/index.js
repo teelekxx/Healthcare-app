@@ -52,16 +52,6 @@ function ChatsListScreen({ navigation }) {
     navigation.navigate("Landing");
   }
 
-  const chatsListPatient = [
-    { Name: "Andy Doe", LastMassage: "" },
-    { Name: "Bill Doe", LastMassage: "" },
-    { Name: "Collin Doe", LastMassage: "Hello" },
-    { Name: "Derick Doe", LastMassage: "" },
-    { Name: "Evan Doe", LastMassage: "" },
-    { Name: "Frank Doe", LastMassage: "" },
-    { Name: "Gill Doe", LastMassage: "" },
-    { Name: "Harry Doe", LastMassage: "" },
-  ];
   const chatsListPharma = [
     { Name: "Mine Pattarin", LastMassage: "" },
     { Name: "Hel Ping", LastMassage: "Hello!" },
@@ -163,23 +153,25 @@ function ChatsListScreen({ navigation }) {
       </RoleSwitch>
       {isPatient ? (
         <SafeAreaView>
-          <ChatScrollable>
-            {myChats.map((val, index) => {
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Chatting", {
-                      groupID: val.data().jobId,
-                      myUID: myUID,
-                    })
-                  }
-                  key={index}
-                >
-                  <ChatModule chat={val} myUID={myUID}></ChatModule>
-                </TouchableOpacity>
-              );
-            })}
-          </ChatScrollable>
+          {isLoading ? (
+            <LoadingContainer>
+              <ActivityIndicator size="large" color="#00a5cb" />
+            </LoadingContainer>
+          ) : (
+            <ChatScrollable>
+              {myChats.map((val, index) => {
+                return (
+                  <TouchableOpacity>
+                    <ChatModule
+                      navigation={navigation}
+                      chat={val}
+                      myUID={myUID}
+                    ></ChatModule>
+                  </TouchableOpacity>
+                );
+              })}
+            </ChatScrollable>
+          )}
         </SafeAreaView>
       ) : (
         <SafeAreaView>
