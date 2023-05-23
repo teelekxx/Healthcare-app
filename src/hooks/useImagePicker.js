@@ -9,12 +9,12 @@ function useImagePicker() {
   // const [image, setImage] = useState(null);
 
   // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+  // let result = await ImagePicker.launchImageLibraryAsync({
+  //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //   allowsEditing: true,
+  //   aspect: [4, 3],
+  //   quality: 1,
+  // });
 
   //   if (!result.canceled) {
   //     const localUri = result.uri;
@@ -42,7 +42,6 @@ function useImagePicker() {
 
   //   }
 
-    
   // };
 
   const [images, setImages] = useState([]);
@@ -55,25 +54,31 @@ function useImagePicker() {
       aspect: [4, 3],
       quality: 1,
     });
-  
-    if (!result.cancelled) {
 
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //   allowsEditing: true,
+    //   aspect: [4, 3],
+    //   quality: 1,
+    // });
+
+    if (!result.cancelled) {
       const newImages = await Promise.all(
         result.assets.map(async (uri) => {
-          const localUri = uri;
+          const localUri = uri.uri;
           const filename = localUri.split("/").pop();
           const match = /\.(\w+)$/.exec(filename);
           const type = match ? `image/${match[1]}` : "image";
-  
+
           const res = await ImageManipulator.manipulateAsync(
-            uri,
+            localUri,
             [{ resize: { height: 1500 } }],
             {
               compress: 0.7,
               format: ImageManipulator.SaveFormat.JPEG,
             }
           );
-  
+
           const imageFile = {
             name: filename,
             type,
@@ -82,12 +87,11 @@ function useImagePicker() {
           return imageFile;
         })
       );
-      setImages((prevImages) => [...prevImages, ...newImages]);
+      setImages((prevImages) =>
+        prevImages === null ? [...newImages] : [...prevImages, ...newImages]
+      );
     }
   };
-
-  
-
   return [{ images }, { pickImage }];
 }
 export default useImagePicker;

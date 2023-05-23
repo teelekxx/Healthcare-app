@@ -14,7 +14,7 @@ export const MyBubble = styled.View`
   padding: 10px 20px 10px 20px;
   margin-left: auto;
   justify-content: center;
-  align-items: center ;
+  align-items: center;
   max-width: ${width * 0.7435}px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   elevation: 10;
@@ -33,7 +33,6 @@ export const WhiteMedMessage = styled.Text`
   padding: 10px;
   font-size: 15px;
   font-weight: bold;
-
 `;
 export const UnderBubble = styled.View`
   flex-direction: row;
