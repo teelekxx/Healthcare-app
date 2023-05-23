@@ -66,7 +66,7 @@ const HistoryDetailScreen = ({navigation, route}) => {
         </CircleButton>
         <PageTitle>Order details</PageTitle>
       </PageTitleContainer>
-      <SignUpForm vertical={true} keyboardDismissMode="on-drag">
+      <SignUpForm vertical={true}>
       <PharName>{userName}</PharName>
       <Text20>Date: {dateFormat(orderDate)}</Text20>
         <Container>

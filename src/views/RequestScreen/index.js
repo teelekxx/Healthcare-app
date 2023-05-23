@@ -59,7 +59,7 @@ import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
 
 function RequestScreen({ navigation }) {
-  const [{ images }, { pickImage }] = useImagePicker();
+  const [{ images }, { pickImage,setImages }] = useImagePicker();
 
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -127,9 +127,9 @@ function RequestScreen({ navigation }) {
   // };
 
   const removeImage = (index) => {
-    const newImages = [...image]; // Create a new array copy
+    const newImages = [...images]; // Create a new array copy
     newImages.splice(index, 1); // Remove the item at the given index
-    setImage(newImages); // Update the state with the new array
+    setImages(newImages); // Update the state with the new array
   };
   const checkSymptoms = () => {
     if (isAccident) {
@@ -188,6 +188,7 @@ function RequestScreen({ navigation }) {
       console.log(err);
     }
   };
+  console.log("images: ", images)
 
   return (
     <RequestContainer>
@@ -203,17 +204,17 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <InputContainer>
         <BlueText>Attached image (optional)</BlueText>
-        {image.length === 0 && (
+        {images.length === 0 && (
           <GreyButton onPress={pickImage}>
             <GreyButtonText>Choose photo</GreyButtonText>
           </GreyButton>
         )}
-        {image && (
+        {images && (
           <SelectedImagesContainer horizontal={true}>
-            {image.map((val, index) => {
+            {images.map((val, index) => {
               return (
                 <SelectedImageContainer key={index}>
-                  <SelectedImage source={{ uri: val }}>
+                  <SelectedImage source={{ uri: val.uri }}>
                     <RemoveButton onPress={() => removeImage(index)}>
                       <Icon
                         name="close-outline"

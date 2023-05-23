@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Text, Platform } from "react-native";
+import { Text, Platform, Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -127,6 +127,7 @@ function SignUpParamedicPage({ navigation, route }) {
   DropDownPicker.setListMode("SCROLLVIEW");
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <PageTitleContainer>
         <CircleButton onPress={() => navigation.goBack()}>
@@ -334,6 +335,7 @@ function SignUpParamedicPage({ navigation, route }) {
         )}
       </Formik>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default SignUpParamedicPage;

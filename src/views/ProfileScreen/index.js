@@ -1,4 +1,5 @@
 import { Icon, Avatar, Accessory } from "react-native-elements";
+import { ToastProvider } from 'react-native-toast-notifications'
 import {
   GreyText,
   Container,
@@ -182,6 +183,7 @@ function ProfileScreen({ navigation }) {
   }
 
   return (
+    <ToastProvider>
     <Background>
       <AvaContainer>
         <AvatarContainer />
@@ -302,6 +304,7 @@ function ProfileScreen({ navigation }) {
         <BlueButtonText>Log out</BlueButtonText>
       </RedButton>
     </Background>
+    </ToastProvider>
   );
 }
 export default ProfileScreen;

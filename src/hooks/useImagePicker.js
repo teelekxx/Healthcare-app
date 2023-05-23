@@ -92,6 +92,6 @@ function useImagePicker() {
       );
     }
   };
-  return [{ images }, { pickImage }];
+  return [{ images }, { pickImage,setImages }];
 }
 export default useImagePicker;

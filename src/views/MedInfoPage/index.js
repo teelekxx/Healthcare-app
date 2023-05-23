@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Keyboard, TouchableWithoutFeedback} from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -250,6 +251,7 @@ function MedInfoPage({ navigation, route }) {
     }
   };
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <PageTitleContainer>
         <CircleButton onPress={() => navigation.goBack()}>
@@ -398,6 +400,7 @@ function MedInfoPage({ navigation, route }) {
       </SignUpForm>
       </WhiteKeyboard>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default MedInfoPage;
