@@ -62,7 +62,7 @@ import {
   HorizonTitle,
 } from "./index.style";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 import Chat from "../../firestore/chat";
 import {
   collection,
