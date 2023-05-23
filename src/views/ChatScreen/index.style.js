@@ -33,11 +33,14 @@ export const PageTitle = styled.Text`
 `;
 
 export const HorizonTitle = styled.View`
-/* background-color: ${Colors.red}; */
+  /* background-color: ${Colors.red}; */
   margin-left: ${width * 0.035897}px;
   /* margin-right: ${width * 0.035897}px; */
   margin-top: ${titleMargin}px;
   flex-direction: row;
+
+  align-items: center;
+  flex: 1;
 `;
 
 export const WhiteContainer = styled.View`
@@ -53,17 +56,21 @@ export const BlueFooter = styled.View`
 
 export const BlueKeyboard = styled.KeyboardAvoidingView`
   background-color: ${Colors.blue};
+  padding-top: 10px;
 `;
 
 export const CallButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 0;
   flex-direction: row;
   padding: 10px;
+  width: 50px;
+  height: 50px;
   background-color: ${Colors.white};
-  border-radius: 20px;
+  border-radius: 100px;
   justify-content: center;
   align-items: center;
-  margin-left: ${width * 0.035897}px;
-
+  margin-right: 10px;
 `;
 
 export const PhoneNumber = styled.Text`
@@ -87,12 +94,19 @@ export const GreyInput = styled.TextInput`
   font-size: 15px;
   background-color: ${Colors.white};
   border-radius: 10px;
-  width: ${width * 0.67}px;
+  height: 40px;
+  flex: 1;
   padding: 10px;
   margin-right: ${width * 0.046153}px;
 `;
 
 export const PictureButton = styled.TouchableOpacity`
+  margin-left: ${width * 0.046153}px;
+  margin-right: ${width * 0.046153}px;
+`;
+
+export const MedButton = styled.TouchableOpacity`
+  margin-left: ${width * 0.046153}px;
   margin-right: ${width * 0.046153}px;
 `;
 
@@ -100,6 +114,7 @@ export const RemoveButton = styled.TouchableOpacity``;
 
 export const SendButton = styled.TouchableOpacity`
   /* margin-right: ${width * 0.046153}px; */
+  margin-right: ${width * 0.046153}px;
 `;
 
 export const SelectedImage = styled.Image`

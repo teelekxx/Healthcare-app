@@ -9,12 +9,14 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 import Auth from "../../api/auth";
-import {  Alert } from "react-native";
 import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { Alert, ActivityIndicator } from "react-native";
+import { LoadingContainer } from "../components/index.style";
 
-export default function ChatModule({ chat, myUID }) {
+export default function ChatModule({ navigation, chat, myUID }) {
   const [chatName, setChatName] = useState("");
   const [location, setLocation] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getChatter = async (myUID) => {
     const otherUID = chat.data().member.filter((jobID) => jobID !== myUID);
@@ -29,6 +31,7 @@ export default function ChatModule({ chat, myUID }) {
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
     setChatName(data.data.medicalInformation.name);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -36,7 +39,15 @@ export default function ChatModule({ chat, myUID }) {
   }, []);
 
   return (
-    <ChatContainer>
+    <ChatContainer
+      onPress={() =>
+        navigation.navigate("Chatting", {
+          chatName: chatName,
+          groupID: chat.data().jobId,
+          myUID: myUID,
+        })
+      }
+    >
       <Avatar
         // source={require("../../../assets/appLogo.png")}
         size={"large"}
@@ -44,10 +55,17 @@ export default function ChatModule({ chat, myUID }) {
         icon={{ name: "user", type: "font-awesome" }}
         overlayContainerStyle={{ backgroundColor: "#efece8" }}
       ></Avatar>
-      <DetailContainer>
-        <ChatName>{chatName}</ChatName>
-        <LastMassage>{chat.data().lastMsg.message}</LastMassage>
-      </DetailContainer>
+
+      {isLoading ? (
+        <LoadingContainer>
+          <ActivityIndicator size="small" color={Colors.blue} />
+        </LoadingContainer>
+      ) : (
+        <DetailContainer>
+          <ChatName>{chatName}</ChatName>
+          <LastMassage>{chat.data().lastMsg.message}</LastMassage>
+        </DetailContainer>
+      )}
     </ChatContainer>
   );
 }
