@@ -44,7 +44,6 @@ import {
   GreyInput,
   WhiteContainer,
   PictureButton,
-  MedButton,
   RemoveButton,
   SendButton,
   BlueFooter,
@@ -62,7 +61,7 @@ import {
   HorizonTitle,
 } from "./index.style";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 import Chat from "../../firestore/chat";
 import {
   collection,
@@ -296,7 +295,6 @@ function ChatScreen({ navigation, route }) {
       // }
 
       setCurrMessage("");
-      scrollViewRef.current.scrollToOffset({ offset: 0 });
     }
   };
 
@@ -305,12 +303,10 @@ function ChatScreen({ navigation, route }) {
   };
 
   const handleDialPress = (phoneNumber) => {
-    if (phoneNumber != "") {
-      const telUrl = `tel:${phoneNumber}`;
-      Linking.openURL(telUrl).catch(() => {
-        console.log("Failed to dial the number");
-      });
-    }
+    const telUrl = `tel:${phoneNumber}`;
+    Linking.openURL(telUrl).catch(() => {
+      console.log("Failed to dial the number");
+    });
   };
 
   const handleMedications = async (value) => {
@@ -437,48 +433,54 @@ function ChatScreen({ navigation, route }) {
             size={20}
           />
         </CircleButton>
-
-        <HorizonTitle>
-          <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
-          <CallButton onPress={() => handleDialPress(chatNumber)}>
-            <Icon
-              name="call-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={21}
-            />
-            {/* <PhoneNumber>Call</PhoneNumber> */}
-          </CallButton>
-        </HorizonTitle>
-      </PageTitleContainer>
-      {console.log(chatMessages)}
-      <ChatField
-        data={chatMessages}
-        keyExtractor={(item, index) => index.toString()}
-        inverted={true}
-        ref={(ref) => {
-          scrollViewRef.current = ref;
-        }}
-        onEndReached={getMoreMessages}
-        renderItem={({ item }) => (
-          <BubbleContainer>
-            <ChatBubble
-              chatName={chatName}
-              navigation={navigation}
-              message={item.Message}
-              timeStamp={item.TimeStamp}
-              sender={item.Sender}
-              image={item.Image}
-              seen={item.Seen}
-              type={item.Type}
-              myUID={myUID}
-            />
-          </BubbleContainer>
+        {isLoading ? (
+          <LoadingContainer>
+            <ActivityIndicator size="large" color={Colors.white} />
+          </LoadingContainer>
+        ) : (
+          <HorizonTitle>
+            <PageTitle>{nameFormat(chatName)}</PageTitle>
+            <CallButton onPress={() => handleDialPress(chatNumber)}>
+              <Icon
+                name="call-outline"
+                type="ionicon"
+                color={Colors.blue}
+                size={21}
+              />
+              <PhoneNumber>{chatNumber}</PhoneNumber>
+            </CallButton>
+          </HorizonTitle>
         )}
-      />
-
+      </PageTitleContainer>
+      <Wrapper
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 1 }}
+      >
+        {console.log(chatMessages)}
+        <ChatField
+          data={chatMessages}
+          keyExtractor={(item, index) => index.toString()}
+          inverted={true}
+          onEndReached={getMoreMessages}
+          renderItem={({ item }) => (
+            <BubbleContainer>
+              <ChatBubble
+                chatName={chatName}
+                navigation={navigation}
+                message={item.Message}
+                timeStamp={item.TimeStamp}
+                sender={item.Sender}
+                image={item.Image}
+                seen={item.Seen}
+                type={item.Type}
+                myUID={myUID}
+              />
+            </BubbleContainer>
+          )}
+        />
+      </Wrapper>
       <BlueKeyboard
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 0 }}
       >
         <BlueFooter>
@@ -507,11 +509,11 @@ function ChatScreen({ navigation, route }) {
                 name="images-outline"
                 type="ionicon"
                 color={Colors.white}
-                size={30}
+                size={21}
               />
             </PictureButton>
             {isPharma && (
-              <MedButton
+              <PictureButton
                 onPress={() =>
                   navigation.navigate("Prescription", {
                     medication: medications,
@@ -523,9 +525,9 @@ function ChatScreen({ navigation, route }) {
                   name="medkit-outline"
                   type="ionicon"
                   color={Colors.white}
-                  size={30}
+                  size={21}
                 />
-              </MedButton>
+              </PictureButton>
             )}
             <GreyInput
               multiline={true}
@@ -538,7 +540,7 @@ function ChatScreen({ navigation, route }) {
                 name="send-outline"
                 type="ionicon"
                 color={Colors.white}
-                size={30}
+                size={21}
               />
             </SendButton>
           </ChatInputContainer>

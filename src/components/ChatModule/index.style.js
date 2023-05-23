@@ -4,7 +4,7 @@ import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-export const ChatContainer = styled.TouchableOpacity`
+export const ChatContainer = styled.View`
   display: flex;
   flex-direction: row;
   margin-bottom: ${height * 0.043246}px;
@@ -18,7 +18,7 @@ export const DetailContainer = styled.View`
 
 export const ChatName = styled.Text`
   color: ${Colors.blue};
-
+  
   font-weight: bold;
   font-size: 15px;
   margin-bottom: ${height * 0.007109}px;
@@ -26,6 +26,6 @@ export const ChatName = styled.Text`
 
 export const LastMassage = styled.Text`
   color: ${Colors.grey};
-
+  
   font-size: 15px;
 `;
