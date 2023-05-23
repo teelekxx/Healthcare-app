@@ -44,6 +44,7 @@ import {
   GreyInput,
   WhiteContainer,
   PictureButton,
+  MedButton,
   RemoveButton,
   SendButton,
   BlueFooter,
@@ -510,7 +511,7 @@ function ChatScreen({ navigation, route }) {
               />
             </PictureButton>
             {isPharma && (
-              <PictureButton
+              <MedButton
                 onPress={() =>
                   navigation.navigate("Prescription", {
                     medication: medications,
@@ -524,7 +525,7 @@ function ChatScreen({ navigation, route }) {
                   color={Colors.white}
                   size={30}
                 />
-              </PictureButton>
+              </MedButton>
             )}
             <GreyInput
               multiline={true}

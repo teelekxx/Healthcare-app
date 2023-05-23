@@ -7,8 +7,6 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   View,
 } from "react-native";
 import {
