@@ -119,6 +119,7 @@ const MyStack = ({ navigation }) => {
 
   useEffect(() => {
     const unlisten = firebaseAuth.onAuthStateChanged(async (authUser) => {
+
       if (authUser) {
         await setNewToken();
         await fetchUserInfomation();
