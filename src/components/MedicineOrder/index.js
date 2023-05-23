@@ -16,7 +16,7 @@ import {
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";

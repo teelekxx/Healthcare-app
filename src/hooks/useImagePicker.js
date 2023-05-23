@@ -62,7 +62,7 @@ function useImagePicker() {
     //   quality: 1,
     // });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const newImages = await Promise.all(
         result.assets.map(async (uri) => {
           const localUri = uri.uri;

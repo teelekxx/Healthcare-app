@@ -9,7 +9,8 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert } from "react-native";
+import {  Alert } from "react-native";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 
 export default function ChatModule({ chat, myUID }) {
   const [chatName, setChatName] = useState("");
