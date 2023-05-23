@@ -16,31 +16,32 @@ export const Container = styled.View`
   align-self: center;
 `;
 export const Title = styled.Text`
-  color: ${Colors.blue};
-  font-weight: bold;
-  font-size: 40px;
-  align-self: center;
+    color: ${Colors.blue};
+    font-weight: bold;
+    font-size: 40px;
+    align-self: center;
 `;
 export const SubTitle = styled.Text`
-  color: ${Colors.blue};
-  font-weight: bold;
-  font-size: 30px;
+    color: ${Colors.blue};
+    font-weight: bold;
+    font-size: 30px;
+    
 `;
 
 export const ItalicText = styled.Text`
-  color: ${Colors.blue};
-
-  font-weight: light;
-  font-style: italic;
-  font-size: 15px;
-  align-self: center;
+    color: ${Colors.blue};
+    
+    font-weight: light;
+    font-style:italic;
+    font-size: 15px;
+    align-self: center;
 `;
 export const ItalicText2 = styled.Text`
-  color: ${Colors.blue};
-
-  font-weight: light;
-  font-style: italic;
-  font-size: 15px;
+    color: ${Colors.blue};
+    
+    font-weight: light;
+    font-style:italic;
+    font-size: 15px;
 `;
 
 export const InputGroup = styled.View`
@@ -142,7 +143,7 @@ export const PageTitle = styled.Text`
 
 export const PageTitleContainer = styled.SafeAreaView`
   margin-bottom: 30px;
-  margin-top: 50px;
+  margin-top:50px;
   flex-direction: row;
   align-items: center;
 `;
@@ -159,22 +160,22 @@ export const AvatarContainer = styled.View`
 `;
 
 export const FormText = styled.Text`
-  font-size: 15px;
-
+  font-size:15px;
+  
   font-weight: bold;
   color: ${Colors.blue};
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top:10px;
+  padding-bottom:10px;
 `;
 export const CenterFormText = styled.Text`
-  font-size: 15px;
+  font-size:15px;
   text-decoration: underline;
   font-weight: bold;
   color: ${Colors.blue};
   text-decoration-color: ${Colors.blue};
-  padding-top: 10px;
-  padding-bottom: 10px;
-  align-self: center;
+  padding-top:10px;
+  padding-bottom:10px;
+  align-self:center;
 `;
 
 export const FormInput = styled.TextInput`
@@ -206,14 +207,14 @@ export const SmallFormInput = styled.TextInput`
 `;
 export const DateCalendar = styled.View`
   flex: 1;
-  display: flex;
+  display:flex;
   flex-direction: row;
-  gap: 10px;
+  gap:10px;
 `;
 
 export const CircleButton = styled.TouchableOpacity`
   margin-top: ${backButtonMargin}px;
-  margin-left: 10px;
+  margin-left: 25px;
   padding: 10px;
   width: 50px;
   height: 50px;
@@ -225,7 +226,7 @@ export const CircleButton = styled.TouchableOpacity`
 `;
 
 export const BlueCircleButton = styled.TouchableOpacity`
-  ${"" /* margin-top: 60px; */}
+  ${'' /* margin-top: 60px; */}
   margin-left: 25px;
   padding: 10px;
   width: 50px;
@@ -255,36 +256,36 @@ export const InfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue};
   border-radius: 10px;
-
+  
   font-weight: bold;
   width: 340px;
   height: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left:10px;
+  padding-right:10px;
 `;
 export const SmallInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue};
   border-radius: 10px;
-  margin-right: 10px;
+  margin-right:10px;
   font-weight: bold;
-  flex: 1;
+  flex:1;
   height: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left:10px;
+  padding-right:10px;
 `;
 export const BigInfoInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
-
+  
   font-weight: bold;
   color: ${Colors.blue};
   border-radius: 10px;
   width: 100%;
   height: 80px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left:10px;
+  padding-right:10px;
 `;
 
 export const WhiteKeyboard = styled.KeyboardAvoidingView`
