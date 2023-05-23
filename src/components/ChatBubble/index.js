@@ -18,7 +18,7 @@ import {
   BlueMedMessage,
   WhiteMedMessage,
 } from "./index.style";
-import { Text } from "react-native";
+import { Text, ActivityIndicator } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import Auth from "../../api/auth";
@@ -38,19 +38,20 @@ export default function ChatBubble({
   chatName,
 }) {
   const [medMessage, setMedMessage] = useState([]);
-  const [orderStatus, setOrderStatus] = useState("");
+  const [orderStatus, setOrderStatus] = useState("pending");
+  const [isLoading, setIsLoading] = useState(false);
 
   const medString = (value) => {
     let tempMedMessage = "";
     let tempTotal = 0;
     value.forEach((data) => {
-      if(data.name){
-      // tempMedMessage += data._id + "\n";
-      tempMedMessage += data.name + "\n";
-      tempMedMessage += data.dosage + "\n";
-      tempMedMessage += "Price: " + data.price + "\n";
-      tempMedMessage += "\n";
-      tempTotal += Number(data.price);
+      if (data.name) {
+        // tempMedMessage += data._id + "\n";
+        tempMedMessage += data.name + "\n";
+        tempMedMessage += data.dosage + "\n";
+        tempMedMessage += "Price: " + data.price + "\n";
+        tempMedMessage += "\n";
+        tempTotal += Number(data.price);
       }
     });
     tempMedMessage += "Total: " + tempTotal;
@@ -64,6 +65,7 @@ export default function ChatBubble({
       token: token,
     });
     if (user.isOk) {
+      setMedMessage(user.data.medicines);
       return user.data;
     } else {
       return ["ERROR"];
@@ -74,10 +76,10 @@ export default function ChatBubble({
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.updateOrder({
       params: { orderId: message },
-      body: {"status" : "accepted"},
+      body: { status: "accepted" },
       token: token,
     });
-    if(user.isOk) {
+    if (user.isOk) {
       setOrderStatus("accepted");
       navigation.navigate("PharmaFinal", {
         chatName: chatName,
@@ -90,25 +92,27 @@ export default function ChatBubble({
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.updateOrder({
       params: { orderId: message },
-      body: {"status" : "canceled"},
+      body: { status: "canceled" },
       token: token,
     });
-    if(user.isOk) {
+    if (user.isOk) {
       setOrderStatus("canceled");
     }
   };
 
   const fetchData = async () => {
-    const data = await getOrderDetail();
-    setMedMessage(data.medicines);
-    setOrderStatus(data.status)
+    setIsLoading(false);
+
+    if (type === "prescription") {
+      const data = await getOrderDetail();
+    }
+
+    setOrderStatus(data.status);
   };
 
   useEffect(() => {
-    if (type === "prescription") {
-      fetchData();
-    }
-  }, [orderStatus]);
+    fetchData();
+  }, []);
   if (image === null) {
     image = [];
   }
@@ -120,7 +124,11 @@ export default function ChatBubble({
         return (
           <MessageContainer>
             <MyBubble>
-              <WhiteMedMessage>{medString(medMessage)}</WhiteMedMessage>
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : (
+                <WhiteMedMessage>{medString(medMessage)}</WhiteMedMessage>
+              )}
             </MyBubble>
             <UnderBubble>
               {seen && <ReadLabel>Read</ReadLabel>}
@@ -156,15 +164,16 @@ export default function ChatBubble({
           <MessageContainer>
             <OthersBubble>
               <BlueMedMessage>{medString(medMessage)}</BlueMedMessage>
-              {(orderStatus == "pending") && (
+              {console.log({ orderStatus })}
+              {orderStatus == "pending" && (
                 <HorizonInput>
-                <CloseButton onPress={cancelOrder}>
-                  <WhiteButtonText>Decline</WhiteButtonText>
-                </CloseButton>
-                <SaveButton onPress={acceptOrder}>
-                  <WhiteButtonText>Accept</WhiteButtonText>
-                </SaveButton>
-              </HorizonInput>
+                  <CloseButton onPress={cancelOrder}>
+                    <WhiteButtonText>Decline</WhiteButtonText>
+                  </CloseButton>
+                  <SaveButton onPress={acceptOrder}>
+                    <WhiteButtonText>Accept</WhiteButtonText>
+                  </SaveButton>
+                </HorizonInput>
               )}
             </OthersBubble>
             <OthersTimeStamp>{timeStamp}</OthersTimeStamp>

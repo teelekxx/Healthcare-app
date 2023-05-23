@@ -334,20 +334,18 @@ function ChatScreen({ navigation, route }) {
         token: token,
       });
       if (user.isOk) {
+        await Chat.sendMessage({
+          uid: route.params.myUID,
+          groupId: route.params.groupID,
+          message: user.data.order._id,
+          type: "prescription",
+        });
         // console.log("response = ", user);
       } else if (!user.isOk) {
         console.log("response = ", user);
       }
-      orderId = user.data.order._id;
 
-      console.log("Prescriptions deleted successfully");
-
-      await Chat.sendMessage({
-        uid: route.params.myUID,
-        groupId: route.params.groupID,
-        message: orderId,
-        type: "prescription",
-      });
+      // console.log("Prescriptions deleted successfully");
     }
   };
 
@@ -366,6 +364,7 @@ function ChatScreen({ navigation, route }) {
         setIsPharma(true);
       }
     };
+
     getUserRole();
 
     const q = query(
@@ -457,6 +456,7 @@ function ChatScreen({ navigation, route }) {
         behavior={Platform.OS === "ios" ? "position" : "height"}
         style={{ flex: 1 }}
       >
+        {console.log(chatMessages)}
         <ChatField
           data={chatMessages}
           keyExtractor={(item, index) => index.toString()}
@@ -465,8 +465,8 @@ function ChatScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <BubbleContainer>
               <ChatBubble
-              chatName={chatName}
-              navigation={navigation}
+                chatName={chatName}
+                navigation={navigation}
                 message={item.Message}
                 timeStamp={item.TimeStamp}
                 sender={item.Sender}

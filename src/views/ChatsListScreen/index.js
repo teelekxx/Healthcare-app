@@ -30,7 +30,14 @@ import {
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
-import { collection, query, where, doc, onSnapshot, orderBy } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  doc,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
 function ChatsListScreen({ navigation }) {
@@ -67,14 +74,26 @@ function ChatsListScreen({ navigation }) {
   useEffect(() => {
     const sortArrayBySendAt = (array) => {
       array.sort((a, b) => {
-        const sendAtA = new Date(a.data().lastMsg.sendAt.seconds * 1000 + a.data().lastMsg.sendAt.nanoseconds / 1000000);
-        const sendAtB = new Date(b.data().lastMsg.sendAt.seconds * 1000 + b.data().lastMsg.sendAt.nanoseconds / 1000000);
-    
+        let sendAtA = 0;
+        let sendAtB = 0;
+        if (a.data().lastMsg.sendAt != null) {
+          sendAtA = new Date(
+            a.data().lastMsg.sendAt.seconds * 1000 +
+              a.data().lastMsg.sendAt.nanoseconds / 1000000
+          );
+        }
+        if (b.data().lastMsg.sendAt != null) {
+          sendAtB = new Date(
+            b.data().lastMsg.sendAt.seconds * 1000 +
+              b.data().lastMsg.sendAt.nanoseconds / 1000000
+          );
+        }
+
         return sendAtA - sendAtB;
       });
-    
+
       return array;
-    }
+    };
     // const getMyUID = async () => {
     //   const token = await AsyncStorage.getItem("token");
     //   const user = await Auth.getUserByToken({
@@ -92,14 +111,15 @@ function ChatsListScreen({ navigation }) {
       if (myUID != null) {
         const q = query(
           collection(db, "groups"),
-          where("member", "array-contains", myUID),  
+          where("member", "array-contains", myUID)
         );
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const jobs = [];
           querySnapshot.forEach((doc) => {
             jobs.push(doc);
           });
-          setMyChats(sortArrayBySendAt(jobs));
+          // setMyChats(sortArrayBySendAt(jobs));
+          setMyChats(jobs);
           setIsLoading(false);
         });
       }

@@ -3,8 +3,8 @@ import axios from "axios";
 // const uri = `https://aec32548a02114e0294b4d9c2e6e048f-1482926241.ap-southeast-1.elb.amazonaws.com/development`;
 // const uri = "aec32548a02114e0294b4d9c2e6e048f-1482926241.ap-southeast-1.elb.amazonaws.com"
 // const uri = "http://10.66.15.66:3000"
-
-const uri = "http://192.168.0.162:3000"
+const uri = "http://172.20.10.9:3000";
+// const uri = "http://192.168.0.162:3000"
 export async function request({
   baseURL = uri,
   body = null,
@@ -100,7 +100,6 @@ export async function request({
 
 // export default mongoose.model('NotificationToken', notificationTokenSchema);
 
-
 //notification.model.js
 
 // import mongoose from 'mongoose';
@@ -136,15 +135,13 @@ export async function request({
 //     type: {
 //       type: String,
 //       enum : ['','','',''],
-      
+
 //     }
 //   },
 //   { timestamps: true },
 // );
 
 // export default mongoose.model('Notification', notificationSchema);
-
-
 
 //notification.controller.js
 // import axios from "axios";
@@ -409,9 +406,7 @@ export async function request({
 //       .collection("notification")
 //       .doc("4fZI9VTZ3QXnjNpnbfmZ8xqsCty1");
 
-   
 //     const doc = await mapsRef.get();
-
 
 //     // const data = doc.data().tokens.map((token) => ({
 //     //   to: token,
@@ -419,13 +414,11 @@ export async function request({
 //     //   body: "my name is boon",
 //     // }));
 
-
 //     // const response = await axios.post('https://exp.host/--/api/v2/push/send', {
 //     //   data,
 //     // });
 
 //     console.log(doc.data().tokens);
-
 
 //     const expoNotificationBody = {
 //       to: doc.data().tokens,
@@ -449,8 +442,6 @@ export async function request({
 
 //     console.log({expoNotificationBody});
 
-    
-
 //     const response = await fetch('https://exp.host/--/api/v2/push/send', {
 //       method: 'POST',
 //       headers: {
@@ -462,8 +453,6 @@ export async function request({
 //       },
 //       body: JSON.stringify(expoNotificationBody),
 //     });
-
-
 
 //     res.status(200).json({ ok: true, message: 'send notification successfully', response });
 //   } catch (error) {
