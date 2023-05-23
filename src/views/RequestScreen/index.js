@@ -9,7 +9,7 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Colors } from "../../constants";
 import { Icon } from "react-native-elements";
-import useImagePicker  from "../../hooks/useImagePicker.js"
+import useImagePicker from "../../hooks/useImagePicker.js";
 import {
   Title,
   ItalicText,
@@ -92,7 +92,6 @@ function RequestScreen({ navigation }) {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        console.log(latitude);
         setLatitude(location.coords.latitude);
         setLongitude(location.coords.longitude);
       })();
@@ -154,11 +153,11 @@ function RequestScreen({ navigation }) {
     try {
       checkSymptoms();
 
-      console.log({image});
       const formData = new FormData();
-      // console.log("here");
-      const localUri = await AssetToLocalUri(image)
-      // formData.append("attachedImages", localUri);
+
+
+  
+    
       formData.append("contactNumber", phoneNumber);
       formData.append("symptoms", symptoms);
       formData.append("otherInformation", otherInformation);
@@ -166,22 +165,15 @@ function RequestScreen({ navigation }) {
       formData.append("deliveringStatus", "waiting");
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
-      // console.log(formData);
+      images.map((image) => {
+        formData.append("images", image);
+      });
+
 
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
-          body: formData
-          // : {
-          //   contactNumber: phoneNumber,
-          //   symptoms: symptoms,
-          //   otherInformation: otherInformation,
-          //   acceptanceStatus: "waiting",
-          //   deliveringStatus: "waiting",
-          //   latitude: latitude,
-          //   longitude: longitude,
-          // },
-          ,
+          body: formData,
           token: token,
         });
         if (user.isOk) {
@@ -317,9 +309,9 @@ function RequestScreen({ navigation }) {
           <BlueButtonText>Cancel</BlueButtonText>
         </BlueBorderButton>
         {/* <BlueButton onPress={() => navigation.navigate("Map")}> */}
-        {/* <BlueButton onPress={sendEmergencyCase}>
+        <BlueButton onPress={sendEmergencyCase}>
           <WhiteButtonText>Request</WhiteButtonText>
-        </BlueButton> */}
+        </BlueButton>
       </HorizonInput3>
     </RequestContainer>
   );
