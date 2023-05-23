@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 export const CircleButton = styled.TouchableOpacity`
-  margin-top: 60px;
   margin-left: 25px;
   padding: 10px;
   width: 50px;
@@ -16,10 +15,11 @@ export const EditButton = styled.TouchableOpacity`
   width: 150px;
   height: 40px;
   margin-top: 10px;
+  margin-bottom:10px;
   background-color: ${Colors.blue};
   border-radius: 20px;
   justify-content: center;
-  align-self: flex-end;
+  align-self: center;
 `;
 export const EditButtonText = styled.Text`
   font-size: 18px;

@@ -3,7 +3,8 @@ import {
   SafeAreaView,
   Text,
   Alert,
-  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
   Dimensions,
   Platform, 
 } from "react-native";
@@ -91,6 +92,7 @@ function SignInPage({ navigation }) {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <CircleButton onPress={() => navigation.goBack()}>
         <Icon
@@ -147,7 +149,7 @@ function SignInPage({ navigation }) {
               <ErrorMessage
                 name="email"
                 component={Text}
-                style={{ color: "red" }}
+                style={{ color: "red", paddingLeft:40 }}
               />
               <InputGroup>
                 <Icon
@@ -170,7 +172,7 @@ function SignInPage({ navigation }) {
               <ErrorMessage
                 name="password"
                 component={Text}
-                style={{ color: "red" }}
+                style={{ color: "red",paddingLeft:40 }}
               />
               <ForgotPassword
                 onPress={() => navigation.navigate("ForgetPassword")}
@@ -186,6 +188,7 @@ function SignInPage({ navigation }) {
         )}
       </Formik>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default SignInPage;

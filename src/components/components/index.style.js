@@ -4,7 +4,7 @@ import { Dimensions, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 const marginMultiplier = Platform.OS === "ios" ? 0 : 0.0632;
-const backButtonMargin = Platform.OS === "ios" ? 0 : 60;
+const backButtonMargin = Platform.OS === "ios" ? 0 : 0;
 
 export const Container = styled.View`
   flex: 1;
@@ -60,7 +60,7 @@ export const Input = styled.TextInput`
   height: 40px;
 `;
 
-export const BlueContainer = styled.SafeAreaView`
+export const BlueContainer = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: ${Colors.blue};
@@ -136,15 +136,14 @@ export const Text = styled.Text`
 
 export const PageTitle = styled.Text`
   font-size: 24px;
-
   font-weight: bold;
   color: ${Colors.white};
-  margin-top: 70px;
   margin-left: 20px;
 `;
 
 export const PageTitleContainer = styled.SafeAreaView`
   margin-bottom: 30px;
+  margin-top:50px;
   flex-direction: row;
   align-items: center;
 `;
@@ -170,9 +169,10 @@ export const FormText = styled.Text`
 `;
 export const CenterFormText = styled.Text`
   font-size:15px;
-  
+  text-decoration: underline;
   font-weight: bold;
   color: ${Colors.blue};
+  text-decoration-color: ${Colors.blue};
   padding-top:10px;
   padding-bottom:10px;
   align-self:center;
@@ -207,8 +207,9 @@ export const SmallFormInput = styled.TextInput`
 `;
 export const DateCalendar = styled.View`
   flex: 1;
+  display:flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap:10px;
 `;
 
 export const CircleButton = styled.TouchableOpacity`
@@ -225,7 +226,7 @@ export const CircleButton = styled.TouchableOpacity`
 `;
 
 export const BlueCircleButton = styled.TouchableOpacity`
-  margin-top: 60px;
+  ${'' /* margin-top: 60px; */}
   margin-left: 25px;
   padding: 10px;
   width: 50px;
@@ -267,9 +268,9 @@ export const SmallInfoInput = styled.TextInput`
   border: 1px solid ${Colors.lightGrey};
   color: ${Colors.blue};
   border-radius: 10px;
-  
+  margin-right:10px;
   font-weight: bold;
-  width: 300px;
+  flex:1;
   height: 40px;
   padding-left:10px;
   padding-right:10px;
@@ -281,7 +282,7 @@ export const BigInfoInput = styled.TextInput`
   font-weight: bold;
   color: ${Colors.blue};
   border-radius: 10px;
-  width: 340px;
+  width: 100%;
   height: 80px;
   padding-left:10px;
   padding-right:10px;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { SafeAreaView, Text, Alert } from "react-native";
+import { SafeAreaView, Text, Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
 import {
   ThemeButton,
   ThemeButtonText,
@@ -100,6 +100,7 @@ function SignUpPage({ navigation }) {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <CircleButton onPress={() => navigation.goBack()}>
         <Icon
@@ -166,7 +167,7 @@ function SignUpPage({ navigation }) {
               <ErrorMessage
                 name="email"
                 component={Text}
-                style={{ color: "red" }}
+                style={{ color: "red",paddingLeft:40 }}
               />
               <InputGroup>
                 <Icon
@@ -188,7 +189,7 @@ function SignUpPage({ navigation }) {
               <ErrorMessage
                 name="password"
                 component={Text}
-                style={{ color: "red" }}
+                style={{ color: "red",paddingLeft:40 }}
               />
               <InputGroup>
                 <Icon
@@ -211,7 +212,7 @@ function SignUpPage({ navigation }) {
               <ErrorMessage
                 name="confirmPassword"
                 component={Text}
-                style={{ color: "red" }}
+                style={{ color: "red",paddingLeft:40 }}
               />
               <BlueButton onPress={handleSubmit}>
                 {/* <BlueButton onPress={() => navigation.navigate("Role", { email: values.email, password: values.password })}> */}
@@ -222,6 +223,7 @@ function SignUpPage({ navigation }) {
         )}
       </Formik>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default SignUpPage;

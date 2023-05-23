@@ -9,7 +9,6 @@ export const NotificationsTitle = styled.Text`
   
   font-weight: bold;
   font-size: 25px;
-  margin-top: ${height * 0.08886}px;
   margin-left: ${width * 0.0641}px;
 `;
 
@@ -19,6 +18,9 @@ export const NotificationsContainer = styled.View`
 
 export const TitleContainer = styled.View`
   flex-direction: row;
+  align-items:center;
+  margin-top:60px;
+  margin-bottom:30px;
 `;
 
 export const NotificationsScrollable = styled.ScrollView`

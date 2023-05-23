@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Platform, SafeAreaView } from "react-native";
+import { Text, Platform, SafeAreaView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -60,7 +60,7 @@ function SignUpPharmacistPage({ navigation, route }) {
   };
 
   const saveGeo = (region) => {
-    setPharLatitude(region.latirude);
+    setPharLatitude(region.latitude);
     setPharLongitude(region.longitude);
   };
 
@@ -115,6 +115,7 @@ function SignUpPharmacistPage({ navigation, route }) {
     });
   };
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <PageTitleContainer>
         <CircleButton onPress={() => navigation.goBack()}>
@@ -338,6 +339,7 @@ function SignUpPharmacistPage({ navigation, route }) {
         )}
       </Formik>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default SignUpPharmacistPage;

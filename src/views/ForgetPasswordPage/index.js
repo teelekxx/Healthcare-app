@@ -115,7 +115,7 @@ function ForgetPasswordPage({ navigation }) {
             <ErrorMessage
               name="email"
               component={Text}
-              style={{ color: "red" }}
+              style={{ color: "red", paddingLeft:40 }}
             />
             <SendButton onPress={handleSubmit}>
               <BlueButtonText>Send</BlueButtonText>

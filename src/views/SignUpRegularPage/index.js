@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Platform } from "react-native";
+import { Text, Platform, Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -71,6 +71,7 @@ function SignUpRegularPage({ navigation, route }) {
     });
   };
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <PageTitleContainer>
         <CircleButton onPress={() => navigation.goBack()}>
@@ -221,6 +222,7 @@ function SignUpRegularPage({ navigation, route }) {
       </Formik>
 
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default SignUpRegularPage;

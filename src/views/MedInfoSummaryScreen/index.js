@@ -25,7 +25,7 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AsyncStorage, ActivityIndicator } from "react-native";
+import { AsyncStorage, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Auth from "../../api/auth";
 
 function MedInfoSummaryScreen({ navigation }) {
@@ -149,6 +149,8 @@ function MedInfoSummaryScreen({ navigation }) {
     );
   }
   return (
+
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
       <PageTitleContainer>
         <CircleButton onPress={() => navigation.goBack()}>
@@ -302,6 +304,7 @@ function MedInfoSummaryScreen({ navigation }) {
         <Space></Space>
       </SignUpForm>
     </BlueContainer>
+    </TouchableWithoutFeedback>
   );
 }
 export default MedInfoSummaryScreen;
