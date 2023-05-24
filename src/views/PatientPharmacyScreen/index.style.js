@@ -58,10 +58,8 @@ export const FindTitle = styled.Text`
   margin-left: ${width * 0.0641}px;
 `;
 
-export const PharmacyIcon = styled.Image`
-  width: ${width * 0.27948}px;
-  height: ${width * 0.27948}px;
-  margin-left: ${width * 0.30769}px;
+export const PharmacyIcon = styled.View`
+  align-self: center;
   margin-top: ${height * 0.04739}px;
 `;
 

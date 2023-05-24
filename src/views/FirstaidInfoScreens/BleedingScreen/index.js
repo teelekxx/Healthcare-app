@@ -21,6 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
+import Bleeding from "../../../../assets/bleeding.svg";
 
 function BleedingScreen({ navigation }) {
   return (
@@ -40,7 +41,9 @@ function BleedingScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepPicture source={require("../../../../assets/bleeding.jpg")} />
+        <View style={{alignSelf: "center"}}>
+          <Bleeding />
+          </View>
           <StepTitle>1. Stop the Bleeding</StepTitle>
           <StepDetail>
             Apply direct pressure on the cut or wound with a clean cloth,

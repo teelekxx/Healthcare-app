@@ -21,6 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
+import CPR from "../../../../assets/CPR.svg";
 
 function CPRScreen({ navigation }) {
   return (
@@ -40,7 +41,9 @@ function CPRScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepPicture source={require("../../../../assets/CPR.png")} />
+        <View style={{alignSelf: "center"}}>
+          <CPR />
+          </View>
           <StepTitle2>For adults and children over 8 years old</StepTitle2>
           <StepTitle>1. Place your hands on the person's chest</StepTitle>
           <StepDetail>

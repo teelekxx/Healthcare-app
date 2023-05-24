@@ -11,6 +11,10 @@ import {
 } from "../../components/components/index.style";
 import { RadioButton } from "react-native-paper";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import RoleHeader from "../../../assets/role.svg";
+import RegularUser from "../../../assets/regularUser.svg";
+import ParamedicUser from "../../../assets/paramedicUser.svg";
+import PharmacistUser from "../../../assets/pharmacistUser.svg";
 
 function RolePage({ route, navigation }) {
   const [checked, setChecked] = React.useState("Regular user");
@@ -47,10 +51,11 @@ function RolePage({ route, navigation }) {
           size={20}
         />
       </CircleButton>
-      <Image source={require("../../../assets/role.png")} />
+      <RoleHeader/>
       <SubTitle>- Choose your role -</SubTitle>
       <BoxWrapper onPress={() => setChecked("Regular user")}>
-        <RoleImage source={require("../../../assets/regularUser.png")} />
+      <RegularUser style={{borderRadius: 10}}/>
+        {/* <RoleImage source={require("../../../assets/regularUser.png")} /> */}
         <Text>Regular user</Text>
         <RadioButton
           color={Colors.blue}
@@ -60,7 +65,7 @@ function RolePage({ route, navigation }) {
         />
       </BoxWrapper>
       <BoxWrapper onPress={() => setChecked("Paramedic")}>
-        <RoleImage source={require("../../../assets/paramedicUser.png")} />
+        <ParamedicUser/>
         <Text>Paramedic</Text>
 
         <RadioButton
@@ -71,7 +76,7 @@ function RolePage({ route, navigation }) {
         />
       </BoxWrapper>
       <BoxWrapper onPress={() => setChecked("Pharmacist")}>
-        <RoleImage source={require("../../../assets/pharmacistUser.png")} />
+        <PharmacistUser />
         <Text>Pharmacist</Text>
         <RadioButton
           color={Colors.blue}
