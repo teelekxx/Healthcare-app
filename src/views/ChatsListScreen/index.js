@@ -178,14 +178,7 @@ function ChatsListScreen({ navigation }) {
           <ChatScrollable>
             {chatsListPharma.map((val, index) => {
               return (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Chatting", { paramKey: val.Name })
-                  }
-                  key={index}
-                >
                   <ChatModule chat={val}></ChatModule>
-                </TouchableOpacity>
               );
             })}
           </ChatScrollable>

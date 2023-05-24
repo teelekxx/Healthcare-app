@@ -4,6 +4,7 @@ import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
 import { Colors } from "../../constants";
 import { collection, query, where, doc, onSnapshot } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../lib/firebase";
 import * as Location from "expo-location";
 import { Google } from "expo";
@@ -12,9 +13,8 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
-  LoadingContainer
 } from "react-native";
-import { Title, ItalicText } from "../../components/components/index.style";
+import { Title, ItalicText, LoadingContainer } from "../../components/components/index.style";
 import {
   Container,
   MapContainer,
@@ -55,11 +55,14 @@ function MapPage({ navigation, route }) {
   const [region, setRegion] = useState(null);
   const [nearbyPlaces, setNearby] = useState(null);
   const [destinationMap, setDestination] = useState(null);
+  const [myUID, setMyUID] = useState("");
   const [foundHospital, setFoundHospital] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("finding");
   const [duration, setDuration] = useState("");
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
   const matchedHospital = {
     Name: "EiEi Hospital",
     ParamedicName: "Tee Hid",
@@ -140,16 +143,19 @@ function MapPage({ navigation, route }) {
   const fetchData = async (jobId) => {
     const data = await getReciever(jobId);
     setFoundHospital(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+    }
     console.log("My token=", myToken.data.jobId);
     if (status == "doing") {
       
       fetchData(myToken.data.jobId);
     }
 
-    console.log("HOSPITAL:", foundHospital.job.receiverUser);
     // const unsub = onSnapshot(doc(db, "jobs", token.params), (doc) => {
     //   const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
     //   console.log(source, " data: ", doc.data());
@@ -240,16 +246,13 @@ function MapPage({ navigation, route }) {
         </MapContainer>
       ) : status === "doing"  ? (
         <MapContainer>
-        {/* {isLoading ? (
-            <LoadingContainer>
+        {isLoading ? (
+          <LoadingContainer>
               <ActivityIndicator size="large" color="#00a5cb" />
             </LoadingContainer>
-          ) : (
-            <HospitalName>{foundHospital.receiverUser.hospital.name}</HospitalName>
-          )} */}
-          {foundHospital && (
-            <HospitalName>{foundHospital.job.receiverUser.hospital.name}</HospitalName>
-          )}
+        ):(
+          <View>
+          <HospitalName>{foundHospital.job.receiverUser.hospital.name}</HospitalName>
           <MapView
             style={{ flex: 1, borderRadius: 20 }}
             initialRegion={region.region}
@@ -264,13 +267,13 @@ function MapPage({ navigation, route }) {
             onMapReady={() => console.log("Map is ready!")}
             onMapError={(error) => console.log(error)}
             // onPress={(e) => console.log(e.nativeEvent)}
-            onLongPress={(e) =>
-              getHospital(
-                region.region.latitude,
-                region.region.longitude,
-                10000
-              )
-            }
+            // onLongPress={(e) =>
+            //   getHospital(
+            //     region.region.latitude,
+            //     region.region.longitude,
+            //     10000
+            //   )
+            // }
             onMarkerPress={(e) => console.log(e.nativeEvent.coordinate)}
             // onRegionChange={(e) => console.log(e.nativeEvent)}
             // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
@@ -283,19 +286,6 @@ function MapPage({ navigation, route }) {
                 longitudeDelta: 0.01,
               }}
             ></Marker>
-            <MapViewDirections
-              origin={{
-                latitude: region.region.latitude,
-                longitude: region.region.longitude,
-              }}
-              destination={{
-                latitude: matchedHospital.latitude,
-                longitude: matchedHospital.longitude,
-              }}
-              apikey="AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM"
-              strokeWidth={7}
-              strokeColor="teal"
-            ></MapViewDirections>
           </MapView>
           <DistanceText>Estimated arrival time: {duration}</DistanceText>
           <FindingPrompt>
@@ -309,7 +299,11 @@ function MapPage({ navigation, route }) {
           </FindingPrompt>
           <ChatButton
             onPress={() =>
-              navigation.navigate("Chatting", { paramKey: "Tee hid" })
+              navigation.navigate("Chatting", {
+                    chatName: foundHospital.job.receiverUser.medicalInformation.name,
+                    groupID: myToken.data.jobId,
+                    myUID: myUID,
+                  })
             }
           >
             <ChatIcon
@@ -319,6 +313,16 @@ function MapPage({ navigation, route }) {
               size={30}
             />
           </ChatButton>
+          </View>
+        )}
+        {/* {isLoading ? (
+            <LoadingContainer>
+              <ActivityIndicator size="large" color="#00a5cb" />
+            </LoadingContainer>
+          ) : (
+            <HospitalName>{foundHospital.receiverUser.hospital.name}</HospitalName>
+          )} */}
+            
         </MapContainer>
       ) : (
         <MapContainer>

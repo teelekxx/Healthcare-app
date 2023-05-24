@@ -357,6 +357,7 @@ function PatientPharmacyScreen({ navigation }) {
               <ChattingButton
                 onPress={() =>
                   navigation.navigate("Chatting", {
+                    chatName: foundPharma.job.pharmacistProfile.pharmacy.name,
                     groupID: jobId,
                     myUID: myUID,
                   })
