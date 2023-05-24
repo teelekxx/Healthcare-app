@@ -194,6 +194,7 @@ function HomePage({ navigation }) {
       <Tab.Screen
         name="Pharmacy"
         component={PharmacyStack}
+
         options={({ route }) => ({
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";

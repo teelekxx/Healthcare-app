@@ -94,8 +94,9 @@ export default function Prescription({ navigation, route }) {
   const calculateTotal = () => {
     let totalPrice = 0;
     medications.forEach((medicine) => {
-      const { price } = medicine;
+      const { price, deliveryFee } = medicine;
       totalPrice += Number(price);
+      totalPrice += Number(deliveryFee);
     });
     return totalPrice;
   };

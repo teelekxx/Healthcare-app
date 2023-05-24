@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, Button } from "react-native";
+import { SafeAreaView, Button, View } from "react-native";
 import {
   Title,
   ItalicText,
@@ -14,6 +14,7 @@ import {
   ThemeButtonText2,
   Bt,
 } from "./index.style";
+import SageLogo from "../../../assets/appLogo.svg";
 function LandingPage({ navigation }) {
 
 
@@ -23,7 +24,9 @@ function LandingPage({ navigation }) {
 
   return (
     <Container>
-      <Image source={require("../../../assets/appLogo.png")} />
+    <View style={{alignSelf: "center"}}>
+    <SageLogo/>
+    </View>
       {/* <Title text = {"SAGE"}/> */}
       <Title>SAGE</Title>
       <ItalicText>Your health, our care</ItalicText>

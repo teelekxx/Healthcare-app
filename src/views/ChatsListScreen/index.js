@@ -139,19 +139,6 @@ function ChatsListScreen({ navigation }) {
           />
         </NotificationTouchable>
       </HomeTitleContainer>
-
-      <RoleSwitch>
-        <SwitchSelector
-          options={options}
-          initial={0}
-          textColor={Colors.blue}
-          selectedColor={Colors.white}
-          buttonColor={Colors.blue}
-          borderColor={Colors.blue}
-          onPress={(value) => setPatient(value)}
-        />
-      </RoleSwitch>
-      {isPatient ? (
         <SafeAreaView>
           {isLoading ? (
             <LoadingContainer>
@@ -161,29 +148,18 @@ function ChatsListScreen({ navigation }) {
             <ChatScrollable>
               {myChats.map((val, index) => {
                 return (
-                  <TouchableOpacity>
                     <ChatModule
                       navigation={navigation}
                       chat={val}
                       myUID={myUID}
+                      key={index}
                     ></ChatModule>
-                  </TouchableOpacity>
                 );
               })}
             </ChatScrollable>
           )}
         </SafeAreaView>
-      ) : (
-        <SafeAreaView>
-          <ChatScrollable>
-            {chatsListPharma.map((val, index) => {
-              return (
-                  <ChatModule chat={val}></ChatModule>
-              );
-            })}
-          </ChatScrollable>
-        </SafeAreaView>
-      )}
+      
     </ChatListContainer>
   );
 }
