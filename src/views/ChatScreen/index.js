@@ -451,7 +451,6 @@ function ChatScreen({ navigation, route }) {
           </CallButton>
         </HorizonTitle>
       </PageTitleContainer>
-      {console.log(chatMessages)}
       <ChatField
         data={chatMessages}
         keyExtractor={(item, index) => index.toString()}

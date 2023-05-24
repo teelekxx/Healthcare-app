@@ -12,6 +12,7 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
+  LoadingContainer
 } from "react-native";
 import { Title, ItalicText } from "../../components/components/index.style";
 import {
@@ -54,6 +55,8 @@ function MapPage({ navigation, route }) {
   const [region, setRegion] = useState(null);
   const [nearbyPlaces, setNearby] = useState(null);
   const [destinationMap, setDestination] = useState(null);
+  const [foundHospital, setFoundHospital] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("finding");
   const [duration, setDuration] = useState("");
@@ -122,20 +125,31 @@ function MapPage({ navigation, route }) {
     }
   };
 
-  const postEmergency = async () => {
+  const getReciever = async (jobId) => {
     const token = await AsyncStorage.getItem("token");
-    const user = await Auth.postEmergencyCase({
-      body: formData,
+    const user = await Auth.getHospitalByJobId({
+      params: { id: jobId },
       token: token,
     });
     if (user.isOk) {
-      console.log("response = ", user);
-      navigation.navigate("Map", { myToken: user });
+      return user;
     }
+  };
+
+
+  const fetchData = async (jobId) => {
+    const data = await getReciever(jobId);
+    setFoundHospital(data);
   };
 
   useEffect(() => {
     console.log("My token=", myToken.data.jobId);
+    if (status == "doing") {
+      
+      fetchData(myToken.data.jobId);
+    }
+
+    console.log("HOSPITAL:", foundHospital.job.receiverUser);
     // const unsub = onSnapshot(doc(db, "jobs", token.params), (doc) => {
     //   const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
     //   console.log(source, " data: ", doc.data());
@@ -194,7 +208,7 @@ function MapPage({ navigation, route }) {
         console.log(nearbyPlaces);
       })
       .catch((error) => {
-        console.log("Error!!!!!!!!!!!!!!!!!!!!!!", error);
+        console.log("Error!", error);
       });
 
     (async () => {
@@ -206,7 +220,7 @@ function MapPage({ navigation, route }) {
       let location = await Location.getCurrentPositionAsync({});
       getHospital(location.coords.latitude, location.coords.longitude);
     })();
-  }, []);
+  }, [status]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -224,9 +238,18 @@ function MapPage({ navigation, route }) {
             <ThemeButtonText>Cancelled</ThemeButtonText>
           </ThemeButton>
         </MapContainer>
-      ) : status === "doing" ? (
+      ) : status === "doing"  ? (
         <MapContainer>
-          <HospitalName>{matchedHospital.Name}</HospitalName>
+        {/* {isLoading ? (
+            <LoadingContainer>
+              <ActivityIndicator size="large" color="#00a5cb" />
+            </LoadingContainer>
+          ) : (
+            <HospitalName>{foundHospital.receiverUser.hospital.name}</HospitalName>
+          )} */}
+          {foundHospital && (
+            <HospitalName>{foundHospital.job.receiverUser.hospital.name}</HospitalName>
+          )}
           <MapView
             style={{ flex: 1, borderRadius: 20 }}
             initialRegion={region.region}

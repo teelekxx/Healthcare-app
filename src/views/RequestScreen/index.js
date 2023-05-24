@@ -177,7 +177,7 @@ function RequestScreen({ navigation }) {
           token: token,
         });
         if (user.isOk) {
-          console.log("response = ", user);
+          console.log("emergency = ", user);
           navigation.navigate("Map", { myToken: user });
         } else if (!user.isOk) {
           console.log("response = ", user);

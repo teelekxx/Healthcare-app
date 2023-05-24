@@ -70,7 +70,7 @@ export const CallButton = styled.TouchableOpacity`
   border-radius: 100px;
   justify-content: center;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 20px;
 `;
 
 export const PhoneNumber = styled.Text`
