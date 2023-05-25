@@ -95,10 +95,10 @@ function ProfileScreen({ navigation }) {
       formData.append("address",address);
       formData.append("city",city);
       formData.append("zipCode",zipCode);
-      // if(images){
-      //   console.log("here change img",images[0])
-      //   formData.append("faceImg",[ images[0]]);
-      // }
+      if(images){
+        console.log("here change img",images[0])
+        formData.append("faceImg",images[0]);
+      }
       console.log("here uri", formData)
       const updateUser = async () => {
         const token = await AsyncStorage.getItem("token");
