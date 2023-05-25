@@ -199,7 +199,7 @@ export const SmallFormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width: 300px;
+  flex: 1;
   height: 40px;
   padding-left: 10px;
   padding-right: 10px;

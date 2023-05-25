@@ -22,7 +22,9 @@ import { Text, ActivityIndicator } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert } from "react-native";
+import {  Alert } from "react-native";
+import { AsyncStorage } from "react-native"
+;
 import { db } from "../../lib/firebase";
 import { useEffect, useState } from "react";
 

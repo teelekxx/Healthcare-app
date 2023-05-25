@@ -34,7 +34,8 @@ import {
 } from "./index.style";
 import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage } from "react-native"
+;
 
 function MapPage({ navigation, route }) {
   const origin = "Bangkok";

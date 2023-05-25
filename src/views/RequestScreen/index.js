@@ -54,7 +54,9 @@ import {
 import * as Location from "expo-location";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage, Alert } from "react-native";
+import { Alert } from "react-native";
+import { AsyncStorage } from "react-native"
+;
 import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
 import Accident from "../../../assets/fender-bender.svg";

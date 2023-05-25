@@ -24,7 +24,8 @@ import {
   SelectedImagesContainer,
   Text
 } from "./index.style";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage } from "react-native"
+;
 import Auth from "../../api/auth";
 const AmbulanceHistoryScreen = ({ navigation, route }) => {
   const { orderId, assigneeName, orderDate, hospital } = route.params;

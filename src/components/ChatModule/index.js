@@ -9,7 +9,9 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 import Auth from "../../api/auth";
-import { AsyncStorage, Alert, ActivityIndicator } from "react-native";
+import { AsyncStorage } from "react-native"
+;
+import { Alert, ActivityIndicator } from "react-native";
 import { LoadingContainer } from "../components/index.style";
 
 export default function ChatModule({ navigation, chat, myUID }) {

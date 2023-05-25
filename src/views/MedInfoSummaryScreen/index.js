@@ -18,6 +18,7 @@ import {
   EditButtonText,
   CheckBoxContainer,
   Space,
+  RedText,
 } from "./index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
@@ -25,7 +26,9 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AsyncStorage, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { AsyncStorage } from "react-native"
+;
 import Auth from "../../api/auth";
 
 function MedInfoSummaryScreen({ navigation }) {
@@ -167,6 +170,8 @@ function MedInfoSummaryScreen({ navigation }) {
         <EditButton onPress={editMode}>
           <EditButtonText>{mode}</EditButtonText>
         </EditButton>
+        {!edit&&<RedText>click "edit" to modify your information</RedText>}
+        {edit&&<RedText>click "save" to save your information</RedText>}
         <GreyText>Congenital Disease</GreyText>
         <BigInfoInput
           multiline
