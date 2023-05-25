@@ -140,7 +140,7 @@ export default function Prescription({ navigation, route }) {
         </Wrapper>
       )}
       <HorizonInput>
-        <MedText>Delivert Fee:</MedText>
+        <MedText>Delivert</MedText>
         <MedTextInput></MedTextInput>
       </HorizonInput>
       <TotalText>Total : {calculateTotal()}</TotalText>
