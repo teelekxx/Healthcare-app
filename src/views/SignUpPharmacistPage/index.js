@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Text, Platform, SafeAreaView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   FormInput,
@@ -14,15 +14,15 @@ import {
   DateCalendar,
   WhiteKeyboard,
 } from "../../components/components/index.style";
-import { CircleButton, MapPickerButton, MapPickerText } from "./index.style";
-import { Icon } from "react-native-elements";
+import { CircleButton, MapPickerButton, MapPickerText, Block } from "./index.style";
+import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
 import Modal from "react-native-modal";
-
+import useImagePicker from "../../hooks/useImagePicker.js";
 import MapPicker from "../../components/MapPicker/index";
 
 function SignUpPharmacistPage({ navigation, route }) {
@@ -54,6 +54,10 @@ function SignUpPharmacistPage({ navigation, route }) {
   const [pharZipCode, setPharZipcode] = useState("");
   const [pharLatitude, setPharLatitude] = useState("");
   const [pharLongitude, setPharLongitude] = useState("");
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
+  useEffect(()=>{
+    setImages(null)
+  },[])
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -96,10 +100,10 @@ function SignUpPharmacistPage({ navigation, route }) {
       password: password,
       role: role,
       name: values.name,
-      dateOfBirth: values.text,
+      dateOfBirth: text,
       gender: gender,
       citizenId: values.citizenId,
-      phoneNumber: values.phone,
+      phoneNumber: values.phoneNumber,
       address: address,
       city: city,
       zipCode: zipCode,
@@ -112,6 +116,7 @@ function SignUpPharmacistPage({ navigation, route }) {
       pharLongitude: pharLongitude,
       licenseNum: values.licenseNum,
       licenseDate: licenseText,
+      ...(images && images[0] && { faceImg: images[0] }),
     });
   };
   return (
@@ -172,7 +177,26 @@ function SignUpPharmacistPage({ navigation, route }) {
             style={{ flex: 1 }}
           >
             <SignUpForm>
-              <AvatarContainer />
+            <Block>
+                  <Avatar
+                    // source={require("../../../assets/appLogo.png")}
+                    size={"large"}
+                    rounded
+                    icon={{ name: "user", type: "font-awesome" }}
+                    overlayBlockStyle={{ backgroundColor: "#efece8" }}
+                    source={
+                      images && images[0]?.uri
+                        ? { uri: images[0].uri }
+                        : require("../../../assets/profile-picture-empty.png")
+                    }
+                  >
+                    <Accessory
+                      size={24}
+                      containerStyle={{ borderRadius: 50 }}
+                      onPress={pickImage}
+                    />
+                  </Avatar>
+                </Block>
               <FormText>Name</FormText>
               <FormInput
                 type="text"

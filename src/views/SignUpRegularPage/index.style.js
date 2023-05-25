@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 import { Colors } from "../../constants";
 export const CircleButton = styled.TouchableOpacity`
-  margin-top:60px;
   margin-left:25px;
   padding: 10px;
   width: 50px;
@@ -12,3 +11,6 @@ export const CircleButton = styled.TouchableOpacity`
   justify-content:center;
   align-items:center;
 `;
+export const Block = styled.View`
+  align-self:center;
+`

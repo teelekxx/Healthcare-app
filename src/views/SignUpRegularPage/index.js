@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Text, Platform, Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   FormInput,
@@ -14,14 +14,14 @@ import {
   DateCalendar,
   WhiteKeyboard,
 } from "../../components/components/index.style";
-import { CircleButton } from "./index.style";
-import { Icon } from "react-native-elements";
+import { CircleButton, Block } from "./index.style";
+import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik, ErrorMessage } from "formik";
-
+import useImagePicker from "../../hooks/useImagePicker.js";
 function SignUpRegularPage({ navigation, route }) {
   const { email, password, role } = route.params;
   const [name, onChangeName] = useState("");
@@ -40,7 +40,10 @@ function SignUpRegularPage({ navigation, route }) {
   // const [mode, setMode] = useState('date')
   const [show, setShow] = useState(false);
   const [text, setText] = useState("select date");
-
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
+  useEffect(()=>{
+    setImages(null)
+  },[])
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -55,21 +58,23 @@ function SignUpRegularPage({ navigation, route }) {
     setText(fDate);
   };
   const handleSubmit = (values) => {
-    console.log("email:",email)
+    console.log("email:",email,text,values.phoneNumber)
     navigation.navigate("MedInfo", {
       email: email,
       password: password,
       role: role,
       name: values.name,
-      dateOfBirth: values.text,
+      dateOfBirth: text,
       gender: gender,
       citizenId: values.citizenId,
-      phoneNumber: values.phone,
+      phoneNumber: values.phoneNumber,
       address: address,
       city: city,
       zipCode: zipCode,
+      ...(images && images[0] && { faceImg: images[0] }),
     });
   };
+  DropDownPicker.setListMode("SCROLLVIEW");
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <BlueContainer>
@@ -122,7 +127,26 @@ function SignUpRegularPage({ navigation, route }) {
             style={{ flex: 1 }}
           >
             <SignUpForm>
-              <AvatarContainer />
+            <Block>
+                  <Avatar
+                    // source={require("../../../assets/appLogo.png")}
+                    size={"large"}
+                    rounded
+                    icon={{ name: "user", type: "font-awesome" }}
+                    overlayBlockStyle={{ backgroundColor: "#efece8" }}
+                    source={
+                      images && images[0]?.uri
+                        ? { uri: images[0].uri }
+                        : require("../../../assets/profile-picture-empty.png")
+                    }
+                  >
+                    <Accessory
+                      size={24}
+                      containerStyle={{ borderRadius: 50 }}
+                      onPress={pickImage}
+                    />
+                  </Avatar>
+                </Block>
               <FormText>Name</FormText>
               <FormInput
                 type="text"
