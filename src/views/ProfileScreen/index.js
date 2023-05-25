@@ -98,6 +98,7 @@ function ProfileScreen({ navigation }) {
       if(images){
         console.log("here change img",images[0])
         formData.append("faceImg",images[0]);
+        setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+images[0])
       }
       console.log("here uri", formData)
       const updateUser = async () => {
