@@ -139,16 +139,20 @@ export default function Prescription({ navigation, route }) {
           </MedicineScrollable>
         </Wrapper>
       )}
+      <HorizonInput>
+        <MedText>Delivert Fee:</MedText>
+        <MedTextInput></MedTextInput>
+      </HorizonInput>
       <TotalText>Total : {calculateTotal()}</TotalText>
       <AddMedicineButton onPress={toggleModal}>
         <Icon name="add-outline" type="ionicon" color={Colors.blue} size={20} />
       </AddMedicineButton>
       <HorizonInput>
         <CloseButton onPress={navigation.goBack}>
-        <WhiteButtonText >Close</WhiteButtonText>
+          <WhiteButtonText>Close</WhiteButtonText>
         </CloseButton>
         <SaveButton onPress={saveAndClose}>
-        <WhiteButtonText>Confirm</WhiteButtonText>
+          <WhiteButtonText>Confirm</WhiteButtonText>
         </SaveButton>
       </HorizonInput>
       <Modal

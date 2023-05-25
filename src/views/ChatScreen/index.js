@@ -339,6 +339,7 @@ function ChatScreen({ navigation, route }) {
           userUid: otherUID[0],
           jobId: group.data().jobId,
           medicines: value,
+
           status: "pending",
         },
 
