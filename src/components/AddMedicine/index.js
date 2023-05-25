@@ -43,7 +43,7 @@ import {
 export default function AddMedicine({
   handleModalVisible,
   handleSaveMedications,
-  index
+  index,
 }) {
   const [medications, setMedication] = useState("");
   const [medicine, setMedicine] = useState("");
@@ -57,32 +57,25 @@ export default function AddMedicine({
   };
 
   const saveAndClose = () => {
-    if(medicine.length < 1){
+    if (medicine.length < 1) {
       handleModalVisible();
       return;
     }
-    if(index != null){    
-      handleSaveMedications(index, 
-      {
+    if (index != null) {
+      handleSaveMedications(index, {
         name: medicine,
         duration: duration,
         dosage: dosage,
-        deliveryFee: deliveryFee,
         price: price,
-      },
-    );
-  }
-  else{
-    handleSaveMedications(
-      {
+      });
+    } else {
+      handleSaveMedications({
         name: medicine,
         duration: duration,
         dosage: dosage,
-        deliveryFee: deliveryFee,
         price: price,
-      },
-    );
-  }
+      });
+    }
 
     handleModalVisible();
   };
@@ -99,47 +92,38 @@ export default function AddMedicine({
   return (
     <MedContainer>
       <MedScollable>
-          <MedColumn>
-            <MedText>Medicine</MedText>
-            <MedTextInput
-              value={medicine}
-              onChangeText={(text) => setMedicine(text)}
-            ></MedTextInput>
-          </MedColumn>
-          <MedColumn>
-            <MedText>Duration</MedText>
-            <MedTextInput
-              value={duration}
-              onChangeText={(text) => setDuration(text)}
-            ></MedTextInput>
-          </MedColumn>
-          <MedColumn>
-            <MedText>Dosage</MedText>
-            <MedTextInput
-              value={dosage}
-              onChangeText={(text) => setDosage(text)}
-            ></MedTextInput>
-          </MedColumn>
-          <MedColumn>
-            <MedText>Delivery Fee</MedText>
-            <MedTextInput
+        <MedColumn>
+          <MedText>Medicine</MedText>
+          <MedTextInput
+            value={medicine}
+            onChangeText={(text) => setMedicine(text)}
+          ></MedTextInput>
+        </MedColumn>
+        <MedColumn>
+          <MedText>Duration</MedText>
+          <MedTextInput
+            value={duration}
+            onChangeText={(text) => setDuration(text)}
+          ></MedTextInput>
+        </MedColumn>
+        <MedColumn>
+          <MedText>Dosage</MedText>
+          <MedTextInput
+            value={dosage}
+            onChangeText={(text) => setDosage(text)}
+          ></MedTextInput>
+        </MedColumn>
+        <MedColumn>
+          <MedText>Price</MedText>
+          <MedTextInput
             keyboardType="numeric"
-              maxLength={5}
-              value={deliveryFee}
-              onChangeText={(text) => setDeliveryFee(text)}
-            ></MedTextInput>
-          </MedColumn>
-          <MedColumn>
-            <MedText>Price</MedText>
-            <MedTextInput
-              keyboardType="numeric"
-              maxLength={5}
-              value={price}
-              onChangeText={(text) => setPrice(text)}
-            ></MedTextInput>
-          </MedColumn>
+            maxLength={5}
+            value={price}
+            onChangeText={(text) => setPrice(text)}
+          ></MedTextInput>
+        </MedColumn>
       </MedScollable>
-      <TotalText>Total: {Number(price) + Number(deliveryFee)}</TotalText>
+      <TotalText>Total: {Number(price)}</TotalText>
       <HorizonInput>
         <CloseButton onPress={closeModal}>
           <WhiteButtonText>Close</WhiteButtonText>

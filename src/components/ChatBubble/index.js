@@ -52,11 +52,12 @@ export default function ChatBubble({
         tempMedMessage += "Duration: " + data.duration + "\n";
         tempMedMessage += "Dosage: " + data.dosage + "\n";
         tempMedMessage += "Price: " + data.price + "\n";
-        tempMedMessage += "+" + fee + "\n";
         tempMedMessage += "\n";
         tempTotal += Number(data.price);
       }
     });
+    tempTotal += Number(fee);
+    tempMedMessage += "+ " + fee + "\n";
     tempMedMessage += "Total: " + tempTotal;
     return tempMedMessage;
   };

@@ -104,7 +104,6 @@ export default function MedicineOrder({
           <PatientName>{medicineName}</PatientName>
           <DesContainer>
             <Price>{price}</Price>
-            <Fee>+ {deliveryFee}</Fee>
           </DesContainer>
         </PatientNameContainer>
         <PatientNameContainer>

@@ -39,7 +39,7 @@ export const MedFirstColumn = styled.View`
 
 export const MedText = styled.Text`
   color: ${Colors.white};
-
+  margin-right: 10px;
   font-size: 15px;
   font-weight: bold;
 `;
@@ -48,7 +48,7 @@ export const MedTextInput = styled.TextInput`
   font-size: 15px;
   background-color: ${Colors.white};
   border-radius: 10px;
-  width: ${width * 0.25}px;
+  width: ${width * 0.15}px;
   padding: 5px;
 `;
 
