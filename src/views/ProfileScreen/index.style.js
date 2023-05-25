@@ -10,7 +10,7 @@ export const AvaContainer = styled.View`
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   justify-content: center;
 `;
 export const EditButton = styled.TouchableOpacity`
@@ -34,4 +34,14 @@ justify-content: space-between;
 align-items:center;
 margin-top:15px;
 padding-right:5px;
+`
+export const RedText = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: ${Colors.red};
+  align-self:center;
+  padding-top: 10px;
+`;
+export const Block = styled.View`
+  align-self:center;
 `

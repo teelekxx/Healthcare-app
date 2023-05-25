@@ -14,7 +14,6 @@ export const CircleButton = styled.TouchableOpacity`
 export const EditButton = styled.TouchableOpacity`
   width: 150px;
   height: 40px;
-  margin-top: 10px;
   margin-bottom:10px;
   background-color: ${Colors.blue};
   border-radius: 20px;
@@ -36,4 +35,11 @@ export const CheckBoxContainer = styled.View`
 export const Space = styled.View`
   height: 30px;
   width: 100%;
+`;
+export const RedText = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: ${Colors.red};
+  align-self:center;
+  padding-bottom:15px;
 `;

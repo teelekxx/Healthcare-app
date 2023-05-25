@@ -41,6 +41,7 @@ import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
 import MapFinder from "../MapFinder";
 
+
 function MapPage({ navigation, route }) {
   console.log("MAP:", route.params.lat);
   const origin = "Bangkok";

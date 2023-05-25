@@ -54,6 +54,7 @@ function useImagePicker() {
       aspect: [4, 3],
       quality: 1,
     });
+    
 
     // let result = await ImagePicker.launchImageLibraryAsync({
     //   mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -62,7 +63,7 @@ function useImagePicker() {
     //   quality: 1,
     // });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const newImages = await Promise.all(
         result.assets.map(async (uri) => {
           const localUri = uri.uri;
