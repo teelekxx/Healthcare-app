@@ -188,6 +188,7 @@ function RequestScreen({ navigation }) {
       console.log(err);
     }
   };
+  console.log("images: ", images)
 
   return (
     <RequestContainer>
