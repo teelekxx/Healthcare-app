@@ -320,7 +320,7 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
-  const handleMedications = async (value) => {
+  const handleMedications = async (value, fee) => {
     const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
       where("type", "==", "prescription")
@@ -339,6 +339,7 @@ function ChatScreen({ navigation, route }) {
           userUid: otherUID[0],
           jobId: group.data().jobId,
           medicines: value,
+          deliveryFee: fee,
           status: "pending",
         },
 

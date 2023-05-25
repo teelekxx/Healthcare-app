@@ -117,7 +117,6 @@ export const PictureButton = styled.TouchableOpacity`
 `;
 
 export const MedButton = styled.TouchableOpacity`
-  margin-left: ${width * 0.046153}px;
   margin-right: ${width * 0.046153}px;
 `;
 
