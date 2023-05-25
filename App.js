@@ -1,4 +1,5 @@
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import { auth as firebaseAuth } from "./src/lib/firebase";
 import React, { useRef, useEffect, useState, useCallback } from "react";
 

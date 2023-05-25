@@ -11,7 +11,8 @@ import { useState, useEffect } from "react";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import { Container, Row, Cell, CellHeader, BigCell, PharName, Text20, BigCellHeader } from "./index.style";
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import Auth from "../../api/auth";
 const HistoryDetailScreen = ({navigation, route}) => {
   const {orderId, userName, orderDate, totalPrice} = route.params

@@ -14,7 +14,8 @@ import {
 import { Colors } from "../../constants";
 import { View,RefreshControl, ActivityIndicator } from "react-native";
 import { useEffect, useState, useCallback } from "react";
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import Auth from "../../api/auth";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { useGetOrders} from "../../hooks/order";

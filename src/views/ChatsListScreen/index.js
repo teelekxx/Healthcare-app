@@ -29,7 +29,8 @@ import {
   RoleSwitch,
 } from "./index.style";
 import Auth from "../../api/auth";
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import {
   collection,
   query,

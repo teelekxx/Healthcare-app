@@ -23,7 +23,8 @@ import {
   Block,
 } from "./index.style";
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import {ActivityIndicator, View } from "react-native";
 import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";

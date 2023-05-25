@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { AsyncStorage } from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native"
+;
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { auth as firebaseAuth } from "../../src/lib/firebase";
 import LandingPage from "../views/LandingPage/index";
