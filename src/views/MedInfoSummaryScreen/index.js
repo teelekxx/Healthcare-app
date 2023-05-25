@@ -26,7 +26,8 @@ import { useState, useEffect } from "react";
 import { CheckBox } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AsyncStorage, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 import Auth from "../../api/auth";
 
 function MedInfoSummaryScreen({ navigation }) {
