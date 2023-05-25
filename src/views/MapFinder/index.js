@@ -18,31 +18,10 @@ function MapFinder({ navigation, route, myLat, myLng }) {
   });
 
   useEffect(() => {
-    if (radius == 1000) {
-      console.log("TEST");
-      const i = {
-        latitude: myLat,
-        longitude: myLng,
-        latitudeDelta: region.latitudeDelta + 0.03,
-        longitudeDelta: region.longitudeDelta + 0.03,
-      };
-      mapRef.current.animateToRegion(i, 500);
-    }
     const interval = setInterval(() => {
       if (radius < 5000) {
         setRadius(radius + 1000);
         // Zoom out the map as the radius increases
-        if (myLat) {
-          const r = {
-            latitude: myLat,
-            longitude: myLng,
-            latitudeDelta: region.latitudeDelta + 0.03,
-            longitudeDelta: region.longitudeDelta + 0.03,
-          };
-
-          setRegion(r);
-          mapRef.current.animateToRegion(r, 500);
-        }
       } else {
         // Zoom to marker after maximum radius is reached
         const markerRegion = {
@@ -54,11 +33,11 @@ function MapFinder({ navigation, route, myLat, myLng }) {
 
         mapRef.current.animateToRegion(markerRegion, 500);
       }
-    }, 6000);
+    }, 60000);
 
     setTimeout(() => {
       clearInterval(interval);
-    }, 60000);
+    }, 300000);
 
     return () => {
       clearInterval(interval);
@@ -68,7 +47,14 @@ function MapFinder({ navigation, route, myLat, myLng }) {
   const mapRef = useRef(null);
 
   const onMapReady = () => {
-    mapRef.current.animateToRegion(region, 100);
+    const markerRegion = {
+      latitude: myLat,
+      longitude: myLng,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+
+    mapRef.current.animateToRegion(markerRegion, 500);
   };
 
   const coordinates = [
@@ -82,7 +68,6 @@ function MapFinder({ navigation, route, myLat, myLng }) {
     <View style={{ flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
-        region={region}
         onMapReady={onMapReady}
         ref={mapRef}
       >
