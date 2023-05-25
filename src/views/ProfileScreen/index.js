@@ -1,5 +1,4 @@
 import { Icon, Avatar, Accessory } from "react-native-elements";
-import { ToastProvider } from 'react-native-toast-notifications'
 import {
   GreyText,
   Container,
@@ -19,9 +18,10 @@ import {
   EditButton,
   EditButtonText,
   AvaContainer,
-  OnDutyWrapper
+  OnDutyWrapper,
+  RedText,
+  Block,
 } from "./index.style";
-
 import { useEffect, useState } from "react";
 import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import AvatarContainer from "../../components/Avatar";
@@ -31,9 +31,9 @@ import { Colors } from "../../constants";
 import { async, jsonEval } from "@firebase/util";
 import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../api/auth";
+import useImagePicker from "../../hooks/useImagePicker.js";
 function ProfileScreen({ navigation }) {
   const auth = useSelector((state) => state.Authentication);
-
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
   const [mode, setMode] = useState("Edit");
@@ -59,6 +59,9 @@ function ProfileScreen({ navigation }) {
   const [show, setShow] = useState(false);
   const [licenseNum, setLicenseNum] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [{ images }, { pickImage,setImages }] = useImagePicker();
+  const [image, setImage] = useState(null);
+  
   const dateFormat = (date) => {
     const mongodbDate = new Date(date);
     // Extract year, month, and day from the MongoDB date
@@ -76,25 +79,32 @@ function ProfileScreen({ navigation }) {
     if (mode === "Edit") {
       //editing
       setEdit(true);
+      setImages(null)
       setMode("Save");
     } else {
       //save
       setEdit(false);
+      const formData = new FormData();
+      formData.append("name",name);
+      formData.append("dateOfBirth",text);
+      formData.append("gender",gender);
+      formData.append("citizenId", id);
+      formData.append("phoneNumber",tel);
+      formData.append("address",address);
+      formData.append("city",city);
+      formData.append("zipCode",zipCode);
+      // if(images){
+      //   console.log("here change img",images[0])
+      //   formData.append("faceImg",[ images[0]]);
+      // }
+      console.log("here uri", formData)
       const updateUser = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.updateUserProfile({
-          body: {
-            name: name,
-            dateOfBirth: text,
-            gender: gender,
-            citizenId: id,
-            phoneNumber: tel,
-            address: address,
-            city: city,
-            zipCode: zipCode,
-          },
+          body: formData,
           token: token,
         });
+        console.log("called")
       };
       updateUser();
       setMode("Edit");
@@ -122,7 +132,9 @@ function ProfileScreen({ navigation }) {
   };
   const [toggle, setToggle] = useState(false)
   const [isLoading, setIsloading] = useState(true);
+
   useEffect(() => {
+    
     try {
       const getUserData = async () => {
         setIsloading(true);
@@ -138,8 +150,10 @@ function ProfileScreen({ navigation }) {
         setAddress(user.data.address.address);
         setCity(user.data.address.city);
         setZipCode(user.data.address.zipCode);
-        setIsloading(false);
+              
         setRole(user.data.user.role);
+        setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+user.data.user.faceImg)
+        setIsloading(false);  
         if (role === "paramedics") {
           setLicenseNum(user.data.paramedics.licenseId);
           setExpiryDate(user.data.paramedics.licenseExpireDate);
@@ -162,7 +176,6 @@ function ProfileScreen({ navigation }) {
           },
           token: token,
         })
-        console.log("after:" ,onDuty)
       }
       
 
@@ -173,6 +186,7 @@ function ProfileScreen({ navigation }) {
     } catch (error) {
       console.error(error);
     }
+    
   }, [role, onDuty]);
   if (isLoading) {
     return (
@@ -183,13 +197,38 @@ function ProfileScreen({ navigation }) {
   }
 
   return (
-    <ToastProvider>
     <Background>
       <AvaContainer>
-        <AvatarContainer />
+      <Block>
+      {edit&&<Avatar
+        // source={require("../../../assets/appLogo.png")}
+        size={"large"}
+        rounded
+        icon={image ? null : { name: 'user', type: 'font-awesome' }}
+        overlayBlockStyle={{ backgroundColor: "#efece8" }}
+        source={images ? { uri: images[0].uri} : {uri: image}}
+      >
+        <Accessory
+          size={24}
+          containerStyle={{ borderRadius: 50 }}
+          onPress={pickImage}
+        />
+      </Avatar>}
+      {!edit&&<Avatar
+        // source={require("../../../assets/appLogo.png")}
+        size={"large"}
+        rounded
+        icon={{name: 'user', type: 'font-awesome'}}
+        overlayBlockStyle={{ backgroundColor: "#efece8" }}
+        source={image ? { uri: image} : require("../../../assets/profile-picture-empty.png")}
+      >
+      </Avatar>}
+    </Block>
         <EditButton onPress={editMode}>
           <EditButtonText>{mode}</EditButtonText>
         </EditButton>
+        {!edit&&<RedText>click "edit" to modify your information</RedText>}
+        {edit&&<RedText>click "save" to save your information</RedText>}
       </AvaContainer>
       <GreyText>Name</GreyText>
       <InfoInput onChangeText={setName} value={name} editable={edit} />
@@ -304,7 +343,6 @@ function ProfileScreen({ navigation }) {
         <BlueButtonText>Log out</BlueButtonText>
       </RedButton>
     </Background>
-    </ToastProvider>
   );
 }
 export default ProfileScreen;

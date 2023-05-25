@@ -18,6 +18,7 @@ import {
   EditButtonText,
   CheckBoxContainer,
   Space,
+  RedText,
 } from "./index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
@@ -167,6 +168,8 @@ function MedInfoSummaryScreen({ navigation }) {
         <EditButton onPress={editMode}>
           <EditButtonText>{mode}</EditButtonText>
         </EditButton>
+        {!edit&&<RedText>click "edit" to modify your information</RedText>}
+        {edit&&<RedText>click "save" to save your information</RedText>}
         <GreyText>Congenital Disease</GreyText>
         <BigInfoInput
           multiline
