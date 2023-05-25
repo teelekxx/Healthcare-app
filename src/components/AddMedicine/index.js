@@ -15,6 +15,8 @@ import {
   CloseButton,
   TotalText,
   MedDesInput,
+  MedSuggestion,
+  SuggestionText,
 } from "./index.style";
 import {
   FormInput,
@@ -38,7 +40,12 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
+  FlatList,
+  Text
 } from "react-native";
+import { async } from "@firebase/util";
+import Auth from "../../api/auth";
+import { AsyncStorage } from "react-native";
 
 export default function AddMedicine({
   handleModalVisible,
@@ -51,6 +58,7 @@ export default function AddMedicine({
   const [dosage, setDosage] = useState("");
   const [deliveryFee, setDeliveryFee] = useState("");
   const [price, setPrice] = useState("");
+  const [suggestions, setSuggestions] = useState(["TEE"]);
 
   const closeModal = () => {
     handleModalVisible();
@@ -89,6 +97,28 @@ export default function AddMedicine({
     return totalPrice;
   };
 
+  // Function to handle input value change
+  const handleInputChange = (text) => {
+    setMedicine(text);
+    const fetchSuggestions = async (text) => {
+      const token = await AsyncStorage.getItem("token");
+      const user = await Auth.getMedicinesByKeyword({
+        params: { keyword: text },
+      });
+      if (user.isOk) {
+        setSuggestions(user.data);
+      }
+    };
+    fetchSuggestions(text);
+    console.log(suggestions);
+  };
+
+  // Function to handle suggestion selection
+  const handleSuggestionSelect = (suggestion) => {
+    setMedicine(suggestion);
+    setSuggestions([]); // Clear the suggestions after selection
+  };
+
   return (
     <MedContainer>
       <MedScollable>
@@ -96,8 +126,19 @@ export default function AddMedicine({
           <MedText>Medicine</MedText>
           <MedTextInput
             value={medicine}
-            onChangeText={(text) => setMedicine(text)}
+            onChangeText={handleInputChange}
           ></MedTextInput>
+          {suggestions.length > 1 && (
+            <MedSuggestion
+            data={suggestions}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSuggestionSelect(item)}>
+                <SuggestionText>{item}</SuggestionText>
+              </TouchableOpacity>
+            )}
+          />
+          )}
+          
         </MedColumn>
         <MedColumn>
           <MedText>Duration</MedText>
