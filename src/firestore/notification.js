@@ -11,19 +11,23 @@ export default class NotificationController {
       const docRef = doc(db, "notification", uid);
 
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        // Retrieve the existing data
-        const existingData = docSnap.data();
-        // Retrieve the existing tokens array or initialize it as an empty array
-        const existingTokens = existingData.tokens || [];
-        // Append the new token to the existing tokens array
-        const updatedTokens = [...existingTokens, token];
-        // Update the 'tokens' field with the updated array
-        await updateDoc(docRef, { tokens: updatedTokens });
-      } else {
+      console.log("docsnap data: ",docSnap.data())
+      if(docSnap.data()){
+        if (!docSnap.data().tokens.includes(token)) {
+          // Retrieve the existing data
+          const existingData = docSnap.data().tokens;
+          // Retrieve the existing tokens array or initialize it as an empty array
+          const existingTokens = existingData.tokens || [];
+          // Append the new token to the existing tokens array
+          const updatedTokens = [...existingTokens, token];
+          // Update the 'tokens' field with the updated array
+          await updateDoc(docRef, { tokens: updatedTokens });
+        } 
+      }else {
         // Create a new document with the token
         await setDoc(docRef, { tokens: [token] });
       }
+     
     } catch (error) {
       console.log(error);
     }
