@@ -213,7 +213,7 @@ export const DateCalendar = styled.View`
 
 export const CircleButton = styled.TouchableOpacity`
   margin-top: ${backButtonMargin}px;
-  margin-left: 10px;
+  margin-left: 20px;
   padding: 10px;
   width: 50px;
   height: 50px;

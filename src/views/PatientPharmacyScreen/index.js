@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { SvgUri, SvgXml } from "react-native-svg";
+import PrescriptionPic from "../../../assets/prescription.svg";
 import {
   SafeAreaView,
   Button,
@@ -198,8 +200,7 @@ function PatientPharmacyScreen({ navigation }) {
           // Use the groupData as needed
           console.log("Group Data:", groupData);
           setIsFree(true);
-        }
-        else{
+        } else {
           console.log("Not yet!");
         }
         // const docSnapshot = querySnapshot;
@@ -230,7 +231,6 @@ function PatientPharmacyScreen({ navigation }) {
       //   });
       //   setAllJobs(jobIds);
       // });
-
 
       const q = query(
         collection(db, "jobs"),
@@ -285,9 +285,12 @@ function PatientPharmacyScreen({ navigation }) {
         <ButtonContainer>
           {status === "none" ? (
             <ButtonContainer>
-              <PharmacyIcon
-                source={require("../../../assets/prescription-1.png")}
-              />
+            <PharmacyIcon>
+            <PrescriptionPic/>
+            </PharmacyIcon>
+              {/* <PharmacyIcon
+                source={require("../../../assets/prescription-2.svg")}
+              /> */}
               <FindButton onPress={sendPharmacy}>
                 <FindButtonText>Find my Pharmacist</FindButtonText>
               </FindButton>
@@ -358,6 +361,7 @@ function PatientPharmacyScreen({ navigation }) {
               <ChattingButton
                 onPress={() =>
                   navigation.navigate("Chatting", {
+                    chatName: foundPharma.job.pharmacistProfile.pharmacy.name,
                     groupID: jobId,
                     myUID: myUID,
                   })

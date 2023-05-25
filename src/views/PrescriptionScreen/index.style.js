@@ -14,7 +14,7 @@ export const MedContainer = styled.SafeAreaView`
 `;
 
 export const PreContainer = styled.SafeAreaView`
-  height: 100% ;
+  height: 100%;
   background-color: ${Colors.blue};
 `;
 
@@ -39,17 +39,16 @@ export const MedFirstColumn = styled.View`
 
 export const MedText = styled.Text`
   color: ${Colors.white};
-
+  margin-right: 10px;
   font-size: 15px;
   font-weight: bold;
-  margin-bottom: 10px;
 `;
 
 export const MedTextInput = styled.TextInput`
   font-size: 15px;
   background-color: ${Colors.white};
   border-radius: 10px;
-  width: ${width * 0.25}px;
+  width: ${width * 0.15}px;
   padding: 5px;
 `;
 
@@ -83,7 +82,7 @@ export const CircleButton = styled.TouchableOpacity`
 
 export const AddMedicineButton = styled.TouchableOpacity`
   margin-top: 50px;
-  margin-bottom:auto ;
+  margin-bottom: auto;
   width: 35px;
   height: 35px;
   elevation: 10;
@@ -95,14 +94,14 @@ export const AddMedicineButton = styled.TouchableOpacity`
 `;
 
 export const Wrapper = styled.SafeAreaView`
-max-height: ${height * 0.6}px;
+  max-height: ${height * 0.6}px;
 `;
-
 
 export const HorizonInput = styled.View`
   display: flex;
   flex-direction: row;
   padding: 20px;
+  align-items: center;
 `;
 
 export const SaveButton = styled.TouchableOpacity`
@@ -152,9 +151,7 @@ export const WhiteContainer = styled.View`
   width: 100%;
 `;
 
-export const MedicineScrollable = styled.ScrollView`
-
-  `;
+export const MedicineScrollable = styled.ScrollView``;
 
 export const PageTitle = styled.Text`
   align-self: center;
@@ -191,4 +188,3 @@ export const BlueButtonText = styled.Text`
 
   color: ${Colors.blue};
 `;
-

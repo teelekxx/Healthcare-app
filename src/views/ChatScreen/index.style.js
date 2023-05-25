@@ -59,9 +59,19 @@ export const BlueKeyboard = styled.KeyboardAvoidingView`
   padding-top: 10px;
 `;
 
+export const DoneButton = styled.TouchableOpacity`
+  margin-left: auto;
+  flex-direction: row;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: ${Colors.teal};
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const CallButton = styled.TouchableOpacity`
-  position: absolute;
-  right: 0;
   flex-direction: row;
   padding: 10px;
   width: 50px;
@@ -70,7 +80,8 @@ export const CallButton = styled.TouchableOpacity`
   border-radius: 100px;
   justify-content: center;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 20px;
+  margin-left: auto;
 `;
 
 export const PhoneNumber = styled.Text`
@@ -106,7 +117,6 @@ export const PictureButton = styled.TouchableOpacity`
 `;
 
 export const MedButton = styled.TouchableOpacity`
-  margin-left: ${width * 0.046153}px;
   margin-right: ${width * 0.046153}px;
 `;
 

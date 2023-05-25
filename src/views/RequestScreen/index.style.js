@@ -57,7 +57,6 @@ export const GreyText = styled.Text`
   font-weight: bold;
   color: ${Colors.grey};
   text-align: center;
-  margin-top: ${height * 0.00592}px;
   margin-left: ${width * 0.04359}px;
 `;
 
@@ -67,7 +66,6 @@ export const BlueText2 = styled.Text`
   font-weight: bold;
   color: ${Colors.blue};
   text-align: center;
-  margin-top: ${height * 0.00592}px;
   margin-left: ${width * 0.04359}px;
 `;
 
@@ -87,7 +85,7 @@ export const HorizonInput = styled.View`
 `;
 
 export const HorizonInput2 = styled.View`
-  display: flex;
+  align-items: center;
   flex-direction: row;
   margin-top: ${height * 0.021327}px;
 `;

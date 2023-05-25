@@ -21,6 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
+import Splint from "../../../../assets/splint.svg";
 
 function SplintScreen({ navigation }) {
   return (
@@ -40,7 +41,9 @@ function SplintScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepPicture source={require("../../../../assets/splint.jpg")} />
+        <View style={{alignSelf: "center"}}>
+          <Splint/>
+          </View>
           <StepTitle2>How to apply a splint</StepTitle2>
           <StepTitle>1. Attend to any bleeding</StepTitle>
           <StepDetail>

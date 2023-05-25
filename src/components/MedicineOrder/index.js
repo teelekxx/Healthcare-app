@@ -10,9 +10,10 @@ import {
   WhiteButtonText,
   PatientName,
   PatientNameContainer,
-  TimeStamp,
+  Price,
   LocationText,
   DesContainer,
+  Fee,
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
@@ -23,14 +24,23 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 
-export default function MedicineOrder({ data, handleDeleteMedications, handleEditMedications, myIndex }) {
+export default function MedicineOrder({
+  data,
+  handleDeleteMedications,
+  handleEditMedications,
+  myIndex,
+}) {
   const [medicineName, setMedicineName] = useState("MED");
-  const [description, setDescription] = useState("DES");
+  const [duration, setDuration] = useState("");
+  const [dosage, setDosage] = useState("");
+  const [deliveryFee, setDeliveryFee] = useState("");
   const [price, setPrice] = useState("PRICE");
 
   useEffect(() => {
     setMedicineName(data.name);
-    setDescription(data.dosage);
+    setDuration(data.duration);
+    setDosage(data.dosage);
+    setDeliveryFee(data.deliveryFee);
     setPrice(data.price);
   }, []);
   const acceptRequest = async () => {
@@ -93,19 +103,22 @@ export default function MedicineOrder({ data, handleDeleteMedications, handleEdi
       <DetailContainer>
         <PatientNameContainer>
           <PatientName>{medicineName}</PatientName>
-          <TimeStamp>{price}</TimeStamp>
+          <DesContainer>
+            <Price>{price}</Price>
+          </DesContainer>
         </PatientNameContainer>
         <PatientNameContainer>
-        <DesContainer>
-        <LocationText>{description}</LocationText>
-        </DesContainer>
+          <DesContainer>
+            <LocationText>Duration: {duration}</LocationText>
+            <LocationText>Dosage: {dosage}</LocationText>
+          </DesContainer>
         </PatientNameContainer>
         <HorizonInput3>
           <BlueBorderButton onPress={() => handleDeleteMedications(myIndex)}>
             <BlueButtonText>Delete</BlueButtonText>
           </BlueBorderButton>
           <BlueButton onPress={() => handleEditMedications(myIndex)}>
-            <WhiteButtonText >Edit</WhiteButtonText>
+            <WhiteButtonText>Edit</WhiteButtonText>
           </BlueButton>
         </HorizonInput3>
       </DetailContainer>
