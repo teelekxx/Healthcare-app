@@ -99,7 +99,7 @@ export default function Prescription({ navigation, route }) {
     medications.forEach((medicine) => {
       const { price } = medicine;
       totalPrice += Number(price);
-      // totalPrice += Number(deliveryFee);
+      totalPrice += Number(deliveryFee);
     });
     return totalPrice;
   };
