@@ -1,6 +1,11 @@
-
 import { useState, useEffect } from "react";
-import { Text, Platform, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Icon, Avatar, Accessory } from "react-native-elements";
+import {
+  Text,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import {
   FormInput,
   SmallFormInput,
@@ -15,8 +20,7 @@ import {
   WhiteKeyboard,
   DateCalendar,
 } from "../../components/components/index.style";
-import { CircleButton, InputBoundary } from "./index.style";
-import { Icon } from "react-native-elements";
+import { CircleButton, Block } from "./index.style";
 import { Colors } from "../../constants";
 import AvatarContainer from "../../components/Avatar/index";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -25,7 +29,7 @@ import { Formik, ErrorMessage } from "formik";
 import Modal from "react-native-modal";
 import MapPicker from "../../components/MapPicker/index";
 import Auth from "../../api/auth";
-
+import useImagePicker from "../../hooks/useImagePicker.js";
 function SignUpParamedicPage({ navigation, route }) {
   const { email, password, role } = route.params;
   const [name, onChangeName] = useState("");
@@ -48,6 +52,7 @@ function SignUpParamedicPage({ navigation, route }) {
   const [text, setText] = useState("select date");
   const [licenseText, setLicenseText] = useState("select date");
   const [showLicense, setShowLicense] = useState(false);
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -61,14 +66,18 @@ function SignUpParamedicPage({ navigation, route }) {
       const getAllHospitals = async () => {
         const res = await Auth.getHospitals({});
         console.log("data", res.data);
-        if(extractedHospitals.length == 0){
+        if (extractedHospitals.length == 0) {
           for (let i = 0; i < res.data.length; i++) {
-            const hospital = { label: res.data[i].name, value: res.data[i]._id };
+            const hospital = {
+              label: res.data[i].name,
+              value: res.data[i]._id,
+            };
             extractedHospitals.push(hospital);
           }
           console.log(extractedHospitals);
         }
-       
+        setImages(null);
+
         //  setHospitals(res)
       };
       getAllHospitals();
@@ -111,16 +120,17 @@ function SignUpParamedicPage({ navigation, route }) {
       password: password,
       role: role,
       name: values.name,
-      dateOfBirth: values.text,
+      dateOfBirth: text,
       gender: gender,
       citizenId: values.citizenId,
-      phoneNumber: values.phone,
+      phoneNumber: values.phoneNumber,
       address: address,
       city: city,
       zipCode: zipCode,
       licenseNum: values.licenseNum,
       licenseDate: licenseText,
       hospitalId: selectedHospital,
+      ...(images && images[0] && { faceImg: images[0] }),
     });
   };
 
@@ -128,213 +138,234 @@ function SignUpParamedicPage({ navigation, route }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-    <BlueContainer>
-      <PageTitleContainer>
-        <CircleButton onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrow-back-outline"
-            type="ionicon"
-            color={Colors.blue}
-            size={20}
-          />
-        </CircleButton>
-        <PageTitle>Sign Up</PageTitle>
-      </PageTitleContainer>
-      <Formik
-        initialValues={{
-          name: "",
-          dateOfBirth: new Date(),
-          citizenId: "",
-          phoneNumber: "",
-          licenseNum: "",
-        }}
-        onSubmit={handleSubmit}
-        validate={(values) => {
-          const errors = {};
+      <BlueContainer>
+        <PageTitleContainer>
+          <CircleButton onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={20}
+            />
+          </CircleButton>
+          <PageTitle>Sign Up</PageTitle>
+        </PageTitleContainer>
+        <Formik
+          initialValues={{
+            name: "",
+            dateOfBirth: new Date(),
+            citizenId: "",
+            phoneNumber: "",
+            licenseNum: "",
+          }}
+          onSubmit={handleSubmit}
+          validate={(values) => {
+            const errors = {};
 
-          if (!values.name) {
-            errors.name = "Name is required";
-          }
-          if (!values.dateOfBirth) {
-            errors.dateOfBirth = "Date of Birth is required";
-          }
-          if (!values.citizenId) {
-            errors.citizenId = "Citizen ID is required";
-          } else if (!/^\d+$/.test(values.citizenId)) {
-            errors.citizenId = "Citizen ID is in a wrong format";
-          } else if (values.citizenId.length < 13) {
-            errors.citizenId = "Citizen ID must be 13 characters long";
-          }
-          if (!values.phoneNumber) {
-            errors.phoneNumber = "Phone number is required";
-          } else if (!/^\d+$/.test(values.phoneNumber)) {
-            errors.phoneNumber = "Phone number is in a wrong format";
-          }
-          if (!values.licenseNum) {
-            errors.licenseNum = "Medical license No. is required";
-          }
-          return errors;
-        }}
-        validateOnChange={false}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-          <WhiteKeyboard
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-          >
-            <SignUpForm nestedScrollEnabled horizontal={false}>
-              <AvatarContainer />
-              <FormText>Name</FormText>
-              <FormInput
-                type="text"
-                placeholderTextColor={Colors.grey}
-                onChangeText={handleChange("name")}
-                onBlur={handleBlur("name")}
-                value={values.name}
-              />
-              <ErrorMessage
-                name="name"
-                component={Text}
-                style={{ color: "red" }}
-              />
-              <FormText>Date of Birth</FormText>
-              <DateCalendar>
-                <SmallFormInput value={text} />
-                {show && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={values.dateOfBirth}
-                    mode="date"
-                    display="default"
-                    onChange={onChange}
-                    onBlur={handleBlur("dateOfBirth")}
-                  />
-                )}
-                <Icon
-                  name="calendar-outline"
-                  type="ionicon"
-                  color={Colors.blue}
-                  size={30}
-                  onPress={() => setShow(true)}
-                />
-              </DateCalendar>
-              <ErrorMessage
-                name="dateOfBirth"
-                component={Text}
-                style={{ color: "red" }}
-              />
+            if (!values.name) {
+              errors.name = "Name is required";
+            }
+            if (!values.dateOfBirth) {
+              errors.dateOfBirth = "Date of Birth is required";
+            }
+            if (!values.citizenId) {
+              errors.citizenId = "Citizen ID is required";
+            } else if (!/^\d+$/.test(values.citizenId)) {
+              errors.citizenId = "Citizen ID is in a wrong format";
+            } else if (values.citizenId.length < 13) {
+              errors.citizenId = "Citizen ID must be 13 characters long";
+            }
+            if (!values.phoneNumber) {
+              errors.phoneNumber = "Phone number is required";
+            } else if (!/^\d+$/.test(values.phoneNumber)) {
+              errors.phoneNumber = "Phone number is in a wrong format";
+            }
+            if (!values.licenseNum) {
+              errors.licenseNum = "Medical license No. is required";
+            }
+            return errors;
+          }}
+          validateOnChange={false}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+            <WhiteKeyboard
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={{ flex: 1 }}
+            >
+              <SignUpForm nestedScrollEnabled horizontal={false}>
+                {/* <AvatarContainer /> */}
+                <Block>
+                  <Avatar
+                    // source={require("../../../assets/appLogo.png")}
+                    size={"large"}
+                    rounded
+                    icon={{ name: "user", type: "font-awesome" }}
+                    overlayBlockStyle={{ backgroundColor: "#efece8" }}
+                    source={
+                      images && images[0]?.uri
+                        ? { uri: images[0].uri }
+                        : require("../../../assets/profile-picture-empty.png")
+                    }
+                  >
+                    <Accessory
+                      size={24}
+                      containerStyle={{ borderRadius: 50 }}
+                      onPress={pickImage}
+                    />
+                  </Avatar>
+                </Block>
 
-              <FormText>Gender</FormText>
-              <DropDownPicker
-                open={open}
-                value={gender}
-                items={items}
-                setOpen={setOpen}
-                setValue={setGender}
-                setItems={setItems}
-                placeholder="select your gender"
-                placeholderStyle={{
-                  fontSize: 15,
-                }}
-                style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
-              />
-              <FormText>Citizen ID</FormText>
-              <FormInput
-                type="text"
-                placeholderTextColor={Colors.grey}
-                onChangeText={handleChange("citizenId")}
-                onBlur={handleBlur("citizenId")}
-                value={values.citizenId}
-              />
-              <ErrorMessage
-                name="citizenId"
-                component={Text}
-                style={{ color: "red" }}
-              />
-              <FormText>Tel.</FormText>
-              <FormInput
-                type="text"
-                placeholderTextColor={Colors.grey}
-                onChangeText={handleChange("phoneNumber")}
-                onBlur={handleBlur("phoneNumber")}
-                value={values.phoneNumber}
-              />
-              <ErrorMessage
-                name="phoneNumber"
-                component={Text}
-                style={{ color: "red" }}
-              />
-              <FormText>Hospital</FormText>
-              <DropDownPicker
-                open={openHospital}
-                value={selectedHospital}
-                items={hospitalOptions}
-                setOpen={setOpenHospital}
-                setValue={setSelectedHospital}
-                setItems={setHospitalOptions}
-                placeholder="select your hospital"
-                searchable={true}
-                searchPlaceholder="Search..."
-                placeholderStyle={{
-                  fontSize: 15,
-                }}
-                dropDownContainerStyle={{
-                  borderColor: "#dfdfdf",
-                }}
-                style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
-              />
-              <FormText>Medical license No.</FormText>
-              <FormInput
-                type="text"
-                placeholderTextColor={Colors.grey}
-                onChangeText={handleChange("licenseNum")}
-                onBlur={handleBlur("licenseNum")}
-                value={values.licenseNum}
-              />
-              <ErrorMessage
-                name="licenseNum"
-                component={Text}
-                style={{ color: "red" }}
-              />
-              <FormText>Medical license expiration date</FormText>
-              <DateCalendar>
-                <SmallFormInput value={licenseText} />
-                {showLicense && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={licenseDate}
-                    mode="date"
-                    display="default"
-                    onChange={onChangeLicense}
-                  />
-                )}
-                <Icon
-                  name="calendar-outline"
-                  type="ionicon"
-                  color={Colors.blue}
-                  size={30}
-                  onPress={() => setShowLicense(true)}
+                <FormText>Name</FormText>
+                <FormInput
+                  type="text"
+                  placeholderTextColor={Colors.grey}
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
                 />
-              </DateCalendar>
-              <FormText>Address</FormText>
-              <BigFormInput
-                multiline
-                numberOfLines={3}
-                onChangeText={onChangeAddress}
-                value={address}
-              />
-              <FormText>City</FormText>
-              <FormInput onChangeText={onChangeCity} value={city} />
-              <FormText>Zip Code</FormText>
-              <FormInput onChangeText={onChangeZipCode} value={zipCode} />
-              <BlueButton onPress={handleSubmit}>
-                <BlueButtonText>Next</BlueButtonText>
-              </BlueButton>
-            </SignUpForm>
-          </WhiteKeyboard>
-        )}
-      </Formik>
-    </BlueContainer>
+                <ErrorMessage
+                  name="name"
+                  component={Text}
+                  style={{ color: "red" }}
+                />
+                <FormText>Date of Birth</FormText>
+                <DateCalendar>
+                  <SmallFormInput value={text} />
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={values.dateOfBirth}
+                      mode="date"
+                      display="default"
+                      onChange={onChange}
+                      onBlur={handleBlur("dateOfBirth")}
+                    />
+                  )}
+                  <Icon
+                    name="calendar-outline"
+                    type="ionicon"
+                    color={Colors.blue}
+                    size={30}
+                    onPress={() => setShow(true)}
+                  />
+                </DateCalendar>
+                <ErrorMessage
+                  name="dateOfBirth"
+                  component={Text}
+                  style={{ color: "red" }}
+                />
+
+                <FormText>Gender</FormText>
+                <DropDownPicker
+                  open={open}
+                  value={gender}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setGender}
+                  setItems={setItems}
+                  placeholder="select your gender"
+                  placeholderStyle={{
+                    fontSize: 15,
+                  }}
+                  style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+                />
+                <FormText>Citizen ID</FormText>
+                <FormInput
+                  type="text"
+                  placeholderTextColor={Colors.grey}
+                  onChangeText={handleChange("citizenId")}
+                  onBlur={handleBlur("citizenId")}
+                  value={values.citizenId}
+                />
+                <ErrorMessage
+                  name="citizenId"
+                  component={Text}
+                  style={{ color: "red" }}
+                />
+                <FormText>Tel.</FormText>
+                <FormInput
+                  type="text"
+                  placeholderTextColor={Colors.grey}
+                  onChangeText={handleChange("phoneNumber")}
+                  onBlur={handleBlur("phoneNumber")}
+                  value={values.phoneNumber}
+                />
+                <ErrorMessage
+                  name="phoneNumber"
+                  component={Text}
+                  style={{ color: "red" }}
+                />
+                <FormText>Hospital</FormText>
+                <DropDownPicker
+                  open={openHospital}
+                  value={selectedHospital}
+                  items={hospitalOptions}
+                  setOpen={setOpenHospital}
+                  setValue={setSelectedHospital}
+                  setItems={setHospitalOptions}
+                  placeholder="select your hospital"
+                  searchable={true}
+                  searchPlaceholder="Search..."
+                  placeholderStyle={{
+                    fontSize: 15,
+                  }}
+                  dropDownContainerStyle={{
+                    borderColor: "#dfdfdf",
+                  }}
+                  style={{ borderColor: "#d8d8d8", backgroundColor: "white" }}
+                />
+                <FormText>Medical license No.</FormText>
+                <FormInput
+                  type="text"
+                  placeholderTextColor={Colors.grey}
+                  onChangeText={handleChange("licenseNum")}
+                  onBlur={handleBlur("licenseNum")}
+                  value={values.licenseNum}
+                />
+                <ErrorMessage
+                  name="licenseNum"
+                  component={Text}
+                  style={{ color: "red" }}
+                />
+                <FormText>Medical license expiration date</FormText>
+                <DateCalendar>
+                  <SmallFormInput value={licenseText} />
+                  {showLicense && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={licenseDate}
+                      mode="date"
+                      display="default"
+                      onChange={onChangeLicense}
+                    />
+                  )}
+                  <Icon
+                    name="calendar-outline"
+                    type="ionicon"
+                    color={Colors.blue}
+                    size={30}
+                    onPress={() => setShowLicense(true)}
+                  />
+                </DateCalendar>
+                <FormText>Address</FormText>
+                <BigFormInput
+                  multiline
+                  numberOfLines={3}
+                  onChangeText={onChangeAddress}
+                  value={address}
+                />
+                <FormText>City</FormText>
+                <FormInput onChangeText={onChangeCity} value={city} />
+                <FormText>Zip Code</FormText>
+                <FormInput onChangeText={onChangeZipCode} value={zipCode} />
+                <BlueButton onPress={handleSubmit}>
+                  <BlueButtonText>Next</BlueButtonText>
+                </BlueButton>
+              </SignUpForm>
+            </WhiteKeyboard>
+          )}
+        </Formik>
+      </BlueContainer>
     </TouchableWithoutFeedback>
   );
 }

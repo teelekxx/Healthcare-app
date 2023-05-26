@@ -199,7 +199,7 @@ export const SmallFormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width: 300px;
+  flex: 1;
   height: 40px;
   padding-left: 10px;
   padding-right: 10px;
@@ -213,7 +213,7 @@ export const DateCalendar = styled.View`
 
 export const CircleButton = styled.TouchableOpacity`
   margin-top: ${backButtonMargin}px;
-  margin-left: 10px;
+  margin-left: 20px;
   padding: 10px;
   width: 50px;
   height: 50px;

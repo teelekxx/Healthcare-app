@@ -28,11 +28,17 @@ export const PatientName = styled.Text`
   font-size: 20px;
 `;
 
-export const TimeStamp = styled.Text`
+export const Price = styled.Text`
   color: ${Colors.blue};
   margin-left: auto;
   font-weight: bold;
   font-size: 15px;
+`;
+
+export const Fee = styled.Text`
+  color: ${Colors.blue};
+  margin-left: auto;
+  font-size: 10px;
 `;
 
 export const PatientNameContainer = styled.View`

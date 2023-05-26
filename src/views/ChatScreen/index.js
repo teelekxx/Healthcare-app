@@ -39,6 +39,7 @@ import {
   ChatField,
   ChatInputContainer,
   CallButton,
+  DoneButton,
   PageTitle,
   PhoneNumber,
   GreyInput,
@@ -103,6 +104,7 @@ function ChatScreen({ navigation, route }) {
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
   const [isPharma, setIsPharma] = useState(false);
+  const [isPara, setIsPara] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [lastKey, setLastKey] = useState("");
@@ -305,6 +307,11 @@ function ChatScreen({ navigation, route }) {
     setIsModalVisible(!isModalVisible);
   };
 
+  const handleDonePress = () => {
+    console.log("Done (Place holder)");
+    navigation.goBack();
+  };
+
   const handleDialPress = (phoneNumber) => {
     if (phoneNumber != "") {
       const telUrl = `tel:${phoneNumber}`;
@@ -314,7 +321,7 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
-  const handleMedications = async (value) => {
+  const handleMedications = async (value, fee) => {
     const q = query(
       collection(db, "messages", route.params.groupID, "messages"),
       where("type", "==", "prescription")
@@ -333,6 +340,7 @@ function ChatScreen({ navigation, route }) {
           userUid: otherUID[0],
           jobId: group.data().jobId,
           medicines: value,
+          deliveryFee: fee,
           status: "pending",
         },
 
@@ -367,6 +375,8 @@ function ChatScreen({ navigation, route }) {
       });
       if (user.data.user.role === "pharmacist") {
         setIsPharma(true);
+      } else if (user.data.user.role === "paramedics") {
+        setIsPara(true);
       }
     };
 
@@ -421,7 +431,7 @@ function ChatScreen({ navigation, route }) {
     };
 
     updateDocuments(); //
-  }, [myUID, isPharma]);
+  }, [myUID, isPharma, isPara]);
 
   // if (isLoading) {
   //   return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
@@ -441,6 +451,16 @@ function ChatScreen({ navigation, route }) {
 
         <HorizonTitle>
           <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
+          {isPara && (
+            <DoneButton onPress={handleDonePress}>
+              <Icon
+                name="checkmark-done-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={21}
+              />
+            </DoneButton>
+          )}
           <CallButton onPress={() => handleDialPress(chatNumber)}>
             <Icon
               name="call-outline"
@@ -452,7 +472,6 @@ function ChatScreen({ navigation, route }) {
           </CallButton>
         </HorizonTitle>
       </PageTitleContainer>
-      {console.log(chatMessages)}
       <ChatField
         data={chatMessages}
         keyExtractor={(item, index) => index.toString()}
@@ -482,68 +501,66 @@ function ChatScreen({ navigation, route }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 0 }}
       >
-        <BlueFooter>
-          {image && (
-            <SelectedImagesContainer horizontal={true}>
-              {image.map((val, index) => {
-                return (
-                  <SelectedImageContainer key={index}>
-                    <RemoveButton onPress={() => removeImage(index)}>
-                      <Icon
-                        name="close-outline"
-                        type="ionicon"
-                        color={Colors.white}
-                        size={21}
-                      />
-                    </RemoveButton>
-                    <SelectedImage source={{ uri: val }} />
-                  </SelectedImageContainer>
-                );
-              })}
-            </SelectedImagesContainer>
+        {image && (
+          <SelectedImagesContainer horizontal={true}>
+            {image.map((val, index) => {
+              return (
+                <SelectedImageContainer key={index}>
+                  <RemoveButton onPress={() => removeImage(index)}>
+                    <Icon
+                      name="close-outline"
+                      type="ionicon"
+                      color={Colors.white}
+                      size={21}
+                    />
+                  </RemoveButton>
+                  <SelectedImage source={{ uri: val }} />
+                </SelectedImageContainer>
+              );
+            })}
+          </SelectedImagesContainer>
+        )}
+        <ChatInputContainer>
+          <PictureButton onPress={pickImage}>
+            <Icon
+              name="images-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={30}
+            />
+          </PictureButton>
+          {isPharma && (
+            <MedButton
+              onPress={() =>
+                navigation.navigate("Prescription", {
+                  medication: medications,
+                  updateData: handleMedications,
+                })
+              }
+            >
+              <Icon
+                name="medkit-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={30}
+              />
+            </MedButton>
           )}
-          <ChatInputContainer>
-            <PictureButton onPress={pickImage}>
-              <Icon
-                name="images-outline"
-                type="ionicon"
-                color={Colors.white}
-                size={30}
-              />
-            </PictureButton>
-            {isPharma && (
-              <MedButton
-                onPress={() =>
-                  navigation.navigate("Prescription", {
-                    medication: medications,
-                    updateData: handleMedications,
-                  })
-                }
-              >
-                <Icon
-                  name="medkit-outline"
-                  type="ionicon"
-                  color={Colors.white}
-                  size={30}
-                />
-              </MedButton>
-            )}
-            <GreyInput
-              multiline={true}
-              value={currMessage}
-              onChangeText={(text) => setCurrMessage(text)}
-            ></GreyInput>
+          <GreyInput
+            multiline={true}
+            value={currMessage}
+            onChangeText={(text) => setCurrMessage(text)}
+          ></GreyInput>
 
-            <SendButton onPress={sendMessage}>
-              <Icon
-                name="send-outline"
-                type="ionicon"
-                color={Colors.white}
-                size={30}
-              />
-            </SendButton>
-          </ChatInputContainer>
-        </BlueFooter>
+          <SendButton onPress={sendMessage}>
+            <Icon
+              name="send-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={30}
+            />
+          </SendButton>
+        </ChatInputContainer>
       </BlueKeyboard>
     </BlueContainer>
   );

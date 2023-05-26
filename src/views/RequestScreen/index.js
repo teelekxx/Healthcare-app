@@ -59,6 +59,11 @@ import { AsyncStorage } from "react-native"
 ;
 import { View } from "react-native";
 import { AssetToLocalUri } from "../../lib/imageConverter";
+import Accident from "../../../assets/fender-bender.svg";
+import ChestPain from "../../../assets/chest-pain.svg";
+import BreathLess from "../../../assets/lungs.svg";
+import Uncon from "../../../assets/insomnia.svg";
+import Weak from "../../../assets/weakness.svg";
 
 function RequestScreen({ navigation }) {
   const [{ images }, { pickImage,setImages }] = useImagePicker();
@@ -179,7 +184,7 @@ function RequestScreen({ navigation }) {
           token: token,
         });
         if (user.isOk) {
-          console.log("response = ", user);
+          console.log("emergency = ", user);
           navigation.navigate("Map", { myToken: user });
         } else if (!user.isOk) {
           console.log("response = ", user);
@@ -238,7 +243,7 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <SymptomList>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/fender-bender.png")} />
+          <Accident/>
           {isAccident && <BlueText2>Accident</BlueText2>}
           {!isAccident && <GreyText>Accident</GreyText>}
           <CheckBoxContainer>
@@ -250,7 +255,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/chest-pain.png")} />
+          <ChestPain/>
           {isChestPain && <BlueText2>Chest pain</BlueText2>}
           {!isChestPain && <GreyText>Chest pain</GreyText>}
           <CheckBoxContainer>
@@ -262,7 +267,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/lungs.png")} />
+          <BreathLess />
           {isBreathlessness && <BlueText2>Breathlessness</BlueText2>}
           {!isBreathlessness && <GreyText>Breathlessness</GreyText>}
           <CheckBoxContainer>
@@ -274,7 +279,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/insomnia.png")} />
+          <Uncon />
           {isUnconsciousness && <BlueText2>Unconsciousness</BlueText2>}
           {!isUnconsciousness && <GreyText>Unconsciousness</GreyText>}
           <CheckBoxContainer>
@@ -286,7 +291,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
         <HorizonInput2>
-          <SymptomIcon source={require("../../../assets/weakness.png")} />
+          <Weak />
           {isWeakness && <BlueText2>Sudden paralysis/weakness</BlueText2>}
           {!isWeakness && <GreyText>Sudden paralysis/weakness</GreyText>}
           <CheckBoxContainer>

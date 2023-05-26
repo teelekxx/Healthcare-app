@@ -21,6 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
+import Heimlich from "../../../../assets/Heimlich.svg";
 
 function HeimlichScreen({ navigation }) {
   return (
@@ -40,7 +41,9 @@ function HeimlichScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepPicture source={require("../../../../assets/Heimlich.png")} />
+        <View style={{alignSelf: "center"}}>
+          <Heimlich/>
+          </View>
           <StepTitle2>How to give Heimlich maneuver</StepTitle2>
           <StepTitle>1. Stand behind the person choking</StepTitle>
           <StepTitle>

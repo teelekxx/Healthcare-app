@@ -166,7 +166,9 @@ const MyStack = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log("hello");
     registerForPushNotificationsAsync().then((token) => {
+      console.log("token here", token);
       if (auth.isAuthenticated)
         appendToFireStore({ uid: auth.user.uid, token: token });
     });

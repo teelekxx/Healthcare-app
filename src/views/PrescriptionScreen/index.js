@@ -44,6 +44,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Modal from "react-native-modal";
 
@@ -52,6 +54,7 @@ import MedicineOrder from "../../components/MedicineOrder";
 
 export default function Prescription({ navigation, route }) {
   const [medications, setMedication] = useState([]);
+  const [deliveryFee, setDeliveryFee] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
   const [updatingIndex, setUpdatingIndex] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -87,7 +90,7 @@ export default function Prescription({ navigation, route }) {
   };
 
   const saveAndClose = () => {
-    route.params.updateData(medications);
+    route.params.updateData(medications, deliveryFee);
     navigation.goBack();
   };
 
@@ -96,6 +99,7 @@ export default function Prescription({ navigation, route }) {
     medications.forEach((medicine) => {
       const { price } = medicine;
       totalPrice += Number(price);
+      // totalPrice += Number(deliveryFee);
     });
     return totalPrice;
   };
@@ -107,70 +111,86 @@ export default function Prescription({ navigation, route }) {
   }, [isModalVisible]);
 
   return (
-    <PreContainer>
-      <PageTitleContainer>
-        <CircleButton
-          onPress={saveAndClose}
-          style={{ backgroundColor: Colors.white }}
-        >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <PreContainer>
+        <PageTitleContainer>
+          <CircleButton
+            onPress={saveAndClose}
+            style={{ backgroundColor: Colors.white }}
+          >
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              color={Colors.blue}
+              size={20}
+            />
+          </CircleButton>
+          <PageTitle>Prescription</PageTitle>
+        </PageTitleContainer>
+        {medications.length > 0 && (
+          <Wrapper>
+            <MedicineScrollable>
+              {medications.map((val, index) => {
+                return (
+                  <MedicineOrder
+                    data={val}
+                    handleDeleteMedications={handleDeleteMedications}
+                    handleEditMedications={openEditMedications}
+                    myIndex={index}
+                  ></MedicineOrder>
+                );
+              })}
+            </MedicineScrollable>
+          </Wrapper>
+        )}
+        <HorizonInput>
+          <MedText>Delivery Fee :</MedText>
+          <MedTextInput
+            keyboardType="numeric"
+            maxLength={5}
+            value={deliveryFee}
+            onChangeText={(text) => setDeliveryFee(text)}
+          ></MedTextInput>
+        </HorizonInput>
+        <TotalText>Total : {calculateTotal()}</TotalText>
+        <AddMedicineButton onPress={toggleModal}>
           <Icon
-            name="arrow-back-outline"
+            name="add-outline"
             type="ionicon"
             color={Colors.blue}
             size={20}
           />
-        </CircleButton>
-        <PageTitle>Prescription</PageTitle>
-      </PageTitleContainer>
-      {medications.length > 0 && (
-        <Wrapper>
-          <MedicineScrollable>
-            {medications.map((val, index) => {
-              return (
-                <MedicineOrder
-                  data={val}
-                  handleDeleteMedications={handleDeleteMedications}
-                  handleEditMedications={openEditMedications}
-                  myIndex={index}
-                ></MedicineOrder>
-              );
-            })}
-          </MedicineScrollable>
-        </Wrapper>
-      )}
-      <TotalText>Total : {calculateTotal()}</TotalText>
-      <AddMedicineButton onPress={toggleModal}>
-        <Icon name="add-outline" type="ionicon" color={Colors.blue} size={20} />
-      </AddMedicineButton>
-      <HorizonInput>
-        <CloseButton onPress={navigation.goBack}>
-        <WhiteButtonText >Close</WhiteButtonText>
-        </CloseButton>
-        <SaveButton onPress={saveAndClose}>
-        <WhiteButtonText>Confirm</WhiteButtonText>
-        </SaveButton>
-      </HorizonInput>
-      <Modal
-        visible={isModalVisible}
-        animationType="fade"
-        backdropOpacity={0.5}
-      >
-        <SafeAreaView>
-          {isUpdate ? (
-            <AddMedicine
-              handleModalVisible={toggleModal}
-              handleSaveMedications={handleEditMedications}
-              index={updatingIndex}
-            />
-          ) : (
-            <AddMedicine
-              handleModalVisible={toggleModal}
-              handleSaveMedications={handleMedications}
-              index={updatingIndex}
-            />
-          )}
-        </SafeAreaView>
-      </Modal>
-    </PreContainer>
+        </AddMedicineButton>
+        <HorizonInput>
+          <CloseButton onPress={navigation.goBack}>
+            <WhiteButtonText>Close</WhiteButtonText>
+          </CloseButton>
+          <SaveButton onPress={saveAndClose}>
+            <WhiteButtonText>Confirm</WhiteButtonText>
+          </SaveButton>
+        </HorizonInput>
+        <Modal
+          visible={isModalVisible}
+          animationType="fade"
+          backdropOpacity={0.5}
+        >
+          <SafeAreaView>
+            {isUpdate ? (
+              <AddMedicine
+                handleModalVisible={toggleModal}
+                handleSaveMedications={handleEditMedications}
+                index={updatingIndex}
+              />
+            ) : (
+              <AddMedicine
+                handleModalVisible={toggleModal}
+                handleSaveMedications={handleMedications}
+                index={updatingIndex}
+              />
+            )}
+          </SafeAreaView>
+        </Modal>
+      </PreContainer>
+    </TouchableWithoutFeedback>
   );
 }

@@ -42,7 +42,7 @@ export const MedTextInput = styled.TextInput`
   background-color: ${Colors.white};
   border-radius: 10px;
 
-  padding: 5px;
+  padding: 10px;
 `;
 
 export const MedDesInput = styled.TextInput`

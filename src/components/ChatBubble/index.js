@@ -40,22 +40,26 @@ export default function ChatBubble({
   chatName,
 }) {
   const [medMessage, setMedMessage] = useState([]);
+  const [deliveryFee, setDeliveryFee] = useState("");
   const [orderStatus, setOrderStatus] = useState("pending");
   const [isLoading, setIsLoading] = useState(false);
 
-  const medString = (value) => {
+  const medString = (value, fee) => {
     let tempMedMessage = "";
     let tempTotal = 0;
     value.forEach((data) => {
       if (data.name) {
         // tempMedMessage += data._id + "\n";
-        tempMedMessage += data.name + "\n";
-        tempMedMessage += data.dosage + "\n";
+        tempMedMessage += data.name + "\n\n";
+        tempMedMessage += "Duration: " + data.duration + "\n";
+        tempMedMessage += "Dosage: " + data.dosage + "\n";
         tempMedMessage += "Price: " + data.price + "\n";
         tempMedMessage += "\n";
         tempTotal += Number(data.price);
       }
     });
+    tempTotal += Number(fee);
+    tempMedMessage += "+ " + fee + "\n";
     tempMedMessage += "Total: " + tempTotal;
     return tempMedMessage;
   };
@@ -67,7 +71,9 @@ export default function ChatBubble({
       token: token,
     });
     if (user.isOk) {
+      console.log("FEE", user.data);
       setMedMessage(user.data.medicines);
+      setDeliveryFee(user.data.deliveryFee);
       return user.data;
     } else {
       return ["ERROR"];
@@ -129,7 +135,9 @@ export default function ChatBubble({
               {isLoading ? (
                 <ActivityIndicator size="small" color={Colors.white} />
               ) : (
-                <WhiteMedMessage>{medString(medMessage)}</WhiteMedMessage>
+                <WhiteMedMessage>
+                  {medString(medMessage, deliveryFee)}
+                </WhiteMedMessage>
               )}
             </MyBubble>
             <UnderBubble>
@@ -165,7 +173,9 @@ export default function ChatBubble({
         return (
           <MessageContainer>
             <OthersBubble>
-              <BlueMedMessage>{medString(medMessage)}</BlueMedMessage>
+              <BlueMedMessage>
+                {medString(medMessage, deliveryFee)}
+              </BlueMedMessage>
               {console.log({ orderStatus })}
               {orderStatus == "pending" && (
                 <HorizonInput>

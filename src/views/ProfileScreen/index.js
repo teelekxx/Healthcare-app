@@ -26,7 +26,6 @@ import { useEffect, useState } from "react";
 import { AsyncStorage } from "react-native"
 ;
 import {ActivityIndicator, View } from "react-native";
-import AvatarContainer from "../../components/Avatar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
@@ -95,10 +94,11 @@ function ProfileScreen({ navigation }) {
       formData.append("address",address);
       formData.append("city",city);
       formData.append("zipCode",zipCode);
-      // if(images){
-      //   console.log("here change img",images[0])
-      //   formData.append("faceImg",[ images[0]]);
-      // }
+      if(images){
+        console.log("here change img",images[0])
+        formData.append("faceImg",images[0]);
+        setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+images[0])
+      }
       console.log("here uri", formData)
       const updateUser = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -152,7 +152,6 @@ function ProfileScreen({ navigation }) {
         setAddress(user.data.address.address);
         setCity(user.data.address.city);
         setZipCode(user.data.address.zipCode);
-              
         setRole(user.data.user.role);
         setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+user.data.user.faceImg)
         setIsloading(false);  

@@ -21,6 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
+import Burn from "../../../../assets/burn.svg";
 
 function BurnScreen({ navigation }) {
   return (
@@ -40,7 +41,9 @@ function BurnScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepPicture source={require("../../../../assets/burn.png")} />
+        <View style={{alignSelf: "center"}}>
+          <Burn/>
+          </View>
           <StepTitle2>How to Treat a Burn</StepTitle2>
           <StepTitle>Cool the Burn</StepTitle>
           <StepDetail>
