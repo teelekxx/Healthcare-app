@@ -304,11 +304,11 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
       </SymptomList>
-      <InputContainer behavior="padding">
+      <InputContainer behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex:1}} >
         <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput
           multiline
-          numberOfLines={3}
+        
           onChangeText={setOtherInformation}
           value={otherInformation}
         ></GreyInput>
