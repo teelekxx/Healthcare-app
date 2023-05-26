@@ -130,3 +130,4 @@ export const DetailContainer = styled.View`
 export const ButtonContainer = styled.View``;
 
 export const FindContainer = styled.View``;
+

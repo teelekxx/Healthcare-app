@@ -40,6 +40,7 @@ import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
 import MapFinder from "../MapFinder";
+import MapFound from "../MapFound";
 
 
 function MapPage({ navigation, route }) {
@@ -150,6 +151,7 @@ function MapPage({ navigation, route }) {
 
   const fetchData = async (jobId) => {
     const data = await getReciever(jobId);
+    console.log(data);
     setFoundHospital(data);
     setIsLoading(false);
   };
@@ -262,14 +264,14 @@ function MapPage({ navigation, route }) {
               <ActivityIndicator size="large" color="#00a5cb" />
             </LoadingContainer>
           ) : (
-            <View>
+            <MapContainer>
               <HospitalName>
                 {foundHospital.job.receiverUser.hospital.name}
               </HospitalName>
+              {/* <MapFound myLat={foundHospital.job.receiverUser.hospitalAddress.latitude} myLng={foundHospital.job.receiverUser.hospitalAddress.name} /> */}
               <MapView
                 style={{ flex: 1, borderRadius: 20 }}
                 initialRegion={region.region}
-                provider={"google"}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
                 showsCompass={true}
@@ -293,8 +295,8 @@ function MapPage({ navigation, route }) {
               >
                 <Marker
                   coordinate={{
-                    latitude: matchedHospital.latitude,
-                    longitude: matchedHospital.longitude,
+                    latitude: foundHospital.job.receiverUser.hospitalAddress.latitude,
+                    longitude: foundHospital.job.receiverUser.hospitalAddress.longitude,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
                   }}
@@ -327,7 +329,7 @@ function MapPage({ navigation, route }) {
                   size={30}
                 />
               </ChatButton>
-            </View>
+            </MapContainer>
           )}
           {/* {isLoading ? (
             <LoadingContainer>

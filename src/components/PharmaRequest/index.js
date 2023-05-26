@@ -32,6 +32,7 @@ export default function PharmaRequest({ data }) {
       params: { id: jobId },
     });
     if (user.isOk) {
+      console.log("OTHERUSER:", user.job.requesterUid);
       return user.job;
     }
   };
@@ -55,7 +56,15 @@ export default function PharmaRequest({ data }) {
       token: token,
     });
     if (user.isOk) {
-      console.log(user);
+      tempMessage = {
+        uid: route.params.myUID,
+        groupId: route.params.groupID,
+        message: currMessage,
+        type: "message",
+      };
+      // const token = await AsyncStorage.getItem("token");
+      // await Chat.sendMessage(tempMessage);
+      console.log("ACCEPT:",user);
     }
     // try {
     //   console.log("here");
