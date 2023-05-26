@@ -77,7 +77,7 @@ export const RequestTitle = styled.Text`
   margin-top: ${height * 0.08886}px;
 `;
 
-export const InputContainer = styled.KeyboardAvoidingView``;
+export const InputContainer = styled.View``;
 
 export const HorizonInput = styled.View`
   display: flex;
@@ -194,4 +194,10 @@ margin-left:auto;
 
 export const SelectedImagesContainer = styled.ScrollView`
   padding: 0px 10px 0px 10px;
+`;
+
+export const Wrapper = styled.KeyboardAvoidingView`
+  flex: 1;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;
