@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../lib/firebase";
 import * as Location from "expo-location";
 import { Google } from "expo";
+import { Audio } from "expo-av";
 import {
   SafeAreaView,
   View,
@@ -35,6 +36,9 @@ import {
   DistanceText,
   ChatButton,
   ChatIcon,
+  FirstAidContainer,
+  Cpr,
+  CprButton
 } from "./index.style";
 import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
@@ -43,6 +47,23 @@ import MapFinder from "../MapFinder";
 
 
 function MapPage({ navigation, route }) {
+  const [sound, setSound] = useState();
+  const [play, setPlay]=useState(false);
+  async function loadSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync( require('../../../assets/heartbeatTempo.mp3')
+    );
+    setSound(sound);
+  }
+  async function handleClicked(){
+    if(!play){
+      setPlay(true)
+      await sound.playAsync();
+    }else{
+      setPlay(false)
+      await sound.stopAsync();
+    }
+  }
   console.log("MAP:", route.params.lat);
   const origin = "Bangkok";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
@@ -155,6 +176,11 @@ function MapPage({ navigation, route }) {
   };
 
   useEffect(() => {
+    try{
+      loadSound();
+    }catch(error){
+      console.log('Failed to load sound', error)
+    }
     if (auth.user) {
       setMyUID(auth.user.uid);
     }
@@ -340,7 +366,7 @@ function MapPage({ navigation, route }) {
       ) : (
         <MapContainer>
           <FindingPrompt>
-            Request Cancellled
+            Request Cancelled
             <InlineIcon
               name="alert-circle"
               type="ionicon"
@@ -350,9 +376,15 @@ function MapPage({ navigation, route }) {
           </FindingPrompt>
         </MapContainer>
       )}
+      <FirstAidContainer>
       <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
         <ThemeButtonText2>Firstaid Knowledge</ThemeButtonText2>
       </ThemeButton2>
+      <CprButton onPress={handleClicked}> 
+      <Cpr source= {require("../../../assets/cprIcon.png")}/>
+      </CprButton>
+      
+      </FirstAidContainer>
     </Container>
   );
 }
