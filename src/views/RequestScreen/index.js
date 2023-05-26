@@ -39,6 +39,7 @@ import {
   SelectedImageContainer,
   RemoveButton,
   SelectedImagesContainer,
+  Wrapper,
 } from "./index.style";
 import {
   FormInput,
@@ -200,6 +201,8 @@ function RequestScreen({ navigation }) {
 
   return (
     <RequestContainer>
+    <Wrapper behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 1 }}>
       <RequestTitle>Ambulance request detail</RequestTitle>
       <InputContainer>
         <BlueText>Contact number*</BlueText>
@@ -304,7 +307,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
       </SymptomList>
-      <InputContainer behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex:1}} >
+      <InputContainer>
         <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput
           multiline
@@ -322,6 +325,7 @@ function RequestScreen({ navigation }) {
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>
+      </Wrapper>
     </RequestContainer>
   );
 }

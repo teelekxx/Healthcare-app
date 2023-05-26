@@ -80,6 +80,18 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async postChatImages(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/image/send`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
   static async postEmergencyCase(option) {
     const config = {
       method: HTTP_METHODS.post,
