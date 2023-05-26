@@ -12,6 +12,8 @@ const titleMargin = Platform.OS === "ios" ? 0 : 50;
 export const ChatField = styled.FlatList`
   background-color: ${Colors.white};
   padding: 0px 20px 20px 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 `;
 
 export const ChatView = styled.SafeAreaView`

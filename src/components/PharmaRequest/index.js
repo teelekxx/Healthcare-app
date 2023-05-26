@@ -16,15 +16,20 @@ import {
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
 import { AsyncStorage } from "react-native"
-;
+;import { useDispatch, useSelector } from "react-redux";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
+import Chat from "../../firestore/chat";
 
-export default function PharmaRequest({ data }) {
+export default function PharmaRequest({ navigation, data }) {
+  const [patientInfo, setPatientInfo] = useState(null);
   const [patientName, setPatientName] = useState("");
   const [location, setLocation] = useState(null);
+  const [myUID, setMyUID] = useState("");
+  const auth = useSelector((state) => state.Authentication);
+  const isAuthenticated = auth.isAuthenticated;
 
   const getRequester = async (jobId) => {
     const token = await AsyncStorage.getItem("token");
@@ -39,11 +44,15 @@ export default function PharmaRequest({ data }) {
   const fetchData = async (jobId) => {
     const data = await getRequester(jobId);
     setPatientName(data.requesterUser.medicalInformation.name);
+    setPatientInfo(data)
     setLocation(data.requesterUser.address.address);
-    console.log(data);
+    console.log(data.requesterUser);
   };
 
   useEffect(() => {
+    if (auth.user) {
+      setMyUID(auth.user.uid);
+    }
     console.log(data);
     const jobId = data.jobId;
     fetchData(jobId);
@@ -56,15 +65,23 @@ export default function PharmaRequest({ data }) {
       token: token,
     });
     if (user.isOk) {
+      console.log("ACCEPT!!",user);
       tempMessage = {
-        uid: route.params.myUID,
-        groupId: route.params.groupID,
-        message: currMessage,
+        uid: patientInfo.requesterUid,
+        groupId: data.jobId,
+        message: data.requesterUser.medicalInformation.bloodType,
         type: "message",
       };
-      // const token = await AsyncStorage.getItem("token");
-      // await Chat.sendMessage(tempMessage);
-      console.log("ACCEPT:",user);
+      const token = await AsyncStorage.getItem("token");
+      await Chat.sendMessage(tempMessage);
+
+      navigation.navigate("Chatting", {
+        chatName: patientName,
+        groupID: data.jobId,
+        myUID: myUID,
+      })
+      
+      
     }
     // try {
     //   console.log("here");
@@ -122,9 +139,11 @@ export default function PharmaRequest({ data }) {
         </PatientNameContainer>
         <LocationText>{location}</LocationText>
         <HorizonInput3>
-          <BlueBorderButton>
-            <BlueButtonText>Decline</BlueButtonText>
-          </BlueBorderButton>
+        <BlueBorderButton>
+        <BlueButtonText>
+          Decline
+        </BlueButtonText>
+        </BlueBorderButton>
           <BlueButton onPress={acceptRequest}>
             <WhiteButtonText>Accept</WhiteButtonText>
           </BlueButton>

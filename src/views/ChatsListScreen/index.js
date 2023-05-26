@@ -102,7 +102,8 @@ function ChatsListScreen({ navigation }) {
       if (myUID != null) {
         const q = query(
           collection(db, "groups"),
-          where("member", "array-contains", myUID)
+          where("member", "array-contains", myUID),
+          // where("visible", "==", true),
         );
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const jobs = [];

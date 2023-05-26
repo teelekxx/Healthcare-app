@@ -46,7 +46,7 @@ import MapFound from "../MapFound";
 function MapPage({ navigation, route }) {
   console.log("MAP:", route.params.lat);
   const origin = "Bangkok";
-  const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
+  const apiKey = "AIzaSyDYrm79HayKAs2UHw5aoxwMOKeXN3EiygY";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
   // const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
@@ -56,7 +56,7 @@ function MapPage({ navigation, route }) {
     { latitude: 8.444526370150388, longitude: 99.96210658564331 },
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
-  ];
+  ];  
   const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -353,7 +353,7 @@ function MapPage({ navigation, route }) {
         </MapContainer>
       )}
       <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
-        <ThemeButtonText2>Firstaid Knowledge</ThemeButtonText2>
+        <ThemeButtonText2>First-aid Knowledge</ThemeButtonText2>
       </ThemeButton2>
     </Container>
   );

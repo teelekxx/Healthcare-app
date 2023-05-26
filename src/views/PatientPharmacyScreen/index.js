@@ -276,7 +276,7 @@ function PatientPharmacyScreen({ navigation }) {
           {allJobs.length > 0 ? (
             <ScrollView>
               {allJobs.map((item) => {
-                return <PharmaRequest data={item}></PharmaRequest>;
+                return <PharmaRequest navigation={navigation} data={item}></PharmaRequest>;
               })}
             </ScrollView>
           ):(

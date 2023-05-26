@@ -99,8 +99,9 @@ export default function Prescription({ navigation, route }) {
     medications.forEach((medicine) => {
       const { price } = medicine;
       totalPrice += Number(price);
-      totalPrice += Number(deliveryFee);
+      
     });
+    totalPrice += Number(deliveryFee);
     return totalPrice;
   };
 
@@ -111,8 +112,8 @@ export default function Prescription({ navigation, route }) {
   }, [isModalVisible]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <PreContainer>
+
+      <BlueContainer>
         <PageTitleContainer>
           <CircleButton
             onPress={saveAndClose}
@@ -190,7 +191,6 @@ export default function Prescription({ navigation, route }) {
             )}
           </SafeAreaView>
         </Modal>
-      </PreContainer>
-    </TouchableWithoutFeedback>
+      </BlueContainer>
   );
 }

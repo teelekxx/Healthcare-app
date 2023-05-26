@@ -32,16 +32,13 @@ export const PageTitle = styled.Text`
   margin-top: ${titleMargin}px; */
 `;
 
+
 export const HorizonTitle = styled.View`
 /* background-color: ${Colors.red}; */
   margin-left: ${width * 0.035897}px;
   /* margin-right: ${width * 0.035897}px; */
   margin-top: ${titleMargin}px;
   flex-direction: row;
-`;
-
-export const WhiteContainer = styled.View`
-  background-color: ${Colors.white};
 `;
 
 export const BlueFooter = styled.View`
@@ -125,4 +122,20 @@ export const Wrapper = styled.KeyboardAvoidingView`
   flex: 1;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+`;
+
+export const BlueText = styled.Text`
+  font-size: 20px;
+
+  color: ${Colors.black};
+
+`;
+export const WhiteContainer = styled.View`
+flex:1;
+  background-color: ${Colors.white};
+  padding: 20px;
+`;
+
+export const OrderContainer = styled.ScrollView`
+
 `;
