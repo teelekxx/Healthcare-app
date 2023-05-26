@@ -153,7 +153,9 @@ function ProfileScreen({ navigation }) {
         setCity(user.data.address.city);
         setZipCode(user.data.address.zipCode);
         setRole(user.data.user.role);
-        setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+user.data.user.faceImg)
+        if(!edit){
+          setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+user.data.user.faceImg)
+        }
         setIsloading(false);  
         if (role === "paramedics") {
           setLicenseNum(user.data.paramedics.licenseId);
@@ -205,7 +207,7 @@ function ProfileScreen({ navigation }) {
         // source={require("../../../assets/appLogo.png")}
         size={"large"}
         rounded
-        icon={image ? null : { name: 'user', type: 'font-awesome' }}
+        icon={{ name: 'user', type: 'font-awesome' }}
         overlayBlockStyle={{ backgroundColor: "#efece8" }}
         source={images ? { uri: images[0].uri} : {uri: image}}
       >
@@ -219,9 +221,9 @@ function ProfileScreen({ navigation }) {
         // source={require("../../../assets/appLogo.png")}
         size={"large"}
         rounded
-        icon={{name: 'user', type: 'font-awesome'}}
+        icon={{ name: 'user', type: 'font-awesome' }}
         overlayBlockStyle={{ backgroundColor: "#efece8" }}
-        source={image ? { uri: image} : require("../../../assets/profile-picture-empty.png")}
+        source={images&&images[0] ? { uri: images[0].uri} : {uri:image}}
       >
       </Avatar>}
     </Block>
