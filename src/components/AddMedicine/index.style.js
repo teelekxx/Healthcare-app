@@ -26,12 +26,10 @@ export const MedRow = styled.View`
 
 export const MedColumn = styled.View`
   padding: 20px 30px 0px 30px;
-
 `;
 
 export const MedText = styled.Text`
   color: ${Colors.white};
-
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -112,4 +110,18 @@ export const TotalText = styled.Text`
   font-weight: bold;
   margin-left: 20px;
   color: ${Colors.white};
+`;
+
+export const MedSuggestion = styled.FlatList`
+  background-color: ${Colors.white};
+
+  max-height: 150px;
+  padding-top: 10px;
+  
+`;
+
+export const SuggestionText = styled.Text`
+  font-size: 15px;
+  margin-bottom: 10px;
+
 `;

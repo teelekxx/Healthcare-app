@@ -6,54 +6,39 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
-function MapFinder({ navigation, route }) {
+function MapFinder({ navigation, route, myLat, myLng }) {
   Geocoder.init("AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM");
+  const [isLoading, setIsLoading] = useState(true);
   const [radius, setRadius] = useState(1000);
   const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: myLat,
+    longitude: myLng,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  
-
-
-
-
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (radius < 5000) {
-        setRadius(radius + 400);
+        setRadius(radius + 1000);
         // Zoom out the map as the radius increases
-
-    
-        const r = {
-          ...region,
-          latitudeDelta: region.latitudeDelta + 0.03,
-          longitudeDelta: region.longitudeDelta + 0.03,
-        };
-  
-        setRegion(r);
-        mapRef.current.animateToRegion(r, 500);
       } else {
         // Zoom to marker after maximum radius is reached
         const markerRegion = {
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          };
+          latitude: myLat,
+          longitude: myLng,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        };
 
-          
         mapRef.current.animateToRegion(markerRegion, 500);
       }
-    }, 1000);
-  
+    }, 60000);
+
     setTimeout(() => {
       clearInterval(interval);
-    }, 10000);
-  
+    }, 300000);
+
     return () => {
       clearInterval(interval);
     };
@@ -62,37 +47,39 @@ function MapFinder({ navigation, route }) {
   const mapRef = useRef(null);
 
   const onMapReady = () => {
-    mapRef.current.animateToRegion(region, 100);
+    const markerRegion = {
+      latitude: myLat,
+      longitude: myLng,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+
+    mapRef.current.animateToRegion(markerRegion, 500);
   };
-
-
 
   const coordinates = [
     {
-      latitude: 100.78825,
-      longitude: -122.4324,
-    }
+      latitude: myLat,
+      longitude: myLng,
+    },
   ];
 
   return (
     <View style={{ flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
-        region={region}
         onMapReady={onMapReady}
         ref={mapRef}
       >
         <Circle
-          center={{ latitude: 37.78825, longitude: -122.4324 }}
+          center={{ latitude: myLat, longitude: myLng }}
           radius={radius}
           fillColor="rgba(255, 0, 0, 0.2)"
           strokeColor="rgba(255, 0, 0, 0.8)"
           strokeWidth={2}
         />
 
-        <CustomMarker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-        />
+        <CustomMarker coordinate={{ latitude: myLat, longitude: myLng }} />
 
         {/* <Marker
           coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
@@ -124,11 +111,10 @@ function MapFinder({ navigation, route }) {
   );
 }
 
-const CustomMarker = ({ coordinate,picked }) => {
+const CustomMarker = ({ coordinate, picked }) => {
   const [opacity, setOpacity] = useState(new Animated.Value(1));
 
   useEffect(() => {
-    
     const intervalId = setInterval(() => {
       Animated.sequence([
         Animated.timing(opacity, {

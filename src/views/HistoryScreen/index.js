@@ -134,6 +134,7 @@ function HistoryScreen({ navigation }) {
                   userName: order.pharmacistInfo.name,
                   orderDate: order.order.created_at,
                   totalPrice: order.order.total,
+                  deliveryFee: order.order.deliveryFee
                 })
               }
             >

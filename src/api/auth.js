@@ -80,6 +80,18 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async postChatImages(option) {
+    const config = {
+      method: HTTP_METHODS.post,
+      url: `/image/send`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+
   static async postEmergencyCase(option) {
     const config = {
       method: HTTP_METHODS.post,
@@ -315,6 +327,16 @@ class Auth {
       method: HTTP_METHODS.put,
       url: `/medical/staff/tok/update`,
       body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
+  static async getMedicinesByKeyword(option) {
+    const config = {
+      method: HTTP_METHODS.get,
+      url: `/medicine/search/${option.params.keyword}`,
       token: option.token,
     };
     console.log(config);

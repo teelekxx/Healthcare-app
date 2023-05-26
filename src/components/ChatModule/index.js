@@ -16,6 +16,8 @@ import { LoadingContainer } from "../components/index.style";
 
 export default function ChatModule({ navigation, chat, myUID }) {
   const [chatName, setChatName] = useState("");
+  const [image, setImage] = useState(null);
+  const [otherUser, setOtherUser] = useState(null);
   const [location, setLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,6 +34,9 @@ export default function ChatModule({ navigation, chat, myUID }) {
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
     setChatName(data.data.medicalInformation.name);
+    setImage(data.data.user.faceImg);
+    
+    console.log("IMG:", image);
     setIsLoading(false);
   };
 
@@ -53,8 +58,9 @@ export default function ChatModule({ navigation, chat, myUID }) {
         // source={require("../../../assets/appLogo.png")}
         size={"large"}
         rounded
-        icon={{ name: "user", type: "font-awesome" }}
+        icon={image ? null : { name: 'user', type: 'font-awesome' }}
         overlayContainerStyle={{ backgroundColor: "#efece8" }}
+        source={ image ? { uri: ("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+image)} : require("../../../assets/profile-picture-empty.png")}
       ></Avatar>
 
       {isLoading ? (

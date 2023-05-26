@@ -15,7 +15,7 @@ import { AsyncStorage } from "react-native"
 ;
 import Auth from "../../api/auth";
 const HistoryDetailScreen = ({navigation, route}) => {
-  const {orderId, userName, orderDate, totalPrice} = route.params
+  const {orderId, userName, orderDate, totalPrice, deliveryFee} = route.params
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const HistoryDetailScreen = ({navigation, route}) => {
             </Row>
           ))}
           <Row>
-            <Cell>Delivery fee: 50</Cell>
+            <Cell>Delivery fee: {deliveryFee}</Cell>
           </Row>
         </Container>
         <Text20>Total Price: {totalPrice}</Text20>

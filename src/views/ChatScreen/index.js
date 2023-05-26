@@ -89,11 +89,12 @@ import MedicationsBubble from "../../components/MedicationsBubble/index";
 import Modal from "react-native-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { async } from "@firebase/util";
+import useImagePicker from "../../hooks/useImagePicker.js";
 
 const { width, height } = Dimensions.get("window");
 
 function ChatScreen({ navigation, route }) {
-  const [image, setImage] = useState(null);
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,7 +146,7 @@ function ChatScreen({ navigation, route }) {
                 .sendAt.toDate()
                 .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
               Sender: doc.data().sendBy,
-              Image: image,
+              Image: images,
               Seen: doc.data().seen,
               Type: doc.data().type,
             });
@@ -201,25 +202,25 @@ function ChatScreen({ navigation, route }) {
     setChatName(data.data.medicalInformation.name);
   };
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsMultipleSelection: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    if (!result.canceled) {
-      const images = result.assets.map((asset) => asset.uri);
-      setImage(images);
-    }
-  };
+  //   if (!result.canceled) {
+  //     const images = result.assets.map((asset) => asset.uri);
+  //     setImage(images);
+  //   }
+  // };
 
   const removeImage = (index) => {
-    const newImages = [...image]; // Create a new array copy
+    const newImages = [...images]; // Create a new array copy
     newImages.splice(index, 1); // Remove the item at the given index
-    setImage(newImages); // Update the state with the new array
+    setImages(newImages); // Update the state with the new array
   };
 
   const addMessage = (message, image) => {
@@ -265,7 +266,39 @@ function ChatScreen({ navigation, route }) {
 
   // postsFirstBatch();
   const sendMessage = async () => {
-    let tempMessage = "";
+    if (images.length > 0){
+      const formData = new FormData();
+      images.map((image) => {
+        formData.append("images", image);
+      });
+      const postImages = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const user = await Auth.postChatImages({
+          body: formData,
+          token: token,
+        });
+        if (user.isOk) {
+          console.log("IMG:", user.attachedImagesPath);
+          user.attachedImagesPath.forEach((imagePath) => {
+            Chat.sendMessage({
+            uid: route.params.myUID,
+            groupId: route.params.groupID,
+            message: imagePath,
+            type: "image",
+          });
+
+          });
+          
+          setImages([]);
+        } 
+        else{
+          console.log("ERROR");
+        }
+      };
+      await postImages();
+    }
+    if (currMessage != "") {
+      let tempMessage = "";
     let tempLastMessage = "";
 
     tempMessage = {
@@ -280,7 +313,6 @@ function ChatScreen({ navigation, route }) {
       sendAt: new Date(),
     };
 
-    if (currMessage != "") {
       const token = await AsyncStorage.getItem("token");
       await Chat.sendMessage(tempMessage);
       updateLastMessage(tempLastMessage);
@@ -401,7 +433,7 @@ function ChatScreen({ navigation, route }) {
             .sendAt.toDate()
             .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           Sender: change.data().sendBy,
-          Image: image,
+          Image: images,
           Seen: change.data().seen,
           Type: change.data().type,
         };
@@ -501,9 +533,9 @@ function ChatScreen({ navigation, route }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 0 }}
       >
-        {image && (
+        {images && (
           <SelectedImagesContainer horizontal={true}>
-            {image.map((val, index) => {
+            {images.map((val, index) => {
               return (
                 <SelectedImageContainer key={index}>
                   <RemoveButton onPress={() => removeImage(index)}>
@@ -514,7 +546,7 @@ function ChatScreen({ navigation, route }) {
                       size={21}
                     />
                   </RemoveButton>
-                  <SelectedImage source={{ uri: val }} />
+                  <SelectedImage source={{ uri: val.uri }} />
                 </SelectedImageContainer>
               );
             })}

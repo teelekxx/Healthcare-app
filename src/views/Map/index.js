@@ -14,7 +14,11 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { Title, ItalicText, LoadingContainer } from "../../components/components/index.style";
+import {
+  Title,
+  ItalicText,
+  LoadingContainer,
+} from "../../components/components/index.style";
 import {
   Container,
   MapContainer,
@@ -34,10 +38,12 @@ import {
 } from "./index.style";
 import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
-import { AsyncStorage } from "react-native"
-;
+import { AsyncStorage, Alert } from "react-native";
+import MapFinder from "../MapFinder";
+
 
 function MapPage({ navigation, route }) {
+  console.log("MAP:", route.params.lat);
   const origin = "Bangkok";
   const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
@@ -54,6 +60,8 @@ function MapPage({ navigation, route }) {
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState(null);
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [nearbyPlaces, setNearby] = useState(null);
   const [destinationMap, setDestination] = useState(null);
   const [myUID, setMyUID] = useState("");
@@ -140,7 +148,6 @@ function MapPage({ navigation, route }) {
     }
   };
 
-
   const fetchData = async (jobId) => {
     const data = await getReciever(jobId);
     setFoundHospital(data);
@@ -151,9 +158,12 @@ function MapPage({ navigation, route }) {
     if (auth.user) {
       setMyUID(auth.user.uid);
     }
+    setLatitude(route.params.lat);
+    setLongitude(route.params.lng);
+    console.log("LAT:", route.params.lat);
+    console.log("LNG:", route.params.lng);
     console.log("My token=", myToken.data.jobId);
     if (status == "doing") {
-      
       fetchData(myToken.data.jobId);
     }
 
@@ -239,91 +249,93 @@ function MapPage({ navigation, route }) {
     <Container>
       {status === "finding" || loading ? (
         <MapContainer>
-          <ActivityIndicator size="large" />
+          <MapFinder myLat={latitude} myLng={longitude} />
           <FindingPrompt>Waiting for available Ambulance ...</FindingPrompt>
           <ThemeButton onPress={cancelAmublance}>
             <ThemeButtonText>Cancelled</ThemeButtonText>
           </ThemeButton>
         </MapContainer>
-      ) : status === "doing"  ? (
+      ) : status === "doing" ? (
         <MapContainer>
-        {isLoading ? (
-          <LoadingContainer>
+          {isLoading ? (
+            <LoadingContainer>
               <ActivityIndicator size="large" color="#00a5cb" />
             </LoadingContainer>
-        ):(
-          <View>
-          <HospitalName>{foundHospital.job.receiverUser.hospital.name}</HospitalName>
-          <MapView
-            style={{ flex: 1, borderRadius: 20 }}
-            initialRegion={region.region}
-            provider={"google"}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            showsCompass={true}
-            zoomEnabled={true}
-            zoomControlEnabled={true}
-            rotateEnabled={false}
-            mapType="standard"
-            onMapReady={() => console.log("Map is ready!")}
-            onMapError={(error) => console.log(error)}
-            // onPress={(e) => console.log(e.nativeEvent)}
-            // onLongPress={(e) =>
-            //   getHospital(
-            //     region.region.latitude,
-            //     region.region.longitude,
-            //     10000
-            //   )
-            // }
-            onMarkerPress={(e) => console.log(e.nativeEvent.coordinate)}
-            // onRegionChange={(e) => console.log(e.nativeEvent)}
-            // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
-          >
-            <Marker
-              coordinate={{
-                latitude: matchedHospital.latitude,
-                longitude: matchedHospital.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }}
-            ></Marker>
-          </MapView>
-          <DistanceText>Estimated arrival time: {duration}</DistanceText>
-          <FindingPrompt>
-            Ambulance found
-            <InlineIcon
-              name="checkmark-circle"
-              type="ionicon"
-              color={Colors.teal}
-              size={20}
-            />
-          </FindingPrompt>
-          <ChatButton
-            onPress={() =>
-              navigation.navigate("Chatting", {
-                    chatName: foundHospital.job.receiverUser.medicalInformation.name,
+          ) : (
+            <View>
+              <HospitalName>
+                {foundHospital.job.receiverUser.hospital.name}
+              </HospitalName>
+              <MapView
+                style={{ flex: 1, borderRadius: 20 }}
+                initialRegion={region.region}
+                provider={"google"}
+                showsUserLocation={true}
+                showsMyLocationButton={true}
+                showsCompass={true}
+                zoomEnabled={true}
+                zoomControlEnabled={true}
+                rotateEnabled={false}
+                mapType="standard"
+                onMapReady={() => console.log("Map is ready!")}
+                onMapError={(error) => console.log(error)}
+                // onPress={(e) => console.log(e.nativeEvent)}
+                // onLongPress={(e) =>
+                //   getHospital(
+                //     region.region.latitude,
+                //     region.region.longitude,
+                //     10000
+                //   )
+                // }
+                onMarkerPress={(e) => console.log(e.nativeEvent.coordinate)}
+                // onRegionChange={(e) => console.log(e.nativeEvent)}
+                // onRegionChangeComplete={(e) => console.log(e.nativeEvent)}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: matchedHospital.latitude,
+                    longitude: matchedHospital.longitude,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                  }}
+                ></Marker>
+              </MapView>
+              <DistanceText>Estimated arrival time: {duration}</DistanceText>
+              <FindingPrompt>
+                Ambulance found
+                <InlineIcon
+                  name="checkmark-circle"
+                  type="ionicon"
+                  color={Colors.teal}
+                  size={20}
+                />
+              </FindingPrompt>
+              <ChatButton
+                onPress={() =>
+                  navigation.navigate("Chatting", {
+                    chatName:
+                      foundHospital.job.receiverUser.medicalInformation.name,
                     groupID: myToken.data.jobId,
                     myUID: myUID,
                   })
-            }
-          >
-            <ChatIcon
-              name="chatbubble-ellipses-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={30}
-            />
-          </ChatButton>
-          </View>
-        )}
-        {/* {isLoading ? (
+                }
+              >
+                <ChatIcon
+                  name="chatbubble-ellipses-outline"
+                  type="ionicon"
+                  color={Colors.blue}
+                  size={30}
+                />
+              </ChatButton>
+            </View>
+          )}
+          {/* {isLoading ? (
             <LoadingContainer>
               <ActivityIndicator size="large" color="#00a5cb" />
             </LoadingContainer>
           ) : (
             <HospitalName>{foundHospital.receiverUser.hospital.name}</HospitalName>
           )} */}
-            
         </MapContainer>
       ) : (
         <MapContainer>

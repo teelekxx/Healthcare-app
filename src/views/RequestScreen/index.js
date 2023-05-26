@@ -39,6 +39,7 @@ import {
   SelectedImageContainer,
   RemoveButton,
   SelectedImagesContainer,
+  Wrapper,
 } from "./index.style";
 import {
   FormInput,
@@ -66,7 +67,7 @@ import Uncon from "../../../assets/insomnia.svg";
 import Weak from "../../../assets/weakness.svg";
 
 function RequestScreen({ navigation }) {
-  const [{ images }, { pickImage,setImages }] = useImagePicker();
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
 
   const [isAccident, setAccident] = useState(false);
   const [isChestPain, setChestPain] = useState(false);
@@ -101,6 +102,7 @@ function RequestScreen({ navigation }) {
         let location = await Location.getCurrentPositionAsync({});
         setLatitude(location.coords.latitude);
         setLongitude(location.coords.longitude);
+        console.log(location.coords.latitude);
       })();
       const getUserData = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -162,9 +164,8 @@ function RequestScreen({ navigation }) {
 
       const formData = new FormData();
 
-
-  
-    
+      console.log("REQLAT:", latitude);
+      console.log("REQLNG:", longitude);
       formData.append("contactNumber", phoneNumber);
       formData.append("symptoms", symptoms);
       formData.append("otherInformation", otherInformation);
@@ -175,8 +176,6 @@ function RequestScreen({ navigation }) {
       images.map((image) => {
         formData.append("images", image);
       });
-
-
       const postEmergency = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postEmergencyCase({
@@ -184,8 +183,11 @@ function RequestScreen({ navigation }) {
           token: token,
         });
         if (user.isOk) {
-          console.log("emergency = ", user);
-          navigation.navigate("Map", { myToken: user });
+          navigation.navigate("Map", {
+            myToken: user,
+            lat: latitude,
+            lng: longitude,
+          });
         } else if (!user.isOk) {
           console.log("response = ", user);
         }
@@ -195,10 +197,12 @@ function RequestScreen({ navigation }) {
       console.log(err);
     }
   };
-  console.log("images: ", images)
+  console.log("images: ", images);
 
   return (
     <RequestContainer>
+    <Wrapper behavior={Platform.OS === "ios" ? "position" : "height"}
+        style={{ flex: 1 }}>
       <RequestTitle>Ambulance request detail</RequestTitle>
       <InputContainer>
         <BlueText>Contact number*</BlueText>
@@ -243,7 +247,7 @@ function RequestScreen({ navigation }) {
       </InputContainer>
       <SymptomList>
         <HorizonInput2>
-          <Accident/>
+          <Accident />
           {isAccident && <BlueText2>Accident</BlueText2>}
           {!isAccident && <GreyText>Accident</GreyText>}
           <CheckBoxContainer>
@@ -255,7 +259,7 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
         <HorizonInput2>
-          <ChestPain/>
+          <ChestPain />
           {isChestPain && <BlueText2>Chest pain</BlueText2>}
           {!isChestPain && <GreyText>Chest pain</GreyText>}
           <CheckBoxContainer>
@@ -303,11 +307,11 @@ function RequestScreen({ navigation }) {
           </CheckBoxContainer>
         </HorizonInput2>
       </SymptomList>
-      <InputContainer behavior="padding">
+      <InputContainer>
         <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput
           multiline
-          numberOfLines={3}
+        
           onChangeText={setOtherInformation}
           value={otherInformation}
         ></GreyInput>
@@ -321,6 +325,7 @@ function RequestScreen({ navigation }) {
           <WhiteButtonText>Request</WhiteButtonText>
         </BlueButton>
       </HorizonInput3>
+      </Wrapper>
     </RequestContainer>
   );
 }
