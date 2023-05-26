@@ -311,7 +311,7 @@ function RequestScreen({ navigation }) {
         <BlueText>Other/ more information (optional)</BlueText>
         <GreyInput
           multiline
-          numberOfLines={3}
+        
           onChangeText={setOtherInformation}
           value={otherInformation}
         ></GreyInput>

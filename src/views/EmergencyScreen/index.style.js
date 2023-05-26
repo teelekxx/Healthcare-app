@@ -27,9 +27,11 @@ export const SosButtonText = styled.Text`
 
 export const PromptText1 = styled.Text`
   width: ${width * 0.62564}px;
-  font-size: 20px;
+  font-size: 17px;
   align-self: center;
-  margin-top: ${height * 0.13436}px;
+  justify-self:center;
+  text-align:center;
+  margin-top: ${height * 0.10436}px;
   font-weight: bold;
   color: ${Colors.blue};
   margin-left: ${width * 0.02564}px;
@@ -44,3 +46,34 @@ export const SosTitle = styled.Text`
 `;
 
 export const SosContainer = styled.View``;
+export const ThemeButton2 = styled.Pressable`
+  padding: 15px;
+  flex:1;
+  height: 64px;
+  align-self: center;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+  background-color: ${Colors.blue};
+  border-radius: 10px;
+`;
+export const ThemeButtonText2 = styled.Text`
+  font-size: 20px;
+  padding: 0;
+  align-self: center;
+
+  font-weight: bold;
+  color: ${Colors.white};
+`;
+export const FirstAidContainer = styled.View`
+flex-direction:row;
+justify-content:center;
+margin:50px 25px 0px 25px;
+`
+export const CprButton = styled.Pressable`
+`
+export const Cpr = styled.Image`
+  width: 64px;
+  height: 64px;
+  margin-left: 10px;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+  elevation: 10;
+`;

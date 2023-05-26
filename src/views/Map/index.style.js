@@ -59,13 +59,13 @@ export const ChatButton = styled.Pressable`
   border-radius: 100px;
 `;
 export const ThemeButton = styled.TouchableOpacity`
-  margin-top: auto;
+  margin-top: 10px;
   padding: 15px;
-  width: 300px;
+  width: 340px;
   height: 60px;
-  margin-bottom: 5.78%;
+  margin-bottom: 20px;
   align-self: center;
-  box-shadow: 0px 4px 7px grey;
+  box-shadow: 0px 4px 4px grey;
   background-color: ${Colors.white};
   border-radius: 10px;
   border: 1px solid ${Colors.red};
@@ -78,11 +78,10 @@ export const ThemeButtonText = styled.Text`
 `;
 export const ThemeButton2 = styled.Pressable`
   padding: 15px;
-  width: 300px;
-  height: 60px;
-  margin-bottom: 12.78%;
+  flex:1;
+  height: 64px;
   align-self: center;
-  box-shadow: 0px 4px 7px grey;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   background-color: ${Colors.blue};
   border-radius: 10px;
 `;
@@ -94,6 +93,20 @@ export const ThemeButtonText2 = styled.Text`
   font-weight: bold;
   color: ${Colors.white};
 `;
+export const FirstAidContainer = styled.View`
+flex-direction:row;
+justify-content:center;
+margin-bottom:30px;
+`
+export const CprButton = styled.Pressable`
+`
+export const Cpr = styled.Image`
+  width: 64px;
+  height: 64px;
+  margin-left: 10px;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+  elevation: 10;
+`;
 
 export const FindingPrompt = styled.Text`
   color: ${Colors.blue};
@@ -103,6 +116,7 @@ export const FindingPrompt = styled.Text`
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+
 `;
 
 export const DistanceText = styled.Text`
@@ -129,3 +143,5 @@ export const InlineIcon = styled(Icon)`
 `;
 
 export const ChatIcon = styled(Icon)``;
+ export const CancelledView = styled.View`
+ `

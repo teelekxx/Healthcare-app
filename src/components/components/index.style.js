@@ -181,7 +181,7 @@ export const FormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width: 340px;
+  flex:1;
   height: 40px;
   padding-left: 10px;
   padding-right: 10px;
@@ -190,7 +190,7 @@ export const BigFormInput = styled.TextInput`
   font-size: 15px;
   border: 1px solid ${Colors.lightGrey};
   border-radius: 10px;
-  width: 340px;
+  flex:1;
   height: 80px;
   padding-left: 10px;
   padding-right: 10px;
@@ -257,7 +257,7 @@ export const InfoInput = styled.TextInput`
   border-radius: 10px;
 
   font-weight: bold;
-  width: 340px;
+  flex:1;
   height: 40px;
   padding-left: 10px;
   padding-right: 10px;
