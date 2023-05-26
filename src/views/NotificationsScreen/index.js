@@ -1,8 +1,11 @@
 import React from "react";
-import { SafeAreaView, Button } from "react-native";
+import { SafeAreaView, Button, Text, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import { BlueCircleButton } from "../../components/components/index.style";
+import { useEffect, useState } from "react";
+import { AsyncStorage } from "react-native";
+import { useInfiniteQuery } from "react-query";
 
 import {
   NotificationsTitle,
@@ -13,9 +16,16 @@ import {
   NotificationsName,
   NotificationsMassage,
   NotificationsDate,
+  NativeButton,
+  NativeText,
 } from "./index.style";
 
+import NotificationApi from "../../api/notification";
+import { useDispatch, useSelector } from "react-redux";
+
 function NotificationsScreen({ navigation }) {
+  // const auth = useSelector((state) => state.Authentication);
+
   const chatNotifications = [
     { Name: "Collin Doe", Massage: "Hello", Date: "24/02/2023" },
     { Name: "Bill Doe", Massage: "How are you?", Date: "22/02/2023" },
@@ -24,6 +34,48 @@ function NotificationsScreen({ navigation }) {
     { Name: "We found an Ambulance!", Massage: "", Date: "20/02/2023" },
     { Name: "Order Successfully", Massage: "", Date: "20/02/2023" },
   ];
+
+  const fetchProjects = async ({ pageParam = 1 }) => {
+    const token = await AsyncStorage.getItem("token");
+    const res = await NotificationApi.getNotificationByUserId({
+      body: {
+        limit: 10,
+        page: pageParam || 1,
+      },
+      token,
+    });
+
+    if (res.isOk) {
+      return res;
+    }
+  };
+
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery("notifications", fetchProjects, {
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.page >= lastPage.totalPages) {
+        return undefined; // Stop pagination if last page reached
+      }
+
+      return lastPage.page + 1;
+    },
+    onError: (error) => {
+      console.log(error);
+      // toast.show(error.toString(), {
+      //   type: "danger",
+      // });
+    },
+  });
+
+ 
+
   return (
     <NotificationsContainer>
       <TitleContainer>
@@ -38,36 +90,45 @@ function NotificationsScreen({ navigation }) {
         <NotificationsTitle>Notification</NotificationsTitle>
       </TitleContainer>
       <SafeAreaView>
-        <NotificationsScrollable>
-          {chatNotifications.map((val, index) => {
-            return (
-              <NotificationBlock
-                onPress={() =>
-                  navigation.navigate("Chatting", { paramKey: val.Name })
-                }
-                key={index}
-              >
-                <NotificationsName>Masssage from: {val.Name}</NotificationsName>
-                <NotificationsMassage>{val.Massage}</NotificationsMassage>
-                <NotificationsDate>{val.Date}</NotificationsDate>
-              </NotificationBlock>
-            );
-          })}
-          {EmergencyNotifications.map((val, index) => {
-            return (
-              <NotificationBlock
-                // onPress={() =>
-                //   navigation.navigate("Chatting", { paramKey: val.Name })
-                // }
-                key={index}
-              >
-                <NotificationsName>{val.Name}</NotificationsName>
-                <NotificationsMassage>{val.Massage}</NotificationsMassage>
-                <NotificationsDate>{val.Date}</NotificationsDate>
-              </NotificationBlock>
-            );
-          })}
-        </NotificationsScrollable>
+        {data && (
+          <NotificationsScrollable>
+            {data.pages.map((val, index) => {
+              return (
+                <View>
+                  {val.notification.map((i) => {
+          
+                    return (
+                      <NotificationBlock
+                        // onPress={() =>
+                        //   navigation.navigate("Chatting", {
+                        //     paramKey: val.Name,
+                        //   })
+                        // }
+                        key={index}
+                      >
+                        <NotificationsName>{i.title}</NotificationsName>
+                        <NotificationsMassage>{i.body}</NotificationsMassage>
+                        <NotificationsDate>{i.createdAt}</NotificationsDate>
+                      </NotificationBlock>
+                    );
+                  })}
+                </View>
+              );
+            })}
+            <NativeButton
+              title="Load More"
+              onPress={fetchNextPage}
+              disabled={!hasNextPage || isFetchingNextPage}
+              style={{
+                alignSelf:"center",
+                marginTop:20,
+                backgroundColor: !hasNextPage || isFetchingNextPage ? "#AAAAAA" : ""
+              }}
+            >
+              <NativeText>Load more</NativeText>
+            </NativeButton>
+          </NotificationsScrollable>
+        )}
       </SafeAreaView>
     </NotificationsContainer>
   );

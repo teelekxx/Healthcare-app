@@ -4,6 +4,27 @@ import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
+
+export const NativeText = styled.Text`
+  font-size: 18px;
+  align-self: center;
+  
+  font-weight: bold;
+  color: ${Colors.white};
+`;
+
+
+export const NativeButton = styled.TouchableOpacity`
+  width: 150px;
+  height: 40px;
+  margin-top: 10px;
+  background-color: ${Colors.blue};
+  border-radius: 20px;
+  justify-content: center;
+`;
+
+
+
 export const NotificationsTitle = styled.Text`
   color: ${Colors.blue};
   
