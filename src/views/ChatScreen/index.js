@@ -278,7 +278,18 @@ function ChatScreen({ navigation, route }) {
           token: token,
         });
         if (user.isOk) {
-          console.log("IMG:", user);
+          console.log("IMG:", user.attachedImagesPath);
+          user.attachedImagesPath.forEach((imagePath) => {
+            Chat.sendMessage({
+            uid: route.params.myUID,
+            groupId: route.params.groupID,
+            message: imagePath,
+            type: "image",
+          });
+
+          });
+          
+          setImages([]);
         } 
         else{
           console.log("ERROR");
