@@ -44,6 +44,7 @@ import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
 import { AsyncStorage, Alert } from "react-native";
 import MapFinder from "../MapFinder";
+import MapFound from "../MapFound";
 
 
 function MapPage({ navigation, route }) {
@@ -66,7 +67,7 @@ function MapPage({ navigation, route }) {
   }
   console.log("MAP:", route.params.lat);
   const origin = "Bangkok";
-  const apiKey = "AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM";
+  const apiKey = "AIzaSyDYrm79HayKAs2UHw5aoxwMOKeXN3EiygY";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
   // const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
@@ -76,7 +77,7 @@ function MapPage({ navigation, route }) {
     { latitude: 8.444526370150388, longitude: 99.96210658564331 },
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
-  ];
+  ];  
   const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -171,6 +172,7 @@ function MapPage({ navigation, route }) {
 
   const fetchData = async (jobId) => {
     const data = await getReciever(jobId);
+    console.log(data);
     setFoundHospital(data);
     setIsLoading(false);
   };
@@ -288,14 +290,14 @@ function MapPage({ navigation, route }) {
               <ActivityIndicator size="large" color="#00a5cb" />
             </LoadingContainer>
           ) : (
-            <View>
+            <MapContainer>
               <HospitalName>
                 {foundHospital.job.receiverUser.hospital.name}
               </HospitalName>
+              {/* <MapFound myLat={foundHospital.job.receiverUser.hospitalAddress.latitude} myLng={foundHospital.job.receiverUser.hospitalAddress.name} /> */}
               <MapView
                 style={{ flex: 1, borderRadius: 20 }}
                 initialRegion={region.region}
-                provider={"google"}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
                 showsCompass={true}
@@ -319,8 +321,8 @@ function MapPage({ navigation, route }) {
               >
                 <Marker
                   coordinate={{
-                    latitude: matchedHospital.latitude,
-                    longitude: matchedHospital.longitude,
+                    latitude: foundHospital.job.receiverUser.hospitalAddress.latitude,
+                    longitude: foundHospital.job.receiverUser.hospitalAddress.longitude,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
                   }}
@@ -353,7 +355,7 @@ function MapPage({ navigation, route }) {
                   size={30}
                 />
               </ChatButton>
-            </View>
+            </MapContainer>
           )}
           {/* {isLoading ? (
             <LoadingContainer>
@@ -378,7 +380,7 @@ function MapPage({ navigation, route }) {
       )}
       <FirstAidContainer>
       <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
-        <ThemeButtonText2>Firstaid Knowledge</ThemeButtonText2>
+        <ThemeButtonText2>First-aid Knowledge</ThemeButtonText2>
       </ThemeButton2>
       <CprButton onPress={handleClicked}> 
       <Cpr source= {require("../../../assets/cprIcon.png")}/>

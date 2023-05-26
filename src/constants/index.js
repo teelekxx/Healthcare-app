@@ -8,4 +8,5 @@ export const Colors = {
   darkPink: "#f47c7c",
   white: "#ffffff",
   teal: "#31cad0",
+  black: "#000000",
 };

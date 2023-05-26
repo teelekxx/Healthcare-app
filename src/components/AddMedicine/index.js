@@ -41,7 +41,9 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
-  Text
+  Text,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { async } from "@firebase/util";
 import Auth from "../../api/auth";
@@ -120,6 +122,7 @@ export default function AddMedicine({
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <MedContainer>
       <MedScollable>
         <MedColumn>
@@ -143,6 +146,7 @@ export default function AddMedicine({
         <MedColumn>
           <MedText>Duration</MedText>
           <MedTextInput
+          multiline={true}
             value={duration}
             onChangeText={(text) => setDuration(text)}
           ></MedTextInput>
@@ -150,6 +154,7 @@ export default function AddMedicine({
         <MedColumn>
           <MedText>Dosage</MedText>
           <MedTextInput
+          multiline={true}
             value={dosage}
             onChangeText={(text) => setDosage(text)}
           ></MedTextInput>
@@ -174,5 +179,6 @@ export default function AddMedicine({
         </SaveButton>
       </HorizonInput>
     </MedContainer>
+    </TouchableWithoutFeedback>
   );
 }

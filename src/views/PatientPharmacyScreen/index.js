@@ -273,13 +273,16 @@ function PatientPharmacyScreen({ navigation }) {
 
       {isPharma ? (
         <ButtonContainer>
-          {allJobs.length > 0 && (
+          {allJobs.length > 0 ? (
             <ScrollView>
               {allJobs.map((item) => {
-                return <PharmaRequest data={item}></PharmaRequest>;
+                return <PharmaRequest navigation={navigation} data={item}></PharmaRequest>;
               })}
             </ScrollView>
-          )}
+          ):(
+            <FindingPrompt>No jobs....</FindingPrompt>
+          )
+          }
         </ButtonContainer>
       ) : (
         <ButtonContainer>

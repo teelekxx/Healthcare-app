@@ -59,6 +59,8 @@ import {
   ModalBackground,
   Wrapper,
   HorizonTitle,
+  BlueText,
+  OrderContainer,
 } from "./index.style";
 import Auth from "../../api/auth";
 import Chat from "../../firestore/chat";
@@ -120,43 +122,6 @@ function PharmaFinalScreen({ navigation, route }) {
     return newName;
   };
 
-  const getGroup = async (jobId) => {
-    try {
-      const querySnapshot = await getDocs(
-        query(collection(db, "groups"), where("jobId", "==", jobId))
-      );
-
-      if (querySnapshot.empty) {
-        console.log("No group found with the specified jobId");
-        return null;
-      } else {
-        const docSnapshot = querySnapshot.docs[0];
-        return docSnapshot;
-      }
-    } catch (error) {
-      console.error("Error getting group:", error);
-      return null;
-    }
-  };
-
-  const fetchData = async (myUID) => {
-    const data = await getChatter(myUID);
-    setChatNumber(data.data.medicalInformation.phoneNumber);
-    setChatName(data.data.medicalInformation.name);
-  };
-
-
-  useEffect(() => {
-    // fetchData(route.params.myUID);
-    if (auth.user) {
-      setMyUID(auth.user.uid);
-    }
-  }, []);
-
-  // if (isLoading) {
-  //   return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
-  // }
-
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -169,10 +134,16 @@ function PharmaFinalScreen({ navigation, route }) {
           />
         </CircleButton>
           <HorizonTitle>
-            <PageTitle>{route.params.chatName}</PageTitle>
+            <PageTitle>Order summary</PageTitle>
           </HorizonTitle>
       </PageTitleContainer>
-      <PageTitle>{route.params.medMessage}</PageTitle>
+      <WhiteContainer>
+      <OrderContainer>
+      <BlueText>{route.params.medMessage}</BlueText>
+      </OrderContainer>
+      
+      </WhiteContainer>
+      
     </BlueContainer>
   );
 }

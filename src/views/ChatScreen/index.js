@@ -112,6 +112,7 @@ function ChatScreen({ navigation, route }) {
   const [nextPosts_loading, setNextPostsLoading] = useState(false);
   const [lastMessage, setLastMessage] = useState([]);
   const [group, setGroup] = useState("");
+  const [groupVisible, setGroupVisible] = useState(true);
 
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
@@ -339,9 +340,31 @@ function ChatScreen({ navigation, route }) {
     setIsModalVisible(!isModalVisible);
   };
 
-  const handleDonePress = () => {
+  const handleDonePress = async () => {
     console.log("Done (Place holder)");
-    navigation.goBack();
+    const token = await AsyncStorage.getItem("token");
+    const user =  await Auth.postJobDone({
+      body: { "jobId": group.data().jobId },
+      token: token,
+    });
+    if (user.isOk) {
+      navigation.goBack();
+      return user;
+    }
+    
+  };
+
+  const handleMedFinish = async () => {
+    console.log("Done (Place holder)");
+    const token = await AsyncStorage.getItem("token");
+    const user =  await Auth.postJobDone({
+      body: { "jobId": group.data().jobId },
+      token: token,
+    });
+    if (user.isOk) {
+      return user;
+    }
+    
   };
 
   const handleDialPress = (phoneNumber) => {
@@ -354,16 +377,17 @@ function ChatScreen({ navigation, route }) {
   };
 
   const handleMedications = async (value, fee) => {
-    const q = query(
-      collection(db, "messages", route.params.groupID, "messages"),
-      where("type", "==", "prescription")
-    );
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      deleteDoc(doc.ref);
-    });
+  
     if (value.length > 0) {
+      const q = query(
+        collection(db, "messages", route.params.groupID, "messages"),
+        where("type", "==", "prescription")
+      );
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach((doc) => {
+        deleteDoc(doc.ref);
+      });
       let orderId = "";
       console.log("VALUE =", value);
       const token = await AsyncStorage.getItem("token");
@@ -419,8 +443,16 @@ function ChatScreen({ navigation, route }) {
       orderBy("sendAt", "desc"),
       limit(10)
     );
+    const g = query(collection(db, "groups"), where("jobId", "==", route.params.groupID))
 
-    const unsub = onSnapshot(q, (querySnapshot) => {
+    const checkGroupUnsub  = onSnapshot(g, (querySnapshot) => {
+      updateDocuments();
+      querySnapshot.docs.forEach((change) => {
+        setGroupVisible(change.data().visible);
+      });
+    });
+
+    const unsubMessages   = onSnapshot(q, (querySnapshot) => {
       updateDocuments();
       let tempKey = "";
       let temp = [];
@@ -463,7 +495,7 @@ function ChatScreen({ navigation, route }) {
     };
 
     updateDocuments(); //
-  }, [myUID, isPharma, isPara]);
+  }, [myUID, isPharma, isPara, groupVisible]);
 
   // if (isLoading) {
   //   return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
@@ -483,7 +515,7 @@ function ChatScreen({ navigation, route }) {
 
         <HorizonTitle>
           <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
-          {isPara && (
+          {groupVisible && (isPara || isPharma) && (
             <DoneButton onPress={handleDonePress}>
               <Icon
                 name="checkmark-done-outline"
@@ -493,7 +525,8 @@ function ChatScreen({ navigation, route }) {
               />
             </DoneButton>
           )}
-          <CallButton onPress={() => handleDialPress(chatNumber)}>
+          {groupVisible && (
+            <CallButton onPress={() => handleDialPress(chatNumber)}>
             <Icon
               name="call-outline"
               type="ionicon"
@@ -502,6 +535,8 @@ function ChatScreen({ navigation, route }) {
             />
             {/* <PhoneNumber>Call</PhoneNumber> */}
           </CallButton>
+          )}
+          
         </HorizonTitle>
       </PageTitleContainer>
       <ChatField
@@ -524,12 +559,13 @@ function ChatScreen({ navigation, route }) {
               seen={item.Seen}
               type={item.Type}
               myUID={myUID}
+              handleFinish={handleMedFinish}
             />
           </BubbleContainer>
         )}
       />
-
-      <BlueKeyboard
+      {groupVisible ? (
+        <BlueKeyboard
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 0 }}
       >
@@ -594,6 +630,13 @@ function ChatScreen({ navigation, route }) {
           </SendButton>
         </ChatInputContainer>
       </BlueKeyboard>
+      ):(
+
+       <ChatInputContainer>
+        <PageTitle>Done</PageTitle>
+        </ChatInputContainer>
+      )}
+      
     </BlueContainer>
   );
 }

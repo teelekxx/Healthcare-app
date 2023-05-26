@@ -114,8 +114,9 @@ export const FindingPrompt = styled.Text`
   font-size: 20px;
   margin-left: ${width * 0.02889}px;
   text-align: center;
-  margin-top:10px;
-  margin-bottom:10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
 `;
 
 export const DistanceText = styled.Text`

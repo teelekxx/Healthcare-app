@@ -37,11 +37,12 @@ export default function ChatBubble({
   type,
   myUID,
   chatName,
+  handleFinish,
 }) {
   const [medMessage, setMedMessage] = useState([]);
   const [deliveryFee, setDeliveryFee] = useState("");
   const [orderStatus, setOrderStatus] = useState("pending");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const medString = (value, fee) => {
     let tempMedMessage = "";
@@ -70,7 +71,6 @@ export default function ChatBubble({
       token: token,
     });
     if (user.isOk) {
-      console.log("FEE", user.data);
       setMedMessage(user.data.medicines);
       setDeliveryFee(user.data.deliveryFee);
       return user.data;
@@ -88,9 +88,10 @@ export default function ChatBubble({
     });
     if (user.isOk) {
       setOrderStatus("accepted");
+      handleFinish();
       navigation.navigate("PharmaFinal", {
         chatName: chatName,
-        medMessage: medString(medMessage),
+        medMessage: medString(medMessage,deliveryFee),
       });
     }
   };
@@ -108,18 +109,23 @@ export default function ChatBubble({
   };
 
   const fetchData = async () => {
-    setIsLoading(false);
-
-    if (type === "prescription") {
-      const data = await getOrderDetail();
-    }
+    const data = await getOrderDetail();
 
     setOrderStatus(data.status);
+    setIsLoading(false);
   };
+  if (type === "prescription" && isLoading) {
+    console.log("PRE");
+    fetchData();
+  }
 
   useEffect(() => {
-    fetchData();
+    // if (type === "prescription") {
+    //   console.log("PRE");
+    //   fetchData();
+    // }
   }, []);
+
   if (image === null) {
     image = [];
   }
@@ -146,11 +152,16 @@ export default function ChatBubble({
           </MessageContainer>
         );
       } else if (type === "image") {
-        console.log("TEST");
         return (
           <MessageContainer>
             <ImagesContainer>
-             <MyImage source={{ uri: "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+message }} />
+              <MyImage
+                source={{
+                  uri:
+                    "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                    message,
+                }}
+              />
             </ImagesContainer>
             <UnderBubble>
               {seen && <ReadLabel>Read</ReadLabel>}
