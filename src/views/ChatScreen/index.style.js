@@ -191,9 +191,22 @@ export const InfoText = styled.Text`
   color: ${Colors.black};
 margin-bottom: 10px;
 `;
+export const CaseText = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: ${Colors.red};
+margin-bottom: 10px;
+`;
 
 export const InfoScrollable = styled.ScrollView`
 background-color: ${Colors.white} ;
+`;
+
+export const CaseImage = styled.Image`
+  width: 200px;
+  height: 200px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+  elevation: 10;
 `;
 
 
