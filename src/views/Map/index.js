@@ -169,7 +169,7 @@ function MapPage({ navigation, route }) {
       token: token,
     });
     if (user.isOk) {
-      getDistance(user);
+      // getDistance(user);
       return user;
     }
   };
