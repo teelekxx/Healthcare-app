@@ -100,6 +100,15 @@ export const MyImage = styled.Image`
   elevation: 10;
 `;
 
+export const OtherImage = styled.Image`
+  width: 200px;
+  height: 200px;
+  margin-bottom: 10px;
+  margin-right: auto;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+  elevation: 10;
+`;
+
 export const ImagesContainer = styled.View``;
 
 export const HorizonInput = styled.View`

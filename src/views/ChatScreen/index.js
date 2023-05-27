@@ -68,6 +68,8 @@ import {
   InfoContainer,
   ProfileImgContainer,
   InfoScrollable,
+  CaseImage,
+  CaseText,
 } from "./index.style";
 import Auth from "../../api/auth";
 import { AsyncStorage } from "react-native";
@@ -110,6 +112,7 @@ function ChatScreen({ navigation, route }) {
   const [chatNumber, setChatNumber] = useState("");
   const [chatInfo, setChatInfo] = useState(null);
   const [chatImg, setChatImg] = useState("");
+  const [caseInfo, setCaseInfo] = useState(null);
   const [total, setTotal] = useState(null);
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
@@ -127,6 +130,13 @@ function ChatScreen({ navigation, route }) {
   const isAuthenticated = auth.isAuthenticated;
   const scrollViewRef = useRef(null);
 
+  const textFormat = (text) => {
+    if(!text || text === "undefined"){
+      return  "-";
+    }
+    return text;
+  };
+
   const nameFormat = (name) => {
     let newName = name;
     if (name.length > 15) {
@@ -137,10 +147,33 @@ function ChatScreen({ navigation, route }) {
   };
 
   const allergiesFormat = (allergies) => {
-    let temp= "";
+    let temp = "";
+    if(allergies[0] === ""){
+      return  "None";
+    }
     if (allergies.length > 0) {
       allergies.forEach((allergy) => {
         temp += allergy + "\n";
+      });
+    } else {
+      temp = "None";
+    }
+    return temp;
+  };
+
+  const symptomsFormat = (symptoms) => {
+    let temp = "";
+    if(symptoms[0] === ""){
+      return  "-";
+    }
+    console.log("SYM:", symptoms);
+    if (symptoms.length > 0) {
+      symptoms.forEach((symptom) => {
+        if(symptom.length === 0) {
+          console.log("NONE");
+          return "-";
+        }
+        temp += symptom + "\n";
       });
     } else {
       temp = "None";
@@ -204,11 +237,28 @@ function ChatScreen({ navigation, route }) {
     }
   };
 
+  const getCaseDetail = async (jobId) => {
+    setGroup(group);
+    console.log("JOBID:", jobId);
+    const token = await AsyncStorage.getItem("token");
+    const user = await Auth.getEmergencyCaseTokById({
+      params: { id: jobId },
+      token: token,
+    });
+    if (user.isOk) {
+      setCaseInfo(user.data);
+    } else {
+      console.log("NOT EMERGENCY");
+    }
+  };
+
   const getChatter = async (myUID) => {
     const group = await getGroup(route.params.groupID);
     const otherUID = group.data().member.filter((jobID) => jobID !== myUID);
     setOtherUID(otherUID);
     setGroup(group);
+    console.log("GROUPDETAIL:", group.data());
+    getCaseDetail(group.data().jobId);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getUserByUID({
       params: { uid: otherUID },
@@ -220,8 +270,8 @@ function ChatScreen({ navigation, route }) {
   };
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
+    console.log("CHATINF0:", data.data.medicalInformation);
     setChatInfo(data.data.medicalInformation);
-    console.log("INFO:", data.data);
     setChatImg(data.data.user.faceImg);
     setChatNumber(data.data.medicalInformation.phoneNumber);
     setChatName(data.data.medicalInformation.name);
@@ -701,16 +751,38 @@ function ChatScreen({ navigation, route }) {
             <InfoScrollable>
               {chatInfo && (
                 <InfoContainer>
-                  <InfoText>Phone Number: {chatNumber}</InfoText>
-                  <InfoText>Date of Birth: {chatInfo.dateOfBirth}</InfoText>
-                  <InfoText>Gender: {chatInfo.gender}</InfoText>
-                  <InfoText>Blood type: {chatInfo.bloodType}</InfoText>
+                  <InfoText>Phone Number: {textFormat(chatNumber)}</InfoText>
+                  <InfoText>Date of Birth: {textFormat(chatInfo.dateOfBirth)}</InfoText>
+                  <InfoText>Gender: {textFormat(chatInfo.gender)}</InfoText>
+                  <InfoText>Blood type: {textFormat(chatInfo.bloodType)}</InfoText>
                   <InfoText>
-                    Congenital Disease: {chatInfo.congenitalDisease}
+                    Congenital Disease: {textFormat(chatInfo.congenitalDisease)}
                   </InfoText>
                   <InfoText>
                     Allergies: {allergiesFormat(chatInfo.allergies)}
                   </InfoText>
+                  {caseInfo && (
+                    <View>
+                      <CaseText>
+                        Symptoms: {symptomsFormat(caseInfo.symptoms)}
+                      </CaseText>
+                      <CaseText>
+                        More Information: {textFormat(caseInfo.otherInformation)}
+                      </CaseText>
+                      {caseInfo.attachedImages.map((val, index) => {
+                        return (
+                          <CaseImage
+                            source={{
+                              uri:
+                                "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                                val,
+                            }}
+                            key={index}
+                          ></CaseImage>
+                        );
+                      })}
+                    </View>
+                  )}
                 </InfoContainer>
               )}
             </InfoScrollable>

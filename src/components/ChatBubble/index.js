@@ -17,6 +17,7 @@ import {
   HorizonInput,
   BlueMedMessage,
   WhiteMedMessage,
+  OtherImage,
 } from "./index.style";
 import { Text, ActivityIndicator } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
@@ -196,9 +197,13 @@ export default function ChatBubble({
         return (
           <MessageContainer>
             <OthersBubble>
+            {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : (
               <BlueMedMessage>
                 {medString(medMessage, deliveryFee)}
               </BlueMedMessage>
+              )}
               {console.log({ orderStatus })}
               {orderStatus == "pending" && (
                 <HorizonInput>
@@ -211,6 +216,22 @@ export default function ChatBubble({
                 </HorizonInput>
               )}
             </OthersBubble>
+            <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
+          </MessageContainer>
+        );
+        
+      }else if (type === "image") {
+        return (
+          <MessageContainer>
+            <ImagesContainer>
+              <OtherImage
+                source={{
+                  uri:
+                    "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                    message,
+                }}
+              />
+            </ImagesContainer>
             <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
           </MessageContainer>
         );
