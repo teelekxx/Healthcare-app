@@ -153,3 +153,47 @@ export const Wrapper = styled.KeyboardAvoidingView`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 `;
+
+export const ProfileContainer = styled.SafeAreaView`
+  display: flex;
+  height: 100%;
+  background-color: ${Colors.blue};
+  border-radius: 20px;
+  box-shadow: 0px 0px 70px grey;
+`;
+
+export const ProfileTitleContainer = styled.SafeAreaView`
+  margin-bottom: 30px;
+  margin-top: 30px;
+  flex-direction: row;
+  align-items: center;
+
+`;
+
+export const ProfileTitle = styled.Text`
+  align-self: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: ${Colors.white};
+  margin-bottom: 20px;
+  margin-top: 10px;
+`;
+
+export const ProfileImgContainer = styled.View`
+  align-items: center;
+`;
+
+export const InfoContainer = styled.View`
+  padding: 20px;
+`;
+export const InfoText = styled.Text`
+  font-size: 15px;
+  color: ${Colors.black};
+margin-bottom: 10px;
+`;
+
+export const InfoScrollable = styled.ScrollView`
+background-color: ${Colors.white} ;
+`;
+
+

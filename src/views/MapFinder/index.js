@@ -7,9 +7,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 function MapFinder({ navigation, route, myLat, myLng }) {
-  Geocoder.init("AIzaSyA-Pb23fMnh-ofKWhoP9PC9Aaj9C81MCQM");
+  Geocoder.init("AIzaSyB1OZN6aK-ey5ZPoeezFvZ5yhtYyS-CRDs");
   const [isLoading, setIsLoading] = useState(true);
   const [radius, setRadius] = useState(1000);
+  const [zoom, setZoom] = useState(0);
   const [region, setRegion] = useState({
     latitude: myLat,
     longitude: myLng,
@@ -20,7 +21,8 @@ function MapFinder({ navigation, route, myLat, myLng }) {
   useEffect(() => {
     const interval = setInterval(() => {
       if (radius < 5000) {
-        setRadius(radius + 1000);
+        setRadius(radius + 100);
+        setZoom(zoom + 0.03);
         // Zoom out the map as the radius increases
       } else {
         // Zoom to marker after maximum radius is reached
@@ -33,7 +35,7 @@ function MapFinder({ navigation, route, myLat, myLng }) {
 
         mapRef.current.animateToRegion(markerRegion, 500);
       }
-    }, 60000);
+    }, 1000);
 
     setTimeout(() => {
       clearInterval(interval);

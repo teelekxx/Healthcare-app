@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
@@ -65,9 +65,10 @@ function MapPage({ navigation, route }) {
       await sound.stopAsync();
     }
   }
-  console.log("MAP:", route.params.lat);
+
+  const mapRef = useRef(null);
   const origin = "Bangkok";
-  const apiKey = "AIzaSyDYrm79HayKAs2UHw5aoxwMOKeXN3EiygY";
+  const apiKey = "AIzaSyB1OZN6aK-ey5ZPoeezFvZ5yhtYyS-CRDs";
   const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
   // const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin}&destinations=${destination}&key=${apiKey}`;
   // const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.771864275082%2c100.575864649699&radius=500&type=hospital&key=${apiKey}`;
@@ -140,18 +141,20 @@ function MapPage({ navigation, route }) {
       region: {
         latitude: lat,
         longitude: lng,
-        latitudeDelta: 5,
-        longitudeDelta: 5,
+        latitudeDelta:  0.222,
+        longitudeDelta: 0.0821,
       },
     });
     let destination =
       matchedHospital.latitude + "%2c" + matchedHospital.longitude;
-    getDistance(curLocation, destination);
+    // getDistance(curLocation, destination);
 
     setLoading(false);
   };
 
-  const getDistance = async (curLocation, destination) => {
+  const getDistance = async (inFoundHospital) => {
+    let curLocation = route.params.lat + "%2c" + route.params.lng;
+    let destination = inFoundHospital.job.receiverUser.hospitalAddress.latitude + "%2c" + inFoundHospital.job.receiverUser.hospitalAddress.latitude;
     const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${curLocation}&destinations=${destination}&key=${apiKey}`;
     const response = await axios.get(distanceUrl);
     if (response != null) {
@@ -166,6 +169,7 @@ function MapPage({ navigation, route }) {
       token: token,
     });
     if (user.isOk) {
+      getDistance(user);
       return user;
     }
   };
@@ -304,8 +308,8 @@ function MapPage({ navigation, route }) {
                 zoomEnabled={true}
                 zoomControlEnabled={true}
                 rotateEnabled={false}
+                ref={mapRef}
                 mapType="standard"
-                onMapReady={() => console.log("Map is ready!")}
                 onMapError={(error) => console.log(error)}
                 // onPress={(e) => console.log(e.nativeEvent)}
                 // onLongPress={(e) =>
