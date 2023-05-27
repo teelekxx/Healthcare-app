@@ -22,13 +22,14 @@ import PatientPharmacyScreen from "../PatientPharmacyScreen/index";
 import FirstaidScreen from "../FirstaidScreen/index";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import CPRScreen from "../FirstaidInfoScreens/CPRScreen/index";
+import AirwayScreen from "../FirstaidInfoScreens/AirwayScreen/index.js";
 import HeimlichScreen from "../FirstaidInfoScreens/HeimlichScreen/index";
 import SplintScreen from "../FirstaidInfoScreens/SplintScreen/index";
 import BleedingScreen from "../FirstaidInfoScreens/BleedingScreen/index";
 import SprainScreen from "../FirstaidInfoScreens/SprainScreen/index";
 import BurnScreen from "../FirstaidInfoScreens/BurnScreen/index";
-
+import CPRScreen from "../FirstaidInfoScreens/CPRScreen/index.js";
+import UnconsciousnessScreen from "../FirstaidInfoScreens/UnconsciousnessScreen/index.js";
 // function ProfileScreen({ navigation }) {
 //   return (
 //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -81,12 +82,14 @@ function AmbulanceStack() {
       <Stack.Screen name="Request" component={RequestScreen} />
       <Stack.Screen name="Map" component={MapPage} />
       <Stack.Screen name="Firstaid" component={FirstaidScreen} />
-      <Stack.Screen name="CPR" component={CPRScreen} />
+      <Stack.Screen name="Open the airway" component={AirwayScreen} />
       <Stack.Screen name="Heimlich Maneuver" component={HeimlichScreen} />
       <Stack.Screen name="Set a Splint" component={SplintScreen} />
       <Stack.Screen name="Stop the Bleeding" component={BleedingScreen} />
       <Stack.Screen name="Support a Sprain" component={SprainScreen} />
       <Stack.Screen name="Treat a Burn" component={BurnScreen} />
+      <Stack.Screen name="CPR" component={CPRScreen} />
+      <Stack.Screen name="Unconsciousness" component={UnconsciousnessScreen} />
       <Stack.Screen name="Notification" component={NotificationStack} />
     </Stack.Navigator>
   );
@@ -231,9 +234,11 @@ function HomePage({ navigation }) {
               routeName === "Notification" ||
               routeName === "Firstaid" ||
               routeName === "CPR" ||
+              routeName === "Open the airway" ||
               routeName === "Heimlich Maneuver" ||
               routeName === "Set a Splint" ||
               routeName === "Stop the Bleeding" ||
+              routeName === "Unconsciousness" ||
               routeName === "Support a Sprain" ||
               routeName === "Treat a Burn"
             ) {

@@ -41,25 +41,24 @@ function HeimlichScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-        <View style={{alignSelf: "center"}}>
+        <View style={{alignSelf: "center", marginBottom:10}}>
           <Heimlich/>
           </View>
-          <StepTitle2>How to give Heimlich maneuver</StepTitle2>
-          <StepTitle>1. Stand behind the person choking</StepTitle>
-          <StepTitle>
+          <StepDetail>1. Stand behind the person choking</StepDetail>
+          <StepDetail>
             2. Place your arms around their waist and bend them forward
-          </StepTitle>
-          <StepTitle>
+          </StepDetail>
+          <StepDetail>
             3. Clench your fist and place it right above the person’s belly
             button then place your other hand on top
-          </StepTitle>
-          <StepTitle>
+          </StepDetail>
+          <StepDetail>
             4. Thrust both hands backwards into their stomach with a hard,
             upward movement up to five times
-          </StepTitle>
-          <StepTitle>
+          </StepDetail>
+          <StepDetail>
             5. If the object is still stuck in their throat, repeat the thrusts
-          </StepTitle>
+          </StepDetail>
         </FirstScrollable>
       </SafeAreaView>
     </FirstListContainer>

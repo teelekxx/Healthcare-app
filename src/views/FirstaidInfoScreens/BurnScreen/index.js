@@ -44,7 +44,6 @@ function BurnScreen({ navigation }) {
         <View style={{alignSelf: "center"}}>
           <Burn/>
           </View>
-          <StepTitle2>How to Treat a Burn</StepTitle2>
           <StepTitle>Cool the Burn</StepTitle>
           <StepDetail>
             Stop the burning process by running the burn under cool water for at
@@ -53,9 +52,9 @@ function BurnScreen({ navigation }) {
             pressure, just let the water run over the burned area for as long as
             you can.
           </StepDetail>
-          <StepTitle>When to Call 911</StepTitle>
+          <StepTitle>When to request an ambulance</StepTitle>
           <StepDetail>
-            Call 911 if there is charring (blackened skin) or blistering
+            If there is charring (blackened skin) or blistering
             (bubbles on the skin) in the following areas: The face, The genitals
             All the way around a wrist, arm, leg or ankle, or Anywhere on the
             body covering an area bigger than the size of the chest.

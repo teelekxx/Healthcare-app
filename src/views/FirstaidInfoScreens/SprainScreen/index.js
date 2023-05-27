@@ -21,7 +21,7 @@ import {
   StepPicture,
   StepDetail,
 } from "./index.style";
-
+import Sprain from "../../../../assets/ankleSprain.svg"
 function SprainScreen({ navigation }) {
   return (
     <FirstListContainer>
@@ -40,25 +40,25 @@ function SprainScreen({ navigation }) {
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-          <StepTitle2>
-            Think R.I.C.E. for the first 48 hours after the injury
-          </StepTitle2>
-          <StepTitle>
-            Rest: Rest the injured part until it's less painful.
-          </StepTitle>
-          <StepTitle>
-            Ice: Wrap an icepack or cold compress in a towel and place over the
+        <View style={{alignSelf: "center", marginBottom:10}}>
+          <Sprain/>
+          </View>
+          <StepDetail>
+            1. Rest the injured part until it's less painful.
+          </StepDetail>
+          <StepDetail>
+            2. Wrap an icepack or cold compress in a towel and place over the
             injured part immediately. Continue for no more than 20 minutes at a
             time, four to eight times a day.
-          </StepTitle>
-          <StepTitle>
-            Compression: Support the injured part with an elastic compression
+          </StepDetail>
+          <StepDetail>
+            2. Support the injured part with an elastic compression
             bandage for at least 2 days.
-          </StepTitle>
-          <StepTitle>
-            Elevation: Raise the injured part above heart level to decrease
+          </StepDetail>
+          <StepDetail>
+            3. Raise the injured part above heart level to decrease
             swelling.
-          </StepTitle>
+          </StepDetail>
         </FirstScrollable>
       </SafeAreaView>
     </FirstListContainer>

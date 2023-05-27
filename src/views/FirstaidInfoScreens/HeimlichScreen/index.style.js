@@ -10,7 +10,7 @@ export const TitleContainer = styled.View`
   margin-top: ${titleMargin}px ;
 `;
 export const FirstListTitle = styled.Text`
-  color: ${Colors.red};
+  color: ${Colors.blue};
   
   font-weight: bold;
   font-size: 25px;
@@ -63,8 +63,12 @@ export const StepTitle2 = styled.Text`
 
 export const StepDetail = styled.Text`
   color: ${Colors.blue};
-  
+  padding:5px;
   font-size: 15px;
+  border:2px solid ${Colors.blue};
+  margin-bottom:10px;
+  margin-top:10px;
+  border-radius:5px;
 `;
 
 export const StepPicture = styled.Image`

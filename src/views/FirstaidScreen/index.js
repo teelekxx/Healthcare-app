@@ -13,6 +13,7 @@ import {
   Container,
   NotificationTouchable,
 } from "../../components/components/index.style";
+
 import { Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import {
@@ -32,8 +33,14 @@ function FirstaidScreen({ navigation }) {
     {
       Name: "CPR",
       Description:
+        "There are three degrees of burn injuries and treating each degree is different. First degree burns really just need topical remedies and loose gauze. Second-degree burns will be blistered and a little swollen. Run it under cool water, then treat similar to a first-degree burn. Third-degree burns are classified by whitening of the skin, blistering, and numbness. These burns should be treated by a doctor. ",
+    },
+    {
+      Name: "Open the airway",
+      Description:
         "CPR is short for cardiopulmonary resuscitation—it provides artificial ventilation that can preserve brain function, blood circulation, and breathing in a person.",
     },
+
     {
       Name: "Heimlich Maneuver",
       Description:
@@ -59,21 +66,26 @@ function FirstaidScreen({ navigation }) {
       Description:
         "There are three degrees of burn injuries and treating each degree is different. First degree burns really just need topical remedies and loose gauze. Second-degree burns will be blistered and a little swollen. Run it under cool water, then treat similar to a first-degree burn. Third-degree burns are classified by whitening of the skin, blistering, and numbness. These burns should be treated by a doctor. ",
     },
+    {
+      Name: "Unconsciousness",
+      Description:
+        "There are three degrees of burn injuries and treating each degree is different. First degree burns really just need topical remedies and loose gauze. Second-degree burns will be blistered and a little swollen. Run it under cool water, then treat similar to a first-degree burn. Third-degree burns are classified by whitening of the skin, blistering, and numbness. These burns should be treated by a doctor. ",
+    },
   ];
   return (
     <FirstListContainer>
       <SafeAreaView>
-      <TitleContainer>
-        <BlueCircleButton onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrow-back-outline"
-            type="ionicon"
-            color={Colors.white}
-            size={20}
-          />
-        </BlueCircleButton>
-        <FirstListTitle>Firstaid</FirstListTitle>
-      </TitleContainer>
+        <TitleContainer>
+          <BlueCircleButton onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={20}
+            />
+          </BlueCircleButton>
+          <FirstListTitle>Firstaid</FirstListTitle>
+        </TitleContainer>
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
@@ -86,7 +98,12 @@ function FirstaidScreen({ navigation }) {
                 <FirstContainer>
                   <DetailContainer>
                     <FirstName>{val.Name}</FirstName>
-                    <Description>{val.Description}</Description>
+                    <Icon
+                      name="arrow-forward-circle-outline"
+                      type="ionicon"
+                      color={Colors.blue}
+                      size={30}
+                    />
                   </DetailContainer>
                 </FirstContainer>
               </TouchableOpacity>

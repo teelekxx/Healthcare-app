@@ -23,6 +23,7 @@ export const FirstListTitle = styled.Text`
 
 export const FirstListContainer = styled.View`
   margin-left: ${width * 0.0641}px;
+  margin-right: ${width * 0.0641}px;
 `;
 
 export const FirstScrollable = styled.ScrollView`
@@ -32,17 +33,22 @@ export const FirstScrollable = styled.ScrollView`
 export const FirstContainer = styled.View`
   display: flex;
   flex-direction: row;
-  margin-bottom: ${height * 0.043246}px;
+  margin-bottom: ${height * 0.023246}px;
 `;
 
 export const DetailContainer = styled.View`
-  border-bottom-width: 1px;
+  border-width: 2px;
   border-color: ${Colors.blue};
   border-style: solid;
+  flex:1;
+  padding:10px;
+  border-radius:5px;
+  flex-direction:row;
+  justify-content:space-between;
 `;
 
 export const FirstName = styled.Text`
-  color: ${Colors.red};
+  color: ${Colors.blue};
   
   font-weight: bold;
   font-size: 20px;
