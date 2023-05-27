@@ -10,41 +10,43 @@ import {
 import { NotificationTouchable } from "../../../components/components/index.style";
 import { Icon } from "react-native-elements";
 import { Colors } from "../../../constants";
-import {
-  TitleContainer,
-  FirstListTitle,
-  FirstScrollable,
-  FirstListContainer,
-  BlueCircleButton,
-  StepTitle,
-  StepTitle2,
-  StepPicture,
-  StepDetail,
-} from "./index.style";
-import CPR from "../../../../assets/CPR.svg";
+import { TitleContainer,FirstListContainer,BlueCircleButton, FirstListTitle, FirstScrollable,FirstContainer, StepDetail } from "../AirwayScreen/index.style";
+import CPR from "../../../../assets/CPRPic.svg";
 
 function CPRScreen({ navigation }) {
   return (
     <FirstListContainer>
-    <SafeAreaView>
-      <TitleContainer>
-        <BlueCircleButton onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrow-back-outline"
-            type="ionicon"
-            color={Colors.white}
-            size={20}
-          />
-        </BlueCircleButton>
-        <FirstListTitle>CPR</FirstListTitle>
-      </TitleContainer>
+      <SafeAreaView>
+        <TitleContainer>
+          <BlueCircleButton onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              color={Colors.white}
+              size={20}
+            />
+          </BlueCircleButton>
+          <FirstListTitle>Open the airway</FirstListTitle>
+        </TitleContainer>
       </SafeAreaView>
       <SafeAreaView>
         <FirstScrollable>
-        <View style={{alignSelf: "center"}}>
-          <CPR />
+          <View style={{ alignSelf: "center", marginBottom:10}}>
+            <CPR />
           </View>
-          <StepTitle2>For adults and children over 8 years old</StepTitle2>
+          <StepDetail>
+            1. To prepare to give chest compressions, place them safely on a flat surface and kneel beside them.
+          </StepDetail>
+          <StepDetail>
+            2. If the person is an adult, place the heel of one of your hands in the center of their chest, between the nipples. Put your other hand on top of the first. Interlock your fingers and raise them up so only the heel of your hand remains on their chest.
+          </StepDetail>
+          <StepDetail>
+            3. To start compressions on an adult, use your upper body to push straight down on their chest at least 2 inches. Perform these at a rate of 100 to 120 compressions per minute. Allow their chest to recoil between compressions.
+          </StepDetail>
+          <StepDetail>
+            4. Repeat the compression cycle until the person starts to breathe or medical help arrives. If the person begins to breathe, have them lie on their side quietly until medical assistance is on the scene.
+          </StepDetail>
+          {/* <StepTitle2>For adults and children over 8 years old</StepTitle2>
           <StepTitle>1. Place your hands on the person's chest</StepTitle>
           <StepDetail>
             Imagine a line between the nipples and put the heel of one hand
@@ -89,7 +91,7 @@ function CPRScreen({ navigation }) {
           <StepDetail>
             Repeat cycles of 30 chest compressions and two breaths until help
             arrives or the patient wakes up.
-          </StepDetail>
+          </StepDetail> */}
         </FirstScrollable>
       </SafeAreaView>
     </FirstListContainer>

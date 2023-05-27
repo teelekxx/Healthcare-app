@@ -1,3 +1,5 @@
+
+export default AirwayScreen;
 import styled from "styled-components/native";
 import { Colors } from "../../../constants";
 import { Dimensions } from "react-native";
