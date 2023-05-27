@@ -32,7 +32,7 @@ import {
   NotificationTouchable,
   LoadingContainer,
 } from "../../components/components/index.style";
-import { Icon } from "react-native-elements";
+import { Avatar, Icon } from "react-native-elements";
 import { Colors } from "../../constants";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -61,10 +61,16 @@ import {
   ModalBackground,
   Wrapper,
   HorizonTitle,
+  ProfileContainer,
+  ProfileTitleContainer,
+  ProfileTitle,
+  InfoText,
+  InfoContainer,
+  ProfileImgContainer,
+  InfoScrollable,
 } from "./index.style";
 import Auth from "../../api/auth";
-import { AsyncStorage } from "react-native"
-;
+import { AsyncStorage } from "react-native";
 import Chat from "../../firestore/chat";
 import {
   collection,
@@ -97,10 +103,13 @@ function ChatScreen({ navigation, route }) {
   const [{ images }, { pickImage, setImages }] = useImagePicker();
   const [currMessage, setCurrMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [medications, setMedications] = useState([]);
   const [chatName, setChatName] = useState("");
   const [chatNumber, setChatNumber] = useState("");
+  const [chatInfo, setChatInfo] = useState(null);
+  const [chatImg, setChatImg] = useState("");
   const [total, setTotal] = useState(null);
   const [myUID, setMyUID] = useState("");
   const [otherUID, setOtherUID] = useState("");
@@ -125,6 +134,18 @@ function ChatScreen({ navigation, route }) {
       newName += "...";
     }
     return newName;
+  };
+
+  const allergiesFormat = (allergies) => {
+    let temp= "";
+    if (allergies.length > 0) {
+      allergies.forEach((allergy) => {
+        temp += allergy + "\n";
+      });
+    } else {
+      temp = "None";
+    }
+    return temp;
   };
 
   const getMoreMessages = async () => {
@@ -199,6 +220,9 @@ function ChatScreen({ navigation, route }) {
   };
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
+    setChatInfo(data.data.medicalInformation);
+    console.log("INFO:", data.data);
+    setChatImg(data.data.user.faceImg);
     setChatNumber(data.data.medicalInformation.phoneNumber);
     setChatName(data.data.medicalInformation.name);
   };
@@ -267,7 +291,7 @@ function ChatScreen({ navigation, route }) {
 
   // postsFirstBatch();
   const sendMessage = async () => {
-    if (images.length > 0){
+    if (images.length > 0) {
       const formData = new FormData();
       images.map((image) => {
         formData.append("images", image);
@@ -282,17 +306,15 @@ function ChatScreen({ navigation, route }) {
           console.log("IMG:", user.attachedImagesPath);
           user.attachedImagesPath.forEach((imagePath) => {
             Chat.sendMessage({
-            uid: route.params.myUID,
-            groupId: route.params.groupID,
-            message: imagePath,
-            type: "image",
+              uid: route.params.myUID,
+              groupId: route.params.groupID,
+              message: imagePath,
+              type: "image",
+            });
           });
 
-          });
-          
           setImages([]);
-        } 
-        else{
+        } else {
           console.log("ERROR");
         }
       };
@@ -300,19 +322,19 @@ function ChatScreen({ navigation, route }) {
     }
     if (currMessage != "") {
       let tempMessage = "";
-    let tempLastMessage = "";
+      let tempLastMessage = "";
 
-    tempMessage = {
-      uid: route.params.myUID,
-      groupId: route.params.groupID,
-      message: currMessage,
-      type: "message",
-    };
-    tempLastMessage = {
-      sendBy: route.params.myUID,
-      message: currMessage,
-      sendAt: new Date(),
-    };
+      tempMessage = {
+        uid: route.params.myUID,
+        groupId: route.params.groupID,
+        message: currMessage,
+        type: "message",
+      };
+      tempLastMessage = {
+        sendBy: route.params.myUID,
+        message: currMessage,
+        sendAt: new Date(),
+      };
 
       const token = await AsyncStorage.getItem("token");
       await Chat.sendMessage(tempMessage);
@@ -343,28 +365,26 @@ function ChatScreen({ navigation, route }) {
   const handleDonePress = async () => {
     console.log("Done (Place holder)");
     const token = await AsyncStorage.getItem("token");
-    const user =  await Auth.postJobDone({
-      body: { "jobId": group.data().jobId },
+    const user = await Auth.postJobDone({
+      body: { jobId: group.data().jobId },
       token: token,
     });
     if (user.isOk) {
       navigation.goBack();
       return user;
     }
-    
   };
 
   const handleMedFinish = async () => {
     console.log("Done (Place holder)");
     const token = await AsyncStorage.getItem("token");
-    const user =  await Auth.postJobDone({
-      body: { "jobId": group.data().jobId },
+    const user = await Auth.postJobDone({
+      body: { jobId: group.data().jobId },
       token: token,
     });
     if (user.isOk) {
       return user;
     }
-    
   };
 
   const handleDialPress = (phoneNumber) => {
@@ -377,14 +397,13 @@ function ChatScreen({ navigation, route }) {
   };
 
   const handleMedications = async (value, fee) => {
-  
     if (value.length > 0) {
       const q = query(
         collection(db, "messages", route.params.groupID, "messages"),
         where("type", "==", "prescription")
       );
       const querySnapshot = await getDocs(q);
-  
+
       querySnapshot.forEach((doc) => {
         deleteDoc(doc.ref);
       });
@@ -443,16 +462,19 @@ function ChatScreen({ navigation, route }) {
       orderBy("sendAt", "desc"),
       limit(10)
     );
-    const g = query(collection(db, "groups"), where("jobId", "==", route.params.groupID))
+    const g = query(
+      collection(db, "groups"),
+      where("jobId", "==", route.params.groupID)
+    );
 
-    const checkGroupUnsub  = onSnapshot(g, (querySnapshot) => {
+    const checkGroupUnsub = onSnapshot(g, (querySnapshot) => {
       updateDocuments();
       querySnapshot.docs.forEach((change) => {
         setGroupVisible(change.data().visible);
       });
     });
 
-    const unsubMessages   = onSnapshot(q, (querySnapshot) => {
+    const unsubMessages = onSnapshot(q, (querySnapshot) => {
       updateDocuments();
       let tempKey = "";
       let temp = [];
@@ -514,7 +536,14 @@ function ChatScreen({ navigation, route }) {
         </CircleButton>
 
         <HorizonTitle>
-          <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
+          {isPharma || isPara ? (
+            <TouchableOpacity onPress={toggleModal}>
+              <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
+            </TouchableOpacity>
+          ) : (
+            <PageTitle>{nameFormat(route.params.chatName)}</PageTitle>
+          )}
+
           {groupVisible && (isPara || isPharma) && (
             <DoneButton onPress={handleDonePress}>
               <Icon
@@ -527,16 +556,15 @@ function ChatScreen({ navigation, route }) {
           )}
           {groupVisible && (
             <CallButton onPress={() => handleDialPress(chatNumber)}>
-            <Icon
-              name="call-outline"
-              type="ionicon"
-              color={Colors.blue}
-              size={21}
-            />
-            {/* <PhoneNumber>Call</PhoneNumber> */}
-          </CallButton>
+              <Icon
+                name="call-outline"
+                type="ionicon"
+                color={Colors.blue}
+                size={21}
+              />
+              {/* <PhoneNumber>Call</PhoneNumber> */}
+            </CallButton>
           )}
-          
         </HorizonTitle>
       </PageTitleContainer>
       <ChatField
@@ -566,77 +594,129 @@ function ChatScreen({ navigation, route }) {
       />
       {groupVisible ? (
         <BlueKeyboard
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 0 }}
-      >
-        {images && (
-          <SelectedImagesContainer horizontal={true}>
-            {images.map((val, index) => {
-              return (
-                <SelectedImageContainer key={index}>
-                  <RemoveButton onPress={() => removeImage(index)}>
-                    <Icon
-                      name="close-outline"
-                      type="ionicon"
-                      color={Colors.white}
-                      size={21}
-                    />
-                  </RemoveButton>
-                  <SelectedImage source={{ uri: val.uri }} />
-                </SelectedImageContainer>
-              );
-            })}
-          </SelectedImagesContainer>
-        )}
-        <ChatInputContainer>
-          <PictureButton onPress={pickImage}>
-            <Icon
-              name="images-outline"
-              type="ionicon"
-              color={Colors.white}
-              size={30}
-            />
-          </PictureButton>
-          {isPharma && (
-            <MedButton
-              onPress={() =>
-                navigation.navigate("Prescription", {
-                  medication: medications,
-                  updateData: handleMedications,
-                })
-              }
-            >
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 0 }}
+        >
+          {images && (
+            <SelectedImagesContainer horizontal={true}>
+              {images.map((val, index) => {
+                return (
+                  <SelectedImageContainer key={index}>
+                    <RemoveButton onPress={() => removeImage(index)}>
+                      <Icon
+                        name="close-outline"
+                        type="ionicon"
+                        color={Colors.white}
+                        size={21}
+                      />
+                    </RemoveButton>
+                    <SelectedImage source={{ uri: val.uri }} />
+                  </SelectedImageContainer>
+                );
+              })}
+            </SelectedImagesContainer>
+          )}
+          <ChatInputContainer>
+            <PictureButton onPress={pickImage}>
               <Icon
-                name="medkit-outline"
+                name="images-outline"
                 type="ionicon"
                 color={Colors.white}
                 size={30}
               />
-            </MedButton>
-          )}
-          <GreyInput
-            multiline={true}
-            value={currMessage}
-            onChangeText={(text) => setCurrMessage(text)}
-          ></GreyInput>
+            </PictureButton>
+            {isPharma && (
+              <MedButton
+                onPress={() =>
+                  navigation.navigate("Prescription", {
+                    medication: medications,
+                    updateData: handleMedications,
+                  })
+                }
+              >
+                <Icon
+                  name="medkit-outline"
+                  type="ionicon"
+                  color={Colors.white}
+                  size={30}
+                />
+              </MedButton>
+            )}
+            <GreyInput
+              multiline={true}
+              value={currMessage}
+              onChangeText={(text) => setCurrMessage(text)}
+            ></GreyInput>
 
-          <SendButton onPress={sendMessage}>
-            <Icon
-              name="send-outline"
-              type="ionicon"
-              color={Colors.white}
-              size={30}
-            />
-          </SendButton>
-        </ChatInputContainer>
-      </BlueKeyboard>
-      ):(
-
-       <ChatInputContainer>
-        <PageTitle>Done</PageTitle>
+            <SendButton onPress={sendMessage}>
+              <Icon
+                name="send-outline"
+                type="ionicon"
+                color={Colors.white}
+                size={30}
+              />
+            </SendButton>
+          </ChatInputContainer>
+        </BlueKeyboard>
+      ) : (
+        <ChatInputContainer>
+          <PageTitle>Done</PageTitle>
         </ChatInputContainer>
       )}
-      
+      <Modal
+        visible={isModalVisible}
+        animationType="fade"
+        backdropOpacity={0.5}
+      >
+        <SafeAreaView>
+          <ProfileContainer>
+            <ProfileTitleContainer>
+              <CircleButton onPress={toggleModal}>
+                <Icon
+                  name="arrow-back-outline"
+                  type="ionicon"
+                  color={Colors.blue}
+                  size={20}
+                />
+              </CircleButton>
+            </ProfileTitleContainer>
+            <ProfileImgContainer>
+              <Avatar
+                size={"xlarge"}
+                rounded
+                icon={chatImg ? null : { name: "user", type: "font-awesome" }}
+                overlayContainerStyle={{ backgroundColor: "#efece8" }}
+                source={
+                  chatImg
+                    ? {
+                        uri:
+                          "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                          chatImg,
+                      }
+                    : require("../../../assets/profile-picture-empty.png")
+                }
+              ></Avatar>
+            </ProfileImgContainer>
+            <ProfileTitle>{route.params.chatName}</ProfileTitle>
+            <InfoScrollable>
+              {chatInfo && (
+                <InfoContainer>
+                  <InfoText>Phone Number: {chatNumber}</InfoText>
+                  <InfoText>Date of Birth: {chatInfo.dateOfBirth}</InfoText>
+                  <InfoText>Gender: {chatInfo.gender}</InfoText>
+                  <InfoText>Blood type: {chatInfo.bloodType}</InfoText>
+                  <InfoText>
+                    Congenital Disease: {chatInfo.congenitalDisease}
+                  </InfoText>
+                  <InfoText>
+                    Allergies: {allergiesFormat(chatInfo.allergies)}
+                  </InfoText>
+                </InfoContainer>
+              )}
+            </InfoScrollable>
+          </ProfileContainer>
+        </SafeAreaView>
+      </Modal>
     </BlueContainer>
   );
 }
