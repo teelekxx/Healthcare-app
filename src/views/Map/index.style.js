@@ -78,7 +78,7 @@ export const ThemeButtonText = styled.Text`
 `;
 export const ThemeButton2 = styled.Pressable`
   padding: 15px;
-  flex:1;
+  flex: 1;
   height: 64px;
   align-self: center;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
@@ -94,12 +94,11 @@ export const ThemeButtonText2 = styled.Text`
   color: ${Colors.white};
 `;
 export const FirstAidContainer = styled.View`
-flex-direction:row;
-justify-content:center;
-margin-bottom:30px;
-`
-export const CprButton = styled.Pressable`
-`
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 30px;
+`;
+export const CprButton = styled.TouchableOpacity``;
 export const Cpr = styled.Image`
   width: 64px;
   height: 64px;
@@ -116,7 +115,6 @@ export const FindingPrompt = styled.Text`
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
-
 `;
 
 export const DistanceText = styled.Text`
@@ -143,5 +141,4 @@ export const InlineIcon = styled(Icon)`
 `;
 
 export const ChatIcon = styled(Icon)``;
- export const CancelledView = styled.View`
- `
+export const CancelledView = styled.View``;

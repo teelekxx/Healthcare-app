@@ -92,7 +92,7 @@ export default function ChatBubble({
       handleFinish();
       navigation.navigate("PharmaFinal", {
         chatName: chatName,
-        medMessage: medString(medMessage,deliveryFee),
+        medMessage: medString(medMessage, deliveryFee),
       });
     }
   };
@@ -197,14 +197,13 @@ export default function ChatBubble({
         return (
           <MessageContainer>
             <OthersBubble>
-            {isLoading ? (
+              {isLoading ? (
                 <ActivityIndicator size="small" color={Colors.white} />
               ) : (
-              <BlueMedMessage>
-                {medString(medMessage, deliveryFee)}
-              </BlueMedMessage>
+                <BlueMedMessage>
+                  {medString(medMessage, deliveryFee)}
+                </BlueMedMessage>
               )}
-              {console.log({ orderStatus })}
               {orderStatus == "pending" && (
                 <HorizonInput>
                   <CloseButton onPress={cancelOrder}>
@@ -219,8 +218,7 @@ export default function ChatBubble({
             <OthersTimeStamp>{timeStamp}</OthersTimeStamp>
           </MessageContainer>
         );
-        
-      }else if (type === "image") {
+      } else if (type === "image") {
         return (
           <MessageContainer>
             <ImagesContainer>

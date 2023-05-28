@@ -15,15 +15,15 @@ import {
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage } from "react-native"
-;import { useDispatch, useSelector } from "react-redux";
+import { AsyncStorage } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Text } from "react-native";
 import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 import Chat from "../../firestore/chat";
 
-export default function PharmaRequest({ navigation, data }) {
+export default function PharmaRequest({ navigation, data, date }) {
   const [patientInfo, setPatientInfo] = useState(null);
   const [patientName, setPatientName] = useState("");
   const [location, setLocation] = useState(null);
@@ -44,7 +44,7 @@ export default function PharmaRequest({ navigation, data }) {
   const fetchData = async (jobId) => {
     const data = await getRequester(jobId);
     setPatientName(data.requesterUser.medicalInformation.name);
-    setPatientInfo(data)
+    setPatientInfo(data);
     setLocation(data.requesterUser.address.address);
     console.log(data.requesterUser);
   };
@@ -53,7 +53,14 @@ export default function PharmaRequest({ navigation, data }) {
     if (auth.user) {
       setMyUID(auth.user.uid);
     }
-    console.log(data);
+    if (data.created_at) {
+      console.log(
+        "data:",
+        data.created_at
+          .toDate()
+          .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      );
+    }
     const jobId = data.jobId;
     fetchData(jobId);
     // console.log("REQUEST = ", getRequester(jobId));
@@ -65,7 +72,7 @@ export default function PharmaRequest({ navigation, data }) {
       token: token,
     });
     if (user.isOk) {
-      console.log("ACCEPT!!",user);
+      console.log("ACCEPT!!", user);
       tempMessage = {
         uid: patientInfo.requesterUid,
         groupId: data.jobId,
@@ -79,9 +86,7 @@ export default function PharmaRequest({ navigation, data }) {
         chatName: patientName,
         groupID: data.jobId,
         myUID: myUID,
-      })
-      
-      
+      });
     }
     // try {
     //   console.log("here");
@@ -135,15 +140,21 @@ export default function PharmaRequest({ navigation, data }) {
       <DetailContainer>
         <PatientNameContainer>
           <PatientName>{patientName}</PatientName>
-          <TimeStamp>12:30</TimeStamp>
+          <TimeStamp>
+            {/* {data.created_at.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })} */}
+            {data.created_at
+              .toDate()
+              .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </TimeStamp>
         </PatientNameContainer>
         <LocationText>{location}</LocationText>
         <HorizonInput3>
-        <BlueBorderButton>
-        <BlueButtonText>
-          Decline
-        </BlueButtonText>
-        </BlueBorderButton>
+          <BlueBorderButton>
+            <BlueButtonText>Decline</BlueButtonText>
+          </BlueBorderButton>
           <BlueButton onPress={acceptRequest}>
             <WhiteButtonText>Accept</WhiteButtonText>
           </BlueButton>

@@ -31,11 +31,27 @@ export const WaitingButton = styled.TouchableOpacity`
   padding: 53px;
 `;
 
+export const FailedButton = styled.TouchableOpacity`
+  border-radius: 200px;
+  background-color: ${Colors.red};
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px 10px 10px;
+  margin: 20px 30px 0px 30px;s
+`;
+
 export const FindButtonText = styled.Text`
   font-size: 24px;
   align-self: center;
-
   text-align: center;
+  color: ${Colors.white};
+`;
+
+export const FailedButtonText = styled.Text`
+  font-size: 16px;
+  align-self: center;
+  text-align: center;
+  font-weight: bold;
   color: ${Colors.white};
 `;
 
@@ -108,12 +124,28 @@ export const DetailText = styled.Text`
   text-align: center;
 `;
 
+
+export const FailedText = styled.Text`
+  color: ${Colors.red};
+  margin-bottom: 10px;
+`;
+
 export const DetailText2 = styled.Text`
   color: ${Colors.blue};
   font-weight: bold;
   font-size: 20px;
   text-align: center;
 `;
+
+export const FailedText2 = styled.Text`
+  color: ${Colors.darkGrey};
+
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+`;
+
+
 export const TimeText = styled.Text`
   color: ${Colors.blue};
 
@@ -128,6 +160,12 @@ export const InlineIcon = styled(Icon)`
 `;
 
 export const DetailContainer = styled.View`
+  margin-top: ${height * 0.04739}px;
+  margin-bottom: ${height * 0.0592}px;
+`;
+
+export const FailedContainer = styled.View`
+  padding: 0px 50px 0px 50px;
   margin-top: ${height * 0.04739}px;
   margin-bottom: ${height * 0.0592}px;
 `;

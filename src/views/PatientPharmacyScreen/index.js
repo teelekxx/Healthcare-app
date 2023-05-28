@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SvgUri, SvgXml } from "react-native-svg";
 import PrescriptionPic from "../../../assets/prescription.svg";
+import PillPic from "../../../assets/pills.svg";
 import {
   SafeAreaView,
   Button,
@@ -45,6 +46,12 @@ import {
   DetailContainer,
   DetailText,
   TimeText,
+  FailedText,
+  FailedContainer,
+  FailedButton,
+  FailedText2,
+  FailedButtonText,
+
   DetailText2,
   FoundContainer,
   FoundText
@@ -81,6 +88,7 @@ function PatientPharmacyScreen({ navigation }) {
 
   const sendPharmacy = async () => {
     try {
+      setStatus("finding");
       console.log("here");
       const postPharmacy = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -99,6 +107,11 @@ function PatientPharmacyScreen({ navigation }) {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleJobFail = async () => {
+    setJobId(null);
+    setStatus("none");
   };
 
   const getReciever = async (jobId) => {
@@ -273,7 +286,6 @@ function PatientPharmacyScreen({ navigation }) {
           />
         </NotificationTouchable>
       </HomeTitleContainer>
-      {console.log(allJobs)}
 
       {isPharma ? (
         <ButtonContainer>
@@ -327,9 +339,9 @@ function PatientPharmacyScreen({ navigation }) {
             </ButtonContainer>
           ) : status === "finding" ? (
             <ButtonContainer>
-              <PharmacyIcon
-                source={require("../../../assets/prescription-1.png")}
-              />
+              <PharmacyIcon>
+                <PrescriptionPic />
+              </PharmacyIcon>
               {/* <WaitingButton disabled ={true} */}
               <WaitingButton
                 onPress={() => {
@@ -405,7 +417,18 @@ function PatientPharmacyScreen({ navigation }) {
               </ChattingButton>
             </ButtonContainer>
           ) : (
-            <ButtonContainer></ButtonContainer>
+            <ButtonContainer>
+              <PharmacyIcon>
+                <PillPic />
+              </PharmacyIcon>
+              <FailedContainer>
+                <FailedText>Sorry, our pharmacists are busy</FailedText>
+                <FailedText2>Please request again</FailedText2>
+                <FailedButton onPress={handleJobFail}>
+                  <FailedButtonText>Back to request page</FailedButtonText>
+                </FailedButton>
+              </FailedContainer>
+            </ButtonContainer>
           )}
         </ButtonContainer>
       )}
