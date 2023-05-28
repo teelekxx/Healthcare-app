@@ -74,8 +74,6 @@ function NotificationsScreen({ navigation }) {
     },
   });
 
- 
-
   return (
     <NotificationsContainer>
       <TitleContainer>
@@ -91,43 +89,73 @@ function NotificationsScreen({ navigation }) {
       </TitleContainer>
       <SafeAreaView>
         {data && (
-          <NotificationsScrollable>
-            {data.pages.map((val, index) => {
-              return (
-                <View>
-                  {val.notification.map((i) => {
-          
-                    return (
-                      <NotificationBlock
-                        // onPress={() =>
-                        //   navigation.navigate("Chatting", {
-                        //     paramKey: val.Name,
-                        //   })
-                        // }
-                        key={index}
-                      >
-                        <NotificationsName>{i.title}</NotificationsName>
-                        <NotificationsMassage>{i.body}</NotificationsMassage>
-                        <NotificationsDate>{i.createdAt}</NotificationsDate>
-                      </NotificationBlock>
-                    );
-                  })}
-                </View>
-              );
-            })}
-            <NativeButton
-              title="Load More"
-              onPress={fetchNextPage}
-              disabled={!hasNextPage || isFetchingNextPage}
-              style={{
-                alignSelf:"center",
-                marginTop:20,
-                backgroundColor: !hasNextPage || isFetchingNextPage ? "#AAAAAA" : ""
-              }}
-            >
-              <NativeText>Load more</NativeText>
-            </NativeButton>
-          </NotificationsScrollable>
+          <SafeAreaView>
+            <NotificationsScrollable>
+              {data.pages.map((val, index) => {
+                return (
+                  <View>
+                    {val.notification.map((i) => {
+                      let date = new Date(i.createdAt);
+                      const day = date.getDate();
+
+                      // Get month (Note: Months are zero-based, so January is 0 and December is 11)
+                      const month = date.getMonth() + 1; // Adding 1 to adjust for zero-based months
+
+                      // Get year
+                      const year = date.getFullYear();
+
+                      let formattedDate = date.toLocaleTimeString([], {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      });
+
+                      // formattedDate += `${day}/${month}/${year}`;
+                      return (
+                        <NotificationBlock
+                          // onPress={() =>
+                          //   navigation.navigate("Chatting", {
+                          //     paramKey: val.Name,
+                          //   })
+                          // }
+                          key={index}
+                        >
+                          <NotificationsName>{i.title}</NotificationsName>
+                          <NotificationsMassage>{i.body}</NotificationsMassage>
+                          {/* <NotificationsDate>
+                            {i.createdAt
+                              .toDate()
+                              .toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                          </NotificationsDate> */}
+                          <NotificationsDate>{formattedDate}</NotificationsDate>
+                        </NotificationBlock>
+                      );
+                    })}
+                  </View>
+                );
+              })}
+              <NativeButton
+                title="Load More"
+                onPress={fetchNextPage}
+                disabled={!hasNextPage || isFetchingNextPage}
+                style={{
+                  alignSelf: "center",
+                  marginTop: 20,
+                  backgroundColor:
+                    !hasNextPage || isFetchingNextPage
+                      ? Colors.grey
+                      : Colors.blue,
+                }}
+              >
+                <NativeText>Load more</NativeText>
+              </NativeButton>
+            </NotificationsScrollable>
+          </SafeAreaView>
         )}
       </SafeAreaView>
     </NotificationsContainer>

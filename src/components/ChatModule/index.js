@@ -9,13 +9,23 @@ import { Icon, Avatar, Accessory } from "react-native-elements";
 import { Colors } from "../../constants";
 import React, { useState, useEffect } from "react";
 import Auth from "../../api/auth";
-import { AsyncStorage } from "react-native"
-;
+import { AsyncStorage } from "react-native";
 import { Alert, ActivityIndicator } from "react-native";
 import { LoadingContainer } from "../components/index.style";
+import {
+  collection,
+  query,
+  where,
+  doc,
+  onSnapshot,
+  orderBy,
+  getCountFromServer,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
 
 export default function ChatModule({ navigation, chat, myUID }) {
   const [chatName, setChatName] = useState("");
+  const [chatCount, setChatCount] = useState(0);
   const [image, setImage] = useState(null);
   const [otherUser, setOtherUser] = useState(null);
   const [location, setLocation] = useState(null);
@@ -35,13 +45,27 @@ export default function ChatModule({ navigation, chat, myUID }) {
     const data = await getChatter(myUID);
     setChatName(data.data.medicalInformation.name);
     setImage(data.data.user.faceImg);
-    
-    console.log("IMG:", image);
+
+    // const snapshot = getCountFromServer(q);
+    // console.log("count: ", snapshot.data().count);
+    // console.log("COUNT:" );
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchData(myUID);
+    // const q = query(
+    //   collection(db, "messages", chat.data().jobId, "messages"),
+    //   where("sendBy", "==", myUID),
+    //   where("seen", "==", false)
+    //   // where("visible", "==", true),
+    // );
+    // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //   querySnapshot.forEach((doc) => {
+    //     setChatCount(chatCount + 1);
+    //   });
+    //   // setMyChats(sortArrayBySendAt(jobs));
+    // });
   }, []);
 
   return (
@@ -58,9 +82,17 @@ export default function ChatModule({ navigation, chat, myUID }) {
         // source={require("../../../assets/appLogo.png")}
         size={"large"}
         rounded
-        icon={image ? null : { name: 'user', type: 'font-awesome' }}
+        icon={image ? null : { name: "user", type: "font-awesome" }}
         overlayContainerStyle={{ backgroundColor: "#efece8" }}
-        source={ image ? { uri: ("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+image)} : require("../../../assets/profile-picture-empty.png")}
+        source={
+          image
+            ? {
+                uri:
+                  "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                  image,
+              }
+            : require("../../../assets/profile-picture-empty.png")
+        }
       ></Avatar>
 
       {isLoading ? (
@@ -70,6 +102,7 @@ export default function ChatModule({ navigation, chat, myUID }) {
       ) : (
         <DetailContainer>
           <ChatName>{chatName}</ChatName>
+          {/* <LastMassage>{chatCount}</LastMassage> */}
           <LastMassage>{chat.data().lastMsg.message}</LastMassage>
         </DetailContainer>
       )}

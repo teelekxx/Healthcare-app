@@ -11,7 +11,7 @@ export const FindButton = styled.TouchableOpacity`
   border-radius: 200px;
   background-color: ${Colors.teal};
   margin-top: ${height * 0.04739}px;
-  ${'' /* margin-left: ${width * 0.1794}px; */}
+  ${"" /* margin-left: ${width * 0.1794}px; */}
   justify-content: center;
   align-items: center;
   padding: 53px;
@@ -25,7 +25,7 @@ export const WaitingButton = styled.TouchableOpacity`
   border-radius: 200px;
   background-color: ${Colors.grey};
   margin-top: ${height * 0.04739}px;
-  ${'' /* margin-left: ${width * 0.1794}px; */}
+  ${"" /* margin-left: ${width * 0.1794}px; */}
   justify-content: center;
   align-items: center;
   padding: 53px;
@@ -63,7 +63,7 @@ export const PromptText1 = styled.Text`
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.12914}px;
-  ${'' /* margin-left: ${width * 0.02564}px; */}
+  ${"" /* margin-left: ${width * 0.02564}px; */}
 `;
 
 export const FindTitle = styled.Text`
@@ -90,7 +90,16 @@ export const FindingPrompt = styled.Text`
   font-weight: bold;
   font-size: 15px;
   margin-top: ${height * 0.02004}px;
-  ${'' /* margin-left: ${width * 0.02889}px; */}
+  ${"" /* margin-left: ${width * 0.02889}px; */}
+  text-align: center;
+`;
+
+export const FindingPrompt2 = styled.Text`
+  color: ${Colors.blue};
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: ${height * 0.05004}px;
+  ${"" /* margin-left: ${width * 0.02889}px; */}
   text-align: center;
 `;
 
@@ -106,7 +115,7 @@ export const ChattingButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-top: ${height * 0.02132}px;
-  ${'' /* margin-left: ${width * 0.06923}px; */}
+  ${"" /* margin-left: ${width * 0.06923}px; */}
 `;
 
 export const WhiteButtonText = styled.Text`
@@ -124,10 +133,12 @@ export const DetailText = styled.Text`
   text-align: center;
 `;
 
-
 export const FailedText = styled.Text`
   color: ${Colors.red};
-  margin-bottom: 10px;
+
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
 `;
 
 export const DetailText2 = styled.Text`
@@ -145,7 +156,6 @@ export const FailedText2 = styled.Text`
   text-align: center;
 `;
 
-
 export const TimeText = styled.Text`
   color: ${Colors.blue};
 
@@ -155,7 +165,7 @@ export const TimeText = styled.Text`
 `;
 
 export const InlineIcon = styled(Icon)`
-  ${'' /* padding-top: 19px; */}
+  ${"" /* padding-top: 19px; */}
   padding-right:5px;
 `;
 
@@ -171,7 +181,8 @@ export const FailedContainer = styled.View`
 `;
 
 export const ButtonContainer = styled.View`
-align-items:center`;
+  align-items: center;
+`;
 
 export const FindContainer = styled.View``;
 
@@ -184,11 +195,10 @@ padding:10px;
 display: flex;
 width:250px;
 border-radius:10px;
-`
+`;
 export const FoundText = styled.Text`
-
-font-weight: bold;
+  font-weight: bold;
   font-size: 15px;
   text-align: center;
-  color:${Colors.green}
-`
+  color: ${Colors.green};
+`;

@@ -23,9 +23,8 @@ import {
   Block,
 } from "./index.style";
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "react-native"
-;
-import {ActivityIndicator, View } from "react-native";
+import { AsyncStorage } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants";
@@ -33,6 +32,7 @@ import { async, jsonEval } from "@firebase/util";
 import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../api/auth";
 import useImagePicker from "../../hooks/useImagePicker.js";
+import NotificationController from "../../firestore/notification";
 function ProfileScreen({ navigation }) {
   const auth = useSelector((state) => state.Authentication);
   const [edit, setEdit] = useState(false);
@@ -54,15 +54,15 @@ function ProfileScreen({ navigation }) {
   ]);
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [staffId, setStaffId] = useState("")
+  const [staffId, setStaffId] = useState("");
   const [text, setText] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [licenseNum, setLicenseNum] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [{ images }, { pickImage,setImages }] = useImagePicker();
+  const [{ images }, { pickImage, setImages }] = useImagePicker();
   const [image, setImage] = useState(null);
-  
+
   const dateFormat = (date) => {
     const mongodbDate = new Date(date);
     // Extract year, month, and day from the MongoDB date
@@ -80,44 +80,51 @@ function ProfileScreen({ navigation }) {
     if (mode === "Edit") {
       //editing
       setEdit(true);
-      setImages(null)
+      setImages(null);
       setMode("Save");
     } else {
       //save
       setEdit(false);
       const formData = new FormData();
-      formData.append("name",name);
-      formData.append("dateOfBirth",text);
-      formData.append("gender",gender);
+      formData.append("name", name);
+      formData.append("dateOfBirth", text);
+      formData.append("gender", gender);
       formData.append("citizenId", id);
-      formData.append("phoneNumber",tel);
-      formData.append("address",address);
-      formData.append("city",city);
-      formData.append("zipCode",zipCode);
-      if(images){
-        console.log("here change img",images[0])
-        formData.append("faceImg",images[0]);
-        setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+images[0])
+      formData.append("phoneNumber", tel);
+      formData.append("address", address);
+      formData.append("city", city);
+      formData.append("zipCode", zipCode);
+      if (images) {
+        console.log("here change img", images[0]);
+        formData.append("faceImg", images[0]);
+        setImage(
+          "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+            images[0]
+        );
       }
-      console.log("here uri", formData)
+      console.log("here uri", formData);
       const updateUser = async () => {
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.updateUserProfile({
           body: formData,
           token: token,
         });
-        console.log("called")
+        console.log("called");
       };
       updateUser();
       setMode("Edit");
     }
   };
   const handleLogOut = async () => {
+    AsyncStorage.removeItem("token");
+    await NotificationController.removeToken({
+      uid: auth.user.uid,
+      token: auth.expoPushToken,
+    });
     await Auth.logout();
     dispatch(AuthenticationActions.logout({}));
     navigation.navigate("Landing");
   };
-
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -132,11 +139,10 @@ function ProfileScreen({ navigation }) {
       tempDate.getFullYear();
     setText(fDate);
   };
-  const [toggle, setToggle] = useState(false)
+  const [toggle, setToggle] = useState(false);
   const [isLoading, setIsloading] = useState(true);
 
   useEffect(() => {
-    
     try {
       const getUserData = async () => {
         setIsloading(true);
@@ -153,14 +159,17 @@ function ProfileScreen({ navigation }) {
         setCity(user.data.address.city);
         setZipCode(user.data.address.zipCode);
         setRole(user.data.user.role);
-        if(!edit){
-          setImage("https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/"+user.data.user.faceImg)
+        if (!edit) {
+          setImage(
+            "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+              user.data.user.faceImg
+          );
         }
-        setIsloading(false);  
+        setIsloading(false);
         if (role === "paramedics") {
           setLicenseNum(user.data.paramedics.licenseId);
           setExpiryDate(user.data.paramedics.licenseExpireDate);
-          if(onDuty===null){
+          if (onDuty === null) {
             setOnDuty(user.data.paramedics.isOnDuty);
           }
           setStaffId(user.data.paramedics._id);
@@ -170,26 +179,24 @@ function ProfileScreen({ navigation }) {
           setExpiryDate(user.data.pharmacist.licenseExpireDate);
         }
       };
-      const putParamedics = async () =>{
+      const putParamedics = async () => {
         const token = await AsyncStorage.getItem("token");
-        console.log("before:" ,onDuty)
+        console.log("before:", onDuty);
         await Auth.putStaffOnDuty({
-          body:{
-            isOnDuty: onDuty
+          body: {
+            isOnDuty: onDuty,
           },
           token: token,
-        })
-      }
-      
+        });
+      };
 
       getUserData();
-      if(role==="paramedics"){
-          putParamedics()
+      if (role === "paramedics") {
+        putParamedics();
       }
     } catch (error) {
       console.error(error);
     }
-    
   }, [role, onDuty]);
   if (isLoading) {
     return (
@@ -202,36 +209,41 @@ function ProfileScreen({ navigation }) {
   return (
     <Background>
       <AvaContainer>
-      <Block>
-      {edit&&<Avatar
-        // source={require("../../../assets/appLogo.png")}
-        size={"large"}
-        rounded
-        icon={{ name: 'user', type: 'font-awesome' }}
-        overlayBlockStyle={{ backgroundColor: "#efece8" }}
-        source={images ? { uri: images[0].uri} : {uri: image}}
-      >
-        <Accessory
-          size={24}
-          containerStyle={{ borderRadius: 50 }}
-          onPress={pickImage}
-        />
-      </Avatar>}
-      {!edit&&<Avatar
-        // source={require("../../../assets/appLogo.png")}
-        size={"large"}
-        rounded
-        icon={{ name: 'user', type: 'font-awesome' }}
-        overlayBlockStyle={{ backgroundColor: "#efece8" }}
-        source={images&&images[0] ? { uri: images[0].uri} : {uri:image}}
-      >
-      </Avatar>}
-    </Block>
+        <Block>
+          {edit && (
+            <Avatar
+              // source={require("../../../assets/appLogo.png")}
+              size={"large"}
+              rounded
+              icon={{ name: "user", type: "font-awesome" }}
+              overlayBlockStyle={{ backgroundColor: "#efece8" }}
+              source={images ? { uri: images[0].uri } : { uri: image }}
+            >
+              <Accessory
+                size={24}
+                containerStyle={{ borderRadius: 50 }}
+                onPress={pickImage}
+              />
+            </Avatar>
+          )}
+          {!edit && (
+            <Avatar
+              // source={require("../../../assets/appLogo.png")}
+              size={"large"}
+              rounded
+              icon={{ name: "user", type: "font-awesome" }}
+              overlayBlockStyle={{ backgroundColor: "#efece8" }}
+              source={
+                images && images[0] ? { uri: images[0].uri } : { uri: image }
+              }
+            ></Avatar>
+          )}
+        </Block>
         <EditButton onPress={editMode}>
           <EditButtonText>{mode}</EditButtonText>
         </EditButton>
-        {!edit&&<RedText>click "edit" to modify your information</RedText>}
-        {edit&&<RedText>click "save" to save your information</RedText>}
+        {!edit && <RedText>click "edit" to modify your information</RedText>}
+        {edit && <RedText>click "save" to save your information</RedText>}
       </AvaContainer>
       <GreyText>Name</GreyText>
       <InfoInput onChangeText={setName} value={name} editable={edit} />
@@ -314,17 +326,16 @@ function ProfileScreen({ navigation }) {
           <GreyText>License expiry date</GreyText>
           <InfoInput value={expiryDate} editable={false} />
           <OnDutyWrapper>
-          <GreyText>On duty status</GreyText>
-          <Toggle
-            toggle={onDuty}
-            setToggle={setOnDuty}
-            color={"#00a5cb"}
-            size={20}
-            filled={true}
-            circleColor={"white"}
-          />
+            <GreyText>On duty status</GreyText>
+            <Toggle
+              toggle={onDuty}
+              setToggle={setOnDuty}
+              color={"#00a5cb"}
+              size={20}
+              filled={true}
+              circleColor={"white"}
+            />
           </OnDutyWrapper>
-          
         </View>
       )}
       {role === "pharmacist" && (

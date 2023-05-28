@@ -157,8 +157,6 @@ const MyStack = ({ navigation }) => {
   const auth = useSelector((state) => state.Authentication);
 
   const appendToFireStore = async ({ uid, token: expoPushToken }) => {
-    dispatch(AuthenticationActions.setExpoPushToken({ expoPushToken }));
-
     await NotificationController.pushToken({
       uid,
       token: expoPushToken,
@@ -170,7 +168,10 @@ const MyStack = ({ navigation }) => {
     registerForPushNotificationsAsync().then((token) => {
       console.log("token here", token);
       if (auth.isAuthenticated)
-        appendToFireStore({ uid: auth.user.uid, token: token });
+        dispatch(
+          AuthenticationActions.setExpoPushToken({ expoPushToken: token })
+        );
+      appendToFireStore({ uid: auth.user.uid, token: token });
     });
 
     notificationListener.current =
@@ -191,7 +192,7 @@ const MyStack = ({ navigation }) => {
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [auth.isAuthenticated]);
 
   return (
     <NavigationContainer>
