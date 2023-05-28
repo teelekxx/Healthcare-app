@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SvgUri, SvgXml } from "react-native-svg";
 import PrescriptionPic from "../../../assets/prescription.svg";
+import PillPic from "../../../assets/pills.svg";
 import {
   SafeAreaView,
   Button,
@@ -45,11 +46,15 @@ import {
   DetailContainer,
   DetailText,
   TimeText,
+  FailedText,
+  FailedContainer,
+  FailedButton,
+  FailedText2,
+  FailedButtonText,
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage } from "react-native"
-;
+import { AsyncStorage } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
 import NotificationController from "../../firestore/notification";
 import { getPresentedNotificationsAsync } from "expo-notifications";
@@ -79,6 +84,7 @@ function PatientPharmacyScreen({ navigation }) {
 
   const sendPharmacy = async () => {
     try {
+      setStatus("finding");
       console.log("here");
       const postPharmacy = async () => {
         const token = await AsyncStorage.getItem("token");
@@ -97,6 +103,11 @@ function PatientPharmacyScreen({ navigation }) {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleJobFail = async () => {
+    setJobId(null);
+    setStatus("none");
   };
 
   const getReciever = async (jobId) => {
@@ -269,28 +280,32 @@ function PatientPharmacyScreen({ navigation }) {
           />
         </NotificationTouchable>
       </HomeTitleContainer>
-      {console.log(allJobs)}
 
       {isPharma ? (
         <ButtonContainer>
           {allJobs.length > 0 ? (
             <ScrollView>
               {allJobs.map((item) => {
-                return <PharmaRequest navigation={navigation} data={item}></PharmaRequest>;
+                return (
+                  <PharmaRequest
+                    navigation={navigation}
+                    data={item}
+                    date={"test"}
+                  ></PharmaRequest>
+                );
               })}
             </ScrollView>
-          ):(
+          ) : (
             <FindingPrompt>No jobs....</FindingPrompt>
-          )
-          }
+          )}
         </ButtonContainer>
       ) : (
         <ButtonContainer>
           {status === "none" ? (
             <ButtonContainer>
-            <PharmacyIcon>
-            <PrescriptionPic/>
-            </PharmacyIcon>
+              <PharmacyIcon>
+                <PrescriptionPic />
+              </PharmacyIcon>
               {/* <PharmacyIcon
                 source={require("../../../assets/prescription-2.svg")}
               /> */}
@@ -319,9 +334,9 @@ function PatientPharmacyScreen({ navigation }) {
             </ButtonContainer>
           ) : status === "finding" ? (
             <ButtonContainer>
-              <PharmacyIcon
-                source={require("../../../assets/prescription-1.png")}
-              />
+              <PharmacyIcon>
+                <PrescriptionPic />
+              </PharmacyIcon>
               {/* <WaitingButton disabled ={true} */}
               <WaitingButton
                 onPress={() => {
@@ -374,7 +389,18 @@ function PatientPharmacyScreen({ navigation }) {
               </ChattingButton>
             </ButtonContainer>
           ) : (
-            <ButtonContainer></ButtonContainer>
+            <ButtonContainer>
+              <PharmacyIcon>
+                <PillPic />
+              </PharmacyIcon>
+              <FailedContainer>
+                <FailedText>Sorry, our pharmacists are busy</FailedText>
+                <FailedText2>Please request again</FailedText2>
+                <FailedButton onPress={handleJobFail}>
+                  <FailedButtonText>Back to request page</FailedButtonText>
+                </FailedButton>
+              </FailedContainer>
+            </ButtonContainer>
           )}
         </ButtonContainer>
       )}
