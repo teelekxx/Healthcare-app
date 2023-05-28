@@ -38,7 +38,7 @@ import {
   ChatIcon,
   FirstAidContainer,
   Cpr,
-  CprButton
+  CprButton,
 } from "./index.style";
 import { ScrollView } from "react-navigation";
 import Auth from "../../api/auth";
@@ -46,22 +46,22 @@ import { AsyncStorage, Alert } from "react-native";
 import MapFinder from "../MapFinder";
 import MapFound from "../MapFound";
 
-
 function MapPage({ navigation, route }) {
   const [sound, setSound] = useState();
-  const [play, setPlay]=useState(false);
+  const [play, setPlay] = useState(false);
   async function loadSound() {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync( require('../../../assets/heartbeatTempo.mp3')
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../assets/heartbeatTempo.mp3")
     );
     setSound(sound);
   }
-  async function handleClicked(){
-    if(!play){
-      setPlay(true)
+  async function handleClicked() {
+    if (!play) {
+      setPlay(true);
       await sound.playAsync();
-    }else{
-      setPlay(false)
+    } else {
+      setPlay(false);
       await sound.stopAsync();
     }
   }
@@ -78,7 +78,7 @@ function MapPage({ navigation, route }) {
     { latitude: 8.444526370150388, longitude: 99.96210658564331 },
     { latitude: 13.771864275082038, longitude: 100.57586464969924 },
     { latitude: 13.97918633927129, longitude: 98.33740674666498 },
-  ];  
+  ];
   const myToken = route.params.myToken;
   // axios.get(placesUrl);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -92,7 +92,7 @@ function MapPage({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("finding");
-  const [duration, setDuration] = useState("");
+  const [duration, setDuration] = useState("12 minutes");
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
   const matchedHospital = {
@@ -141,7 +141,7 @@ function MapPage({ navigation, route }) {
       region: {
         latitude: lat,
         longitude: lng,
-        latitudeDelta:  0.222,
+        latitudeDelta: 0.222,
         longitudeDelta: 0.0821,
       },
     });
@@ -154,7 +154,10 @@ function MapPage({ navigation, route }) {
 
   const getDistance = async (inFoundHospital) => {
     let curLocation = route.params.lat + "%2c" + route.params.lng;
-    let destination = inFoundHospital.job.receiverUser.hospitalAddress.latitude + "%2c" + inFoundHospital.job.receiverUser.hospitalAddress.latitude;
+    let destination =
+      inFoundHospital.job.receiverUser.hospitalAddress.latitude +
+      "%2c" +
+      inFoundHospital.job.receiverUser.hospitalAddress.latitude;
     const distanceUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${curLocation}&destinations=${destination}&key=${apiKey}`;
     const response = await axios.get(distanceUrl);
     if (response != null) {
@@ -182,10 +185,10 @@ function MapPage({ navigation, route }) {
   };
 
   useEffect(() => {
-    try{
+    try {
       loadSound();
-    }catch(error){
-      console.log('Failed to load sound', error)
+    } catch (error) {
+      console.log("Failed to load sound", error);
     }
     if (auth.user) {
       setMyUID(auth.user.uid);
@@ -325,8 +328,10 @@ function MapPage({ navigation, route }) {
               >
                 <Marker
                   coordinate={{
-                    latitude: foundHospital.job.receiverUser.hospitalAddress.latitude,
-                    longitude: foundHospital.job.receiverUser.hospitalAddress.longitude,
+                    latitude:
+                      foundHospital.job.receiverUser.hospitalAddress.latitude,
+                    longitude:
+                      foundHospital.job.receiverUser.hospitalAddress.longitude,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
                   }}
@@ -383,13 +388,12 @@ function MapPage({ navigation, route }) {
         </MapContainer>
       )}
       <FirstAidContainer>
-      <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
-        <ThemeButtonText2>First-aid Knowledge</ThemeButtonText2>
-      </ThemeButton2>
-      <CprButton onPress={handleClicked}> 
-      <Cpr source= {require("../../../assets/cprIcon.png")}/>
-      </CprButton>
-      
+        <ThemeButton2 onPress={() => navigation.navigate("Firstaid")}>
+          <ThemeButtonText2>First-aid Knowledge</ThemeButtonText2>
+        </ThemeButton2>
+        <CprButton onPress={handleClicked}>
+          <Cpr source={require("../../../assets/cprIcon.png")} />
+        </CprButton>
       </FirstAidContainer>
     </Container>
   );
