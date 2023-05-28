@@ -138,7 +138,9 @@ export const SelectedImage = styled.Image`
 
 export const SelectedImageContainer = styled.View``;
 
-export const BubbleContainer = styled.View``;
+export const BubbleContainer = styled.View`
+  margin-bottom: 10px;
+`;
 
 export const BlueContainer = styled.View`
   flex: 1;
@@ -167,7 +169,6 @@ export const ProfileTitleContainer = styled.SafeAreaView`
   margin-top: 30px;
   flex-direction: row;
   align-items: center;
-
 `;
 
 export const ProfileTitle = styled.Text`
@@ -189,17 +190,17 @@ export const InfoContainer = styled.View`
 export const InfoText = styled.Text`
   font-size: 15px;
   color: ${Colors.black};
-margin-bottom: 10px;
+  margin-bottom: 10px;
 `;
 export const CaseText = styled.Text`
   font-size: 15px;
   font-weight: bold;
   color: ${Colors.red};
-margin-bottom: 10px;
+  margin-bottom: 10px;
 `;
 
 export const InfoScrollable = styled.ScrollView`
-background-color: ${Colors.white} ;
+  background-color: ${Colors.white};
 `;
 
 export const CaseImage = styled.Image`
@@ -208,5 +209,3 @@ export const CaseImage = styled.Image`
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   elevation: 10;
 `;
-
-

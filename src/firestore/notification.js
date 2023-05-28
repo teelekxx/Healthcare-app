@@ -11,8 +11,8 @@ export default class NotificationController {
       const docRef = doc(db, "notification", uid);
 
       const docSnap = await getDoc(docRef);
-      console.log("docsnap data: ",docSnap.data())
-      if(docSnap.data()){
+      console.log("docsnap data: ", docSnap.data());
+      if (docSnap.data()) {
         if (!docSnap.data().tokens.includes(token)) {
           // Retrieve the existing data
           const existingData = docSnap.data().tokens;
@@ -22,24 +22,32 @@ export default class NotificationController {
           const updatedTokens = [...existingTokens, token];
           // Update the 'tokens' field with the updated array
           await updateDoc(docRef, { tokens: updatedTokens });
-        } 
-      }else {
+        }
+      } else {
         // Create a new document with the token
         await setDoc(docRef, { tokens: [token] });
       }
-     
     } catch (error) {
       console.log(error);
     }
   };
 
   static removeToken = async ({ uid, token }) => {
-    const docRef = doc(db, "notification", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+    try {
+      const docRef = doc(db, "notification", uid);
+      const docSnap = await getDoc(docRef);
+      console.log(docSnap.data(), token);
+      // if (docSnap.exists()) {
       const data = docSnap.data();
+      console.log("data", data);
+
+      console.log("token of this phone", token);
       const tokens = data.tokens.filter((t) => t !== token);
+      console.log("Last token", tokens);
       await updateDoc(docRef, { tokens });
+    } catch (error) {
+      console.log(error);
     }
   };
+  // };
 }
