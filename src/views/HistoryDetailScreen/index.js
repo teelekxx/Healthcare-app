@@ -54,6 +54,15 @@ const HistoryDetailScreen = ({navigation, route}) => {
     }-${month < 10 ? "0" + month : month}-${year}`;
     return dateString;
   };
+  const calculateTotal = () => {
+    let totalPrice = 0;
+    orders.forEach((medicine) => {
+
+      totalPrice += Number(medicine.price)
+    });
+    totalPrice+= Number(deliveryFee)
+    return totalPrice;
+  };
   return (
     <BlueContainer>
       <PageTitleContainer>
@@ -89,7 +98,7 @@ const HistoryDetailScreen = ({navigation, route}) => {
             <Cell>Delivery fee: {deliveryFee}</Cell>
           </Row>
         </Container>
-        <Text20>Total Price: {totalPrice}</Text20>
+        <Text20>Total Price: {calculateTotal()}</Text20>
       </SignUpForm>
     </BlueContainer>
   );
