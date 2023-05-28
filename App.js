@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, LogBox } from "react-native";
 import { auth as firebaseAuth } from "./src/lib/firebase";
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import {
@@ -16,6 +16,8 @@ import { Provider } from "react-redux";
 
 export default function App() {
   const queryClient = new QueryClient();
+  // Ignore all log notifications:
+  LogBox.ignoreAllLogs();
 
   return (
     <Provider store={store}>
