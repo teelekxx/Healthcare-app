@@ -238,7 +238,7 @@ function ChatScreen({ navigation, route }) {
   };
 
   const getCaseDetail = async (jobId) => {
-    setGroup(group);
+    // setGroup(group);
     console.log("JOBID:", jobId);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getEmergencyCaseTokById({
