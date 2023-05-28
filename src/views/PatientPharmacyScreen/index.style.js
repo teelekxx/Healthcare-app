@@ -11,7 +11,7 @@ export const FindButton = styled.TouchableOpacity`
   border-radius: 200px;
   background-color: ${Colors.teal};
   margin-top: ${height * 0.04739}px;
-  margin-left: ${width * 0.1794}px;
+  ${'' /* margin-left: ${width * 0.1794}px; */}
   justify-content: center;
   align-items: center;
   padding: 53px;
@@ -25,7 +25,7 @@ export const WaitingButton = styled.TouchableOpacity`
   border-radius: 200px;
   background-color: ${Colors.grey};
   margin-top: ${height * 0.04739}px;
-  margin-left: ${width * 0.1794}px;
+  ${'' /* margin-left: ${width * 0.1794}px; */}
   justify-content: center;
   align-items: center;
   padding: 53px;
@@ -47,7 +47,7 @@ export const PromptText1 = styled.Text`
   font-weight: bold;
   color: ${Colors.blue};
   margin-top: ${height * 0.12914}px;
-  margin-left: ${width * 0.02564}px;
+  ${'' /* margin-left: ${width * 0.02564}px; */}
 `;
 
 export const FindTitle = styled.Text`
@@ -63,20 +63,18 @@ export const PharmacyIcon = styled.View`
   margin-top: ${height * 0.04739}px;
 `;
 
-export const ProfileIcon = styled.Image`
+export const ProfileIcon = styled.View`
   width: ${width * 0.35897}px;
   height: ${width * 0.35897}px;
-  margin-left: ${width * 0.30769}px;
   margin-top: ${height * 0.1587}px;
 `;
 
 export const FindingPrompt = styled.Text`
   color: ${Colors.blue};
-
   font-weight: bold;
-  font-size: 20px;
-  margin-top: ${height * 0.09004}px;
-  margin-left: ${width * 0.02889}px;
+  font-size: 15px;
+  margin-top: ${height * 0.02004}px;
+  ${'' /* margin-left: ${width * 0.02889}px; */}
   text-align: center;
 `;
 
@@ -92,7 +90,7 @@ export const ChattingButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-top: ${height * 0.02132}px;
-  margin-left: ${width * 0.06923}px;
+  ${'' /* margin-left: ${width * 0.06923}px; */}
 `;
 
 export const WhiteButtonText = styled.Text`
@@ -110,6 +108,12 @@ export const DetailText = styled.Text`
   text-align: center;
 `;
 
+export const DetailText2 = styled.Text`
+  color: ${Colors.blue};
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+`;
 export const TimeText = styled.Text`
   color: ${Colors.blue};
 
@@ -119,7 +123,8 @@ export const TimeText = styled.Text`
 `;
 
 export const InlineIcon = styled(Icon)`
-  padding-top: 19px;
+  ${'' /* padding-top: 19px; */}
+  padding-right:5px;
 `;
 
 export const DetailContainer = styled.View`
@@ -127,7 +132,25 @@ export const DetailContainer = styled.View`
   margin-bottom: ${height * 0.0592}px;
 `;
 
-export const ButtonContainer = styled.View``;
+export const ButtonContainer = styled.View`
+align-items:center`;
 
 export const FindContainer = styled.View``;
 
+export const FoundContainer = styled.View`
+flex-direction:row
+border:2px solid ${Colors.green};
+justify-content: center;
+align-items: center;
+padding:10px;
+display: flex;
+width:250px;
+border-radius:10px;
+`
+export const FoundText = styled.Text`
+
+font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+  color:${Colors.green}
+`
