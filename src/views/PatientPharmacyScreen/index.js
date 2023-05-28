@@ -45,11 +45,13 @@ import {
   DetailContainer,
   DetailText,
   TimeText,
+  DetailText2,
+  FoundContainer,
+  FoundText
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
-import { AsyncStorage } from "react-native"
-;
+import { AsyncStorage } from "react-native";
 import PharmaRequest from "../../components/PharmaRequest";
 import NotificationController from "../../firestore/notification";
 import { getPresentedNotificationsAsync } from "expo-notifications";
@@ -69,7 +71,7 @@ function PatientPharmacyScreen({ navigation }) {
   const [newGroup, setNewGroup] = useState(null);
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
-
+  const [image, setImage] = useState(null);
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
     { Name: "Bill Doe", location: "456 Kiki rd. Bangkok." },
@@ -137,6 +139,8 @@ function PatientPharmacyScreen({ navigation }) {
     const data = await getReciever(jobId);
     setNewGroup(group);
     setFoundPharma(data);
+    setImage(data.job.pharmacistProfile.user.faceImg);
+    console.log("faceimg", image);
   };
 
   useEffect(() => {
@@ -276,21 +280,25 @@ function PatientPharmacyScreen({ navigation }) {
           {allJobs.length > 0 ? (
             <ScrollView>
               {allJobs.map((item) => {
-                return <PharmaRequest navigation={navigation} data={item}></PharmaRequest>;
+                return (
+                  <PharmaRequest
+                    navigation={navigation}
+                    data={item}
+                  ></PharmaRequest>
+                );
               })}
             </ScrollView>
-          ):(
+          ) : (
             <FindingPrompt>No jobs....</FindingPrompt>
-          )
-          }
+          )}
         </ButtonContainer>
       ) : (
         <ButtonContainer>
           {status === "none" ? (
             <ButtonContainer>
-            <PharmacyIcon>
-            <PrescriptionPic/>
-            </PharmacyIcon>
+              <PharmacyIcon>
+                <PrescriptionPic />
+              </PharmacyIcon>
               {/* <PharmacyIcon
                 source={require("../../../assets/prescription-2.svg")}
               /> */}
@@ -336,31 +344,54 @@ function PatientPharmacyScreen({ navigation }) {
             </ButtonContainer>
           ) : status === "doing" ? (
             <ButtonContainer>
-              <ProfileIcon
-                source={require("../../../assets/profile-picture-empty.png")}
-              />
+            <FoundContainer>
+            <InlineIcon
+                  name="checkmark-circle"
+                  type="ionicon"
+                  color={Colors.green}
+                  size={20}
+                />
+              <FoundText>
+                Pharmacist found
+              </FoundText>
+              
+              
+              </FoundContainer>
+              <ProfileIcon>
+                <Avatar
+                  size={"xlarge"}
+                  rounded
+                  overlayContainerStyle={{ backgroundColor: "#efece8" }}
+                  source={
+                    image
+                      ? {
+                          uri:
+                            "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                            foundPharma.job.pharmacistProfile.user.faceImg,
+                        }
+                      : require("../../../assets/profile-picture-empty.png")
+                  }
+                ></Avatar>
+              </ProfileIcon>
+
               {foundPharma && (
                 <DetailContainer>
                   <DetailText>
                     {foundPharma.job.pharmacistProfile.medicalInformation.name}
                   </DetailText>
 
-                  <DetailText>
+                  <DetailText2>
                     {foundPharma.job.pharmacistProfile.pharmacy.name}
-                  </DetailText>
+                  </DetailText2>
                   <TimeText>{new Date().toLocaleString()}</TimeText>
                 </DetailContainer>
               )}
-
+             
               <FindingPrompt>
-                Pharmacist found. Click the button below to start chatting{" "}
-                <InlineIcon
-                  name="checkmark-circle"
-                  type="ionicon"
-                  color={Colors.teal}
-                  size={20}
-                />
+                Click the button below to start chatting
+                
               </FindingPrompt>
+             
               <ChattingButton
                 onPress={() =>
                   navigation.navigate("Chatting", {
