@@ -48,7 +48,10 @@ function HistoryScreen({ navigation }) {
         const user = await Auth.getUserProfile({
           token: token,
         });
+        console.log("pharma: ", user.data.user.role)
+
         if (user.data.user.role === "pharmacist") {
+          console.log("pharma: ")
           setIsPharma(true);
         }
       };
@@ -86,6 +89,7 @@ function HistoryScreen({ navigation }) {
   if (isLoading) { 
     return (<LoadingContainer><ActivityIndicator size="large" color="#00a5cb"/></LoadingContainer>)
   }
+  
     
 
   return (
@@ -109,7 +113,7 @@ function HistoryScreen({ navigation }) {
             >
             <Block>
             <Name>{order.buyerInfo.name}</Name>
-            <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
+            {/* <DateFormat>Total Price: {order.order.total} Baht</DateFormat> */}
               <DateFormat>Date: {dateFormat(order.order.created_at)}</DateFormat>
               
               <Space></Space>
@@ -140,7 +144,7 @@ function HistoryScreen({ navigation }) {
             >
               <Block>
                 <Name>{order.pharmacistInfo.name}</Name>
-                <DateFormat>Total Price: {order.order.total} Baht</DateFormat>
+                {/* <DateFormat>Total Price: {order.order.total} Baht</DateFormat> */}
                 <DateFormat>Date: {dateFormat(order.order.created_at)}</DateFormat>
                 <Space></Space>
               </Block>
