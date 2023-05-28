@@ -51,6 +51,10 @@ import {
   FailedButton,
   FailedText2,
   FailedButtonText,
+
+  DetailText2,
+  FoundContainer,
+  FoundText
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
@@ -74,7 +78,7 @@ function PatientPharmacyScreen({ navigation }) {
   const [newGroup, setNewGroup] = useState(null);
   const auth = useSelector((state) => state.Authentication);
   const isAuthenticated = auth.isAuthenticated;
-
+  const [image, setImage] = useState(null);
   const [pendingReq, setPendingReq] = useState([
     { Name: "Andy Doe", location: "123 Eiei rd. Bangkok." },
     { Name: "Bill Doe", location: "456 Kiki rd. Bangkok." },
@@ -148,6 +152,8 @@ function PatientPharmacyScreen({ navigation }) {
     const data = await getReciever(jobId);
     setNewGroup(group);
     setFoundPharma(data);
+    setImage(data.job.pharmacistProfile.user.faceImg);
+    console.log("faceimg", image);
   };
 
   useEffect(() => {
@@ -290,7 +296,6 @@ function PatientPharmacyScreen({ navigation }) {
                   <PharmaRequest
                     navigation={navigation}
                     data={item}
-                    date={"test"}
                   ></PharmaRequest>
                 );
               })}
@@ -351,31 +356,54 @@ function PatientPharmacyScreen({ navigation }) {
             </ButtonContainer>
           ) : status === "doing" ? (
             <ButtonContainer>
-              <ProfileIcon
-                source={require("../../../assets/profile-picture-empty.png")}
-              />
+            <FoundContainer>
+            <InlineIcon
+                  name="checkmark-circle"
+                  type="ionicon"
+                  color={Colors.green}
+                  size={20}
+                />
+              <FoundText>
+                Pharmacist found
+              </FoundText>
+              
+              
+              </FoundContainer>
+              <ProfileIcon>
+                <Avatar
+                  size={"xlarge"}
+                  rounded
+                  overlayContainerStyle={{ backgroundColor: "#efece8" }}
+                  source={
+                    image
+                      ? {
+                          uri:
+                            "https://healthcare-finalproject.s3.ap-southeast-1.amazonaws.com/" +
+                            foundPharma.job.pharmacistProfile.user.faceImg,
+                        }
+                      : require("../../../assets/profile-picture-empty.png")
+                  }
+                ></Avatar>
+              </ProfileIcon>
+
               {foundPharma && (
                 <DetailContainer>
                   <DetailText>
                     {foundPharma.job.pharmacistProfile.medicalInformation.name}
                   </DetailText>
 
-                  <DetailText>
+                  <DetailText2>
                     {foundPharma.job.pharmacistProfile.pharmacy.name}
-                  </DetailText>
+                  </DetailText2>
                   <TimeText>{new Date().toLocaleString()}</TimeText>
                 </DetailContainer>
               )}
-
+             
               <FindingPrompt>
-                Pharmacist found. Click the button below to start chatting{" "}
-                <InlineIcon
-                  name="checkmark-circle"
-                  type="ionicon"
-                  color={Colors.teal}
-                  size={20}
-                />
+                Click the button below to start chatting
+                
               </FindingPrompt>
+             
               <ChattingButton
                 onPress={() =>
                   navigation.navigate("Chatting", {
