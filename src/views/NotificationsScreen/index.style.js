@@ -4,15 +4,13 @@ import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-
 export const NativeText = styled.Text`
   font-size: 18px;
   align-self: center;
-  
+
   font-weight: bold;
   color: ${Colors.white};
 `;
-
 
 export const NativeButton = styled.TouchableOpacity`
   width: 150px;
@@ -23,11 +21,9 @@ export const NativeButton = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-
-
 export const NotificationsTitle = styled.Text`
   color: ${Colors.blue};
-  
+
   font-weight: bold;
   font-size: 25px;
   margin-left: ${width * 0.0641}px;
@@ -39,13 +35,13 @@ export const NotificationsContainer = styled.View`
 
 export const TitleContainer = styled.View`
   flex-direction: row;
-  align-items:center;
-  margin-top:60px;
-  margin-bottom:30px;
+  align-items: center;
+  margin-top: 60px;
+  margin-bottom: 30px;
 `;
 
 export const NotificationsScrollable = styled.ScrollView`
-  height: ${height * 0.8994}px;
+  max-height: ${height * 0.6994}px;
   margin-left: ${width * 0.0641}px;
   margin-right: ${width * 0.0641}px;
 `;
@@ -60,20 +56,27 @@ export const NotificationBlock = styled.TouchableOpacity`
 
 export const NotificationsName = styled.Text`
   color: ${Colors.blue};
-  
+
   font-weight: bold;
   font-size: 20px;
 `;
 
 export const NotificationsMassage = styled.Text`
   color: ${Colors.grey};
-  
+
   font-size: 15px;
 `;
 
 export const NotificationsDate = styled.Text`
   color: ${Colors.grey};
-  
+
   font-size: 15px;
   margin-left: auto;
+`;
+
+export const NotificationFlatList = styled.FlatList`
+  background-color: ${Colors.white};
+  padding: 0px 20px 20px 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 `;

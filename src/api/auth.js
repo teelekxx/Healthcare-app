@@ -364,6 +364,17 @@ class Auth {
 
     return request(config).catch((err) => ({ ...err, isOk: false }));
   }
+  static async putChatNotification(option) {
+    const config = {
+      method: HTTP_METHODS.put,
+      url: `/notification/${option.params.senderUid}/send/${option.params.recieverUid}`,
+      body: option.body,
+      token: option.token,
+    };
+    console.log(config);
+
+    return request(config).catch((err) => ({ ...err, isOk: false }));
+  }
 }
 
 export default Auth;

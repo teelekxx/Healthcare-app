@@ -51,10 +51,10 @@ import {
   FailedButton,
   FailedText2,
   FailedButtonText,
-
+  FindingPrompt2,
   DetailText2,
   FoundContainer,
-  FoundText
+  FoundText,
 } from "./index.style";
 import Auth from "../../api/auth";
 import * as ImagePicker from "expo-image-picker";
@@ -350,24 +350,20 @@ function PatientPharmacyScreen({ navigation }) {
               >
                 <ActivityIndicator size="large" />
               </WaitingButton>
-              <FindingPrompt>
+              <FindingPrompt2>
                 waiting for available Pharmacist ...
-              </FindingPrompt>
+              </FindingPrompt2>
             </ButtonContainer>
           ) : status === "doing" ? (
             <ButtonContainer>
-            <FoundContainer>
-            <InlineIcon
+              <FoundContainer>
+                <InlineIcon
                   name="checkmark-circle"
                   type="ionicon"
                   color={Colors.green}
                   size={20}
                 />
-              <FoundText>
-                Pharmacist found
-              </FoundText>
-              
-              
+                <FoundText>Pharmacist found</FoundText>
               </FoundContainer>
               <ProfileIcon>
                 <Avatar
@@ -398,12 +394,11 @@ function PatientPharmacyScreen({ navigation }) {
                   <TimeText>{new Date().toLocaleString()}</TimeText>
                 </DetailContainer>
               )}
-             
+
               <FindingPrompt>
                 Click the button below to start chatting
-                
               </FindingPrompt>
-             
+
               <ChattingButton
                 onPress={() =>
                   navigation.navigate("Chatting", {

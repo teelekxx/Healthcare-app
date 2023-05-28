@@ -9,7 +9,7 @@ import {
 import { db } from "../lib/firebase";
 
 export default class Chat {
-  static sendMessage = async ({ uid, groupId, message, type}) => {
+  static sendMessage = async ({ uid, groupId, message, type }) => {
     const messageData = {
       message: message,
       sendBy: uid,

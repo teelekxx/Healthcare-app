@@ -131,8 +131,8 @@ function ChatScreen({ navigation, route }) {
   const scrollViewRef = useRef(null);
 
   const textFormat = (text) => {
-    if(!text || text === "undefined"){
-      return  "-";
+    if (!text || text === "undefined") {
+      return "-";
     }
     return text;
   };
@@ -148,8 +148,8 @@ function ChatScreen({ navigation, route }) {
 
   const allergiesFormat = (allergies) => {
     let temp = "";
-    if(allergies[0] === ""){
-      return  "None";
+    if (allergies[0] === "") {
+      return "None";
     }
     if (allergies.length > 0) {
       allergies.forEach((allergy) => {
@@ -163,13 +163,13 @@ function ChatScreen({ navigation, route }) {
 
   const symptomsFormat = (symptoms) => {
     let temp = "";
-    if(symptoms[0] === ""){
-      return  "-";
+    if (symptoms[0] === "") {
+      return "-";
     }
     console.log("SYM:", symptoms);
     if (symptoms.length > 0) {
       symptoms.forEach((symptom) => {
-        if(symptom.length === 0) {
+        if (symptom.length === 0) {
           console.log("NONE");
           return "-";
         }
@@ -238,7 +238,6 @@ function ChatScreen({ navigation, route }) {
   };
 
   const getCaseDetail = async (jobId) => {
-    // setGroup(group);
     console.log("JOBID:", jobId);
     const token = await AsyncStorage.getItem("token");
     const user = await Auth.getEmergencyCaseTokById({
@@ -270,7 +269,6 @@ function ChatScreen({ navigation, route }) {
   };
   const fetchData = async (myUID) => {
     const data = await getChatter(myUID);
-    console.log("CHATINF0:", data.data.medicalInformation);
     setChatInfo(data.data.medicalInformation);
     setChatImg(data.data.user.faceImg);
     setChatNumber(data.data.medicalInformation.phoneNumber);
@@ -341,19 +339,25 @@ function ChatScreen({ navigation, route }) {
 
   // postsFirstBatch();
   const sendMessage = async () => {
+    setCurrMessage("");
     if (images.length > 0) {
       const formData = new FormData();
       images.map((image) => {
         formData.append("images", image);
       });
       const postImages = async () => {
+        let tempLastImage = "";
         const token = await AsyncStorage.getItem("token");
         const user = await Auth.postChatImages({
           body: formData,
           token: token,
         });
         if (user.isOk) {
-          console.log("IMG:", user.attachedImagesPath);
+          tempLastImage = {
+            sendBy: route.params.myUID,
+            message: "Image sent",
+            sendAt: new Date(),
+          };
           user.attachedImagesPath.forEach((imagePath) => {
             Chat.sendMessage({
               uid: route.params.myUID,
@@ -362,6 +366,7 @@ function ChatScreen({ navigation, route }) {
               type: "image",
             });
           });
+          updateLastMessage(tempLastImage);
 
           setImages([]);
         } else {
@@ -386,9 +391,19 @@ function ChatScreen({ navigation, route }) {
         sendAt: new Date(),
       };
 
+      console.log("MESSAGE:", currMessage);
       const token = await AsyncStorage.getItem("token");
       await Chat.sendMessage(tempMessage);
       updateLastMessage(tempLastMessage);
+      const user = await Auth.putChatNotification({
+        params: { senderUid: myUID, recieverUid: otherUID },
+        body: {
+          body: currMessage,
+        },
+        token: token,
+      });
+      console.log("NOTI!!!!!!:", user);
+
       // const user = await Auth.postChatMessage({
       //   body: {
       //     groupId: route.params.groupID,
@@ -403,7 +418,6 @@ function ChatScreen({ navigation, route }) {
       //   console.log("response = ", user);
       // }
 
-      setCurrMessage("");
       scrollViewRef.current.scrollToOffset({ offset: 0 });
     }
   };
@@ -752,9 +766,13 @@ function ChatScreen({ navigation, route }) {
               {chatInfo && (
                 <InfoContainer>
                   <InfoText>Phone Number: {textFormat(chatNumber)}</InfoText>
-                  <InfoText>Date of Birth: {textFormat(chatInfo.dateOfBirth)}</InfoText>
+                  <InfoText>
+                    Date of Birth: {textFormat(chatInfo.dateOfBirth)}
+                  </InfoText>
                   <InfoText>Gender: {textFormat(chatInfo.gender)}</InfoText>
-                  <InfoText>Blood type: {textFormat(chatInfo.bloodType)}</InfoText>
+                  <InfoText>
+                    Blood type: {textFormat(chatInfo.bloodType)}
+                  </InfoText>
                   <InfoText>
                     Congenital Disease: {textFormat(chatInfo.congenitalDisease)}
                   </InfoText>
@@ -767,7 +785,8 @@ function ChatScreen({ navigation, route }) {
                         Symptoms: {symptomsFormat(caseInfo.symptoms)}
                       </CaseText>
                       <CaseText>
-                        More Information: {textFormat(caseInfo.otherInformation)}
+                        More Information:{" "}
+                        {textFormat(caseInfo.otherInformation)}
                       </CaseText>
                       {caseInfo.attachedImages.map((val, index) => {
                         return (
